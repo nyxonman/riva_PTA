@@ -377,137 +377,6 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="0" rowspan="11">
-           <layout class="QFormLayout" name="formLayout">
-            <property name="fieldGrowthPolicy">
-             <enum>QFormLayout::FieldsStayAtSizeHint</enum>
-            </property>
-            <item row="0" column="0">
-             <widget class="QLabel" name="iterLab">
-              <property name="toolTip">
-               <string>Number of times the test is repeated for each node</string>
-              </property>
-              <property name="text">
-               <string>Iteration(s)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLineEdit" name="IterVal">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="toolTip">
-               <string>Number of times the test is repeated for each node</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="rootCntLab">
-              <property name="toolTip">
-               <string>Number of ROOTs for test. This reflects to number of columns in the right side table</string>
-              </property>
-              <property name="text">
-               <string>Number of ROOT(s)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QLineEdit" name="rootCntVal">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="toolTip">
-               <string>Number of ROOTs for test. This reflects to number of columns in the right side table</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QLabel" name="label_2">
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
-             <widget class="QCheckBox" name="outputToFile">
-              <property name="cursor">
-               <cursorShape>PointingHandCursor</cursorShape>
-              </property>
-              <property name="toolTip">
-               <string>To save the output of the result to a csv file. If unchecked, by default, it will save to last_testlog.csv</string>
-              </property>
-              <property name="text">
-               <string>Output results to file</string>
-              </property>
-              <property name="checked">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="1">
-             <widget class="QLineEdit" name="outputFilenameVal">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="toolTip">
-               <string>To save the output of the result to a csv file. If unchecked, by default, it will save to last_testlog.csv</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="0">
-             <widget class="QCheckBox" name="showMap">
-              <property name="cursor">
-               <cursorShape>PointingHandCursor</cursorShape>
-              </property>
-              <property name="toolTip">
-               <string>Show the mapping for the nodes in the table against short addr and pan id</string>
-              </property>
-              <property name="text">
-               <string>Show Mapping</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="1">
-             <widget class="QCheckBox" name="scrollToLastCmdHistory">
-              <property name="cursor">
-               <cursorShape>PointingHandCursor</cursorShape>
-              </property>
-              <property name="toolTip">
-               <string>Check to scroll the result to the end always</string>
-              </property>
-              <property name="text">
-               <string>Scroll to Last</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
           <item row="12" column="2">
            <widget class="QPushButton" name="saveEntryBtn">
             <property name="minimumSize">
@@ -622,6 +491,9 @@
             </property>
             <property name="alternatingRowColors">
              <bool>true</bool>
+            </property>
+            <property name="selectionMode">
+             <enum>QAbstractItemView::ExtendedSelection</enum>
             </property>
             <property name="textElideMode">
              <enum>Qt::ElideLeft</enum>
@@ -836,6 +708,133 @@
              <bool>true</bool>
             </property>
            </widget>
+          </item>
+          <item row="0" column="0" rowspan="11">
+           <layout class="QFormLayout" name="formLayout">
+            <property name="fieldGrowthPolicy">
+             <enum>QFormLayout::FieldsStayAtSizeHint</enum>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="iterLab">
+              <property name="toolTip">
+               <string>Number of times the test is repeated for each node</string>
+              </property>
+              <property name="text">
+               <string>Iteration(s)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="IterVal">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="toolTip">
+               <string>Number of times the test is repeated for each node</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="rootCntLab">
+              <property name="toolTip">
+               <string>Number of ROOTs for test. This reflects to number of columns in the right side table</string>
+              </property>
+              <property name="text">
+               <string>Number of ROOT(s)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="rootCntVal">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="toolTip">
+               <string>Number of ROOTs for test. This reflects to number of columns in the right side table</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QCheckBox" name="outputToFile">
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="toolTip">
+               <string>To save the output of the result to a csv file. If unchecked, by default, it will save to last_testlog.csv</string>
+              </property>
+              <property name="text">
+               <string>Output results to file</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QLineEdit" name="outputFilenameVal">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="toolTip">
+               <string>To save the output of the result to a csv file. If unchecked, by default, it will save to last_testlog.csv</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0">
+             <widget class="QCheckBox" name="showMap">
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="toolTip">
+               <string>Show the mapping for the nodes in the table against short addr and pan id</string>
+              </property>
+              <property name="text">
+               <string>Show Mapping</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="1">
+             <widget class="QCheckBox" name="showAllMap">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>ALL neighbors</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="1">
+             <widget class="QCheckBox" name="scrollToLastCmdHistory">
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="toolTip">
+               <string>Check to scroll the result to the end always</string>
+              </property>
+              <property name="text">
+               <string>Scroll to Last</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>
