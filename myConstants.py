@@ -20,7 +20,7 @@ DFT_PKT_RESP_TIME  = "180"
 DFT_ROOTS_CNT      = "1"
 BACT_TIME_SLOT     = 6
 CONFIG_FILENAME    = "configPTA.csv"
-DFT_OUTPUTFILENAME = "last_testlog.csv"
+DFT_OUTPUTFILENAME = "testlog_"+str(datetime.now().strftime('%d_%m_%Y'))+".csv"
 
 
 # win_size = os.get_terminal_size().columns
