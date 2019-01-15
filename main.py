@@ -16,7 +16,7 @@ if __name__ == "__main__":
     
     # rename the window
     MainObj.setWindowTitle("Ping Test Application v" + APP_VERSION)
-
+    test change in new branch
     # interact with the ui
     uiInteractObj = interactGUI(ui)
     # uiInteractionInit(ui)
