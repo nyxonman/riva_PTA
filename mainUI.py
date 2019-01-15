@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'C:\Users\nishakya\OneDrive - Itron\Desktop\SHAKYA\ITRON_PROJECTS\DEMO\Test1\main.ui'
+# Form implementation generated from reading ui file 'C:\Users\nishakya\OneDrive - Itron\Desktop\SHAKYA\ITRON_PROJECTS\PTA\riva_PTA\main.ui'
 #
 # Created by: PyQt5 UI code generator 5.11.3
 #
@@ -266,6 +266,8 @@ class Ui_MainObj(object):
         self.tableWidget.setSizePolicy(sizePolicy)
         self.tableWidget.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.tableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustIgnored)
+        self.tableWidget.setAlternatingRowColors(True)
+        self.tableWidget.setTextElideMode(QtCore.Qt.ElideLeft)
         self.tableWidget.setShowGrid(True)
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(1)
