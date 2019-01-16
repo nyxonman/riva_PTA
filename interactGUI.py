@@ -432,30 +432,38 @@ class interactGUI(object):
 	def exportData2csv(self):
 		itemCnt = 0
 		empty = []
-		addMapAndFinalStats = 0 if self.ui.exportDataMapFinal.checkState() == 0 else 1
+		incTestInfo = 0 if self.ui.exportIncTestInfo.checkState() == 0 else 1
+		incData = 0 if self.ui.exportIncData.checkState() == 0 else 1
+		incFinalStats = 0 if self.ui.exportIncFinalStats.checkState() == 0 else 1
+		incMapList = 0 if self.ui.exportIncMapList.checkState() == 0 else 1
 		path, fileType = QFileDialog.getSaveFileName(QtWidgets.QWidget(), 'Export CSV File', DFT_OUTPUTFILENAME, 'CSV(*.csv)')
 		if path:
 			with open(path,"w", newline='') as stream:
 				writer = csv.writer(stream)
 				# write the headers
-				for r in self.exportData["header"]:
-					writer.writerow(r)
+				if incTestInfo:
+					for r in self.exportData["header"]:
+						writer.writerow(r)
 				
 				# write main data
-				for r in self.exportData["main"]:
-					writer.writerow(r)
-
-				if addMapAndFinalStats:
-					# write the final stats
+				if incData:
+					if not incTestInfo:
+						writer.writerow(["TimeStamp","extAddr","sAddr","hwType","best_RF","RSSI_I","RSSI_M","tx","rx","macTxSucc","macTxFail","loss","minRTT","maxRTT","mdevRTT","avgRTT"])
+					for r in self.exportData["main"]:
+						writer.writerow(r)
 					writer.writerow(empty)
+
+				# write the final stats
+				if incFinalStats:
 					writer.writerow(["final"])
 					writer.writerow(["TimeStamp","extAddr","sAddr","hwType","best_RF","RSSI_I","RSSI_M","tx","rx","macTxSucc","macTxFail","loss","minRTT","maxRTT","avgRTT"])
 
 					for r in self.exportData["finalStats"]:
 						writer.writerow(r)
-
-					# write the maplist
 					writer.writerow(empty)
+
+				# write the maplist
+				if incMapList:
 					writer.writerow(["mapList"])
 					writer.writerow(["EXT_ADDR", "SADDR", "PAN ID"])
 					for r in self.exportData["mapList"]:
@@ -761,14 +769,6 @@ class interactGUI(object):
 		self.ui.statusbar.showMessage(msg)
 
 	def slotCopyExportData(self, exportData):
-		print("header")
-		print(exportData["header"])
-		print("main")
-		print(exportData["main"])
-		print("finalStats")
-		print(exportData["finalStats"])
-		print("mapList")
-		print(exportData["mapList"])
 		self.exportData = exportData
 	
 	def slotDisplayMap(self, mapStr):
@@ -914,17 +914,7 @@ class pingThread(QThread):
 		# display the mapping
 		self.sigDisplayMap.emit(self.myApp.mapStr)
 
-		# if everything is ok break the while loop
-		print("app export data")
-		print("header")
-		print(self.myApp.exportData["header"])
-		print("main")
-		print(self.myApp.exportData["main"])
-		print("finalStats")
-		print(self.myApp.exportData["finalStats"])
-		print("mapList")
-		print(self.myApp.exportData["mapList"])
-		print("endapp export data")
+		# copy export data
 		self.sigCopyExportData.emit(self.myApp.exportData)
 		
 		self.ui.tabWidget.setCurrentIndex(0)

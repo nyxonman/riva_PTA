@@ -201,8 +201,6 @@ class App():
 
 	def add_header_2_output(self, myDate, reps, first = False):
 		# for file
-		print("I am here")
-
 		if first == True:
 			self.exportData["header"] = []
 			self.exportData["header"].append(["PTA",self.version,"REPETITIONS", self.iteration, "RESULT STATS", "Date",myDate])
@@ -210,9 +208,7 @@ class App():
 			self.exportData["header"].append([self.pktSize, self.pktCnt, self.pktIntv, self.pktResTime, self.iteration, "{}/{}".format(self.validNodesCnt, len(self.testNodes))])
 			self.exportData["header"].append([])
 			self.exportData["header"].append(["TimeStamp","extAddr", "sAddr", "hwType", "best_RF", "RSSI_I", "RSSI_M", "tx", "rx", "macTxSucc", "macTxFail", "loss", "minRTT", "maxRTT", "mdevRTT", "avgRTT"])
-			# self.exportData["header"]=self.exportData["header"]
-			print(self.exportData["header"])
-			print("==============")
+			
 			
 	def verifyInputParams(self):
 		errMsg  = ""
