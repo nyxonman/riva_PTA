@@ -642,7 +642,7 @@ class interactGUI(object):
 		self.statusBarMsg("Test Started")
 		# myApp.fileList =[]
 
-		myApp.pktSize, myApp.pktIntv, myApp.pktResTime, myApp.pktCnt, myApp.nbrOfRoots, myApp.iteration, myApp.map, myApp.allMap, myApp.outputFile, myApp.outputFilename	= self.getParams()
+		myApp.pktSize, myApp.pktIntv, myApp.pktResTime, myApp.pktCnt, myApp.nbrOfRoots, myApp.iteration, myApp.map, myApp.allNeighbors, myApp.outputFile, myApp.outputFilename	= self.getParams()
 
 		while 1:
 			ret = self.verifyEntries(myApp)
@@ -719,7 +719,7 @@ class interactGUI(object):
 			if myApp.map == True:
 				self.ui.tabWidget.setCurrentIndex(1)
 				myApp.runMap_test(self)
-				self.ui.showMap.checkStateSet(0)
+				self.ui.showMap.setChecked(0)
 				RUN_OK = True
 				break
 			

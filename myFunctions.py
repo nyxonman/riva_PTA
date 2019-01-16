@@ -332,7 +332,7 @@ def prepare_test(myApp):
                 myApp.add_test_node(extAddr, ipAddr)
                 validNodesCnt+=1
     # print("{} = {}".format(extAddr,sAddr))
-    # myApp.display_test_nodes()
+    myApp.display_test_nodes()
 
     return validNodesCnt
 

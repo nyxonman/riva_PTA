@@ -11,7 +11,7 @@ class App():
 		self.file           = ""
 		self.pktIntv        = str(DFT_PKT_INTV)
 		self.map            = False
-		self.allMap         = False
+		self.allNeighbors         = False
 		self.outputFile     = False
 		self.outputFilename = "last_testlog.csv"
 		self.iteration      = str(DFT_ITERATION)
