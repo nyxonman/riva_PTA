@@ -274,13 +274,14 @@ class interactGUI(object):
 				self.ui.pktSizeDial.setEnabled(1)
 				self.ui.IterVal.setEnabled(1)
 			self.mShowMap = myObjVal
+			self.ui.showAllMap.setEnabled(myObjVal)
 
 		elif myObjName == "showAllMap":
-			myObjVal      = 0 if myObj.checkState() == 0 else 1
-			self.mShowAllMap = True if myObjVal = 1 else False
+			myObjVal         = 0 if myObj.checkState() == 0 else 1
+			self.mShowAllMap = True if myObjVal == 1 else False
 
 		elif myObjName == "outputToFile":
-			myObjVal = 0 if myObj.checkState() == 0 else 1
+			myObjVal           = 0 if myObj.checkState() == 0 else 1
 			self.ui.outputFilenameVal.setEnabled(myObjVal)
 			self.mOutputToFile = myObjVal
 
@@ -437,6 +438,7 @@ class interactGUI(object):
 			with open(path,"w", newline='') as stream:
 				writer = csv.writer(stream)
 				# # write the headers
+				# print(self.exportData["header"])
 				# for r in self.exportData["header"]:
 				# 	writer.writerow(r)
 				writer.writerow(["TimeStamp","extAddr","sAddr","hwType","best_RF","RSSI_I","RSSI_M","tx","rx","macTxSucc","macTxFail","loss","minRTT","maxRTT","mdevRTT","avgRTT"])
@@ -449,12 +451,15 @@ class interactGUI(object):
 					# write the final stats
 					writer.writerow(empty)
 					writer.writerow(["final"])
+					writer.writerow(["TimeStamp","extAddr","sAddr","hwType","best_RF","RSSI_I","RSSI_M","tx","rx","macTxSucc","macTxFail","loss","minRTT","maxRTT","avgRTT"])
+
 					for r in self.exportData["finalStats"]:
 						writer.writerow(r)
 
 					# write the maplist
 					writer.writerow(empty)
 					writer.writerow(["mapList"])
+					writer.writerow(["EXT_ADDR", "SADDR", "PAN ID"])
 					for r in self.exportData["mapList"]:
 						writer.writerow(r)
 
@@ -707,6 +712,7 @@ class interactGUI(object):
 			if myApp.map == True:
 				self.ui.tabWidget.setCurrentIndex(1)
 				myApp.runMap_test(self)
+				self.ui.showMap.checkStateSet(0)
 				RUN_OK = True
 				break
 			
