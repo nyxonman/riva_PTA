@@ -302,7 +302,10 @@ def process_neighbor_data(pan, panId, data, interactGuiObj):
     return RET_SUCC
         
 def prepare_test(myApp):
+    '''Prepare the sorted list of the nodes'''
     validNodesCnt = 0
+
+    # if all neighbors is not checked
     if myApp.fromConfig == True:
         for extAddr in myApp.fileList:
             # item = myApp.fileList[key]
@@ -332,7 +335,7 @@ def prepare_test(myApp):
                 myApp.add_test_node(extAddr, ipAddr)
                 validNodesCnt+=1
     # print("{} = {}".format(extAddr,sAddr))
-    myApp.display_test_nodes()
+    # myApp.display_test_nodes()
 
     return validNodesCnt
 

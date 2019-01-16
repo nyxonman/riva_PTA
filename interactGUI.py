@@ -644,6 +644,10 @@ class interactGUI(object):
 
 		myApp.pktSize, myApp.pktIntv, myApp.pktResTime, myApp.pktCnt, myApp.nbrOfRoots, myApp.iteration, myApp.map, myApp.allNeighbors, myApp.outputFile, myApp.outputFilename	= self.getParams()
 
+		# if all neighbors is checked from config is False
+		if myApp.allNeighbors:
+			myApp.fromConfig = False
+
 		while 1:
 			ret = self.verifyEntries(myApp)
 			if ret == RET_FAIL:
@@ -732,7 +736,6 @@ class interactGUI(object):
 			self.ui.lowerText.setHtml('')
 			self.statusBarMsg("Test Running...")
 			
-
 			tot    = len(myApp.testNodes)
 			total_iterations = int(myApp.iteration)
 			myDate = get_date()
