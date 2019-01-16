@@ -437,15 +437,13 @@ class interactGUI(object):
 		if path:
 			with open(path,"w", newline='') as stream:
 				writer = csv.writer(stream)
-				# # write the headers
-				# print(self.exportData["header"])
-				# for r in self.exportData["header"]:
-				# 	writer.writerow(r)
-				writer.writerow(["TimeStamp","extAddr","sAddr","hwType","best_RF","RSSI_I","RSSI_M","tx","rx","macTxSucc","macTxFail","loss","minRTT","maxRTT","mdevRTT","avgRTT"])
+				# write the headers
+				for r in self.exportData["header"]:
+					writer.writerow(r)
+				
 				# write main data
 				for r in self.exportData["main"]:
 					writer.writerow(r)
-				
 
 				if addMapAndFinalStats:
 					# write the final stats
@@ -763,6 +761,14 @@ class interactGUI(object):
 		self.ui.statusbar.showMessage(msg)
 
 	def slotCopyExportData(self, exportData):
+		print("header")
+		print(exportData["header"])
+		print("main")
+		print(exportData["main"])
+		print("finalStats")
+		print(exportData["finalStats"])
+		print("mapList")
+		print(exportData["mapList"])
 		self.exportData = exportData
 	
 	def slotDisplayMap(self, mapStr):
@@ -829,7 +835,7 @@ class pingThread(QThread):
 		last_iteration_time = 0
 
 		self.myApp.add_header_2_output(myDate,reps, True)
-		append2csv(self.myApp.outputFilename,self.myApp.outputData,"w")
+		append2csv(self.myApp.outputFilename,self.myApp.exportData["header"],"w")
 		
 		self.myApp.exportData["main"]=[]
 
@@ -845,7 +851,7 @@ class pingThread(QThread):
 					self.ui.statusbar.showMessage("Waiting for {} seconds from {} before iterating... ".format(int(MIN_TIME_BEFORE_ITERATE - delta), get_date()))
 					sleep(MIN_TIME_BEFORE_ITERATE - delta)
 				myDate = get_date()
-				self.myApp.add_header_2_output(myDate,reps, False)
+				# self.myApp.add_header_2_output(myDate,reps, False)
 
 			last_iteration_time = datetime.today()
 
@@ -893,7 +899,7 @@ class pingThread(QThread):
 		if int(self.myApp.iteration) > 1:
 
 			myDate = get_date()
-			self.myApp.add_header_2_output(myDate,int(self.myApp.iteration) +1, False)
+			# self.myApp.add_header_2_output(myDate,int(self.myApp.iteration) +1, False)
 			for item in self.myApp.testNodes:
 				for extAddr in item:
 					# ipAddr  = item[extAddr]
@@ -909,6 +915,16 @@ class pingThread(QThread):
 		self.sigDisplayMap.emit(self.myApp.mapStr)
 
 		# if everything is ok break the while loop
+		print("app export data")
+		print("header")
+		print(self.myApp.exportData["header"])
+		print("main")
+		print(self.myApp.exportData["main"])
+		print("finalStats")
+		print(self.myApp.exportData["finalStats"])
+		print("mapList")
+		print(self.myApp.exportData["mapList"])
+		print("endapp export data")
 		self.sigCopyExportData.emit(self.myApp.exportData)
 		
 		self.ui.tabWidget.setCurrentIndex(0)

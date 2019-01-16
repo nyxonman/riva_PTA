@@ -201,15 +201,18 @@ class App():
 
 	def add_header_2_output(self, myDate, reps, first = False):
 		# for file
+		print("I am here")
+
 		if first == True:
 			self.exportData["header"] = []
-			self.outputData.append(["PTA",self.version,"REPETITIONS", self.iteration, "RESULT STATS", "Date",myDate])
-			self.outputData.append(["pktSize","pktCnt","pktInt","pktResp", "Iteration", "Nodes"])
-			self.outputData.append([self.pktSize, self.pktCnt, self.pktIntv, self.pktResTime, self.iteration, "{}/{}".format(self.validNodesCnt, len(self.testNodes))])
-			self.outputData.append([])
-			self.outputData.append(["TimeStamp","extAddr", "sAddr", "hwType", "best_RF", "RSSI_I", "RSSI_M", "tx", "rx", "macTxSucc", "macTxFail", "loss", "minRTT", "maxRTT", "mdevRTT", "avgRTT"])
-			
-			self.exportData["header"]=self.outputData
+			self.exportData["header"].append(["PTA",self.version,"REPETITIONS", self.iteration, "RESULT STATS", "Date",myDate])
+			self.exportData["header"].append(["pktSize","pktCnt","pktInt","pktResp", "Iteration", "Nodes"])
+			self.exportData["header"].append([self.pktSize, self.pktCnt, self.pktIntv, self.pktResTime, self.iteration, "{}/{}".format(self.validNodesCnt, len(self.testNodes))])
+			self.exportData["header"].append([])
+			self.exportData["header"].append(["TimeStamp","extAddr", "sAddr", "hwType", "best_RF", "RSSI_I", "RSSI_M", "tx", "rx", "macTxSucc", "macTxFail", "loss", "minRTT", "maxRTT", "mdevRTT", "avgRTT"])
+			# self.exportData["header"]=self.exportData["header"]
+			print(self.exportData["header"])
+			print("==============")
 			
 	def verifyInputParams(self):
 		errMsg  = ""
