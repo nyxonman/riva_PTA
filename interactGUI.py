@@ -20,7 +20,7 @@ class interactGUI(object):
 		self.mRootCnt        = 0
 		self.mIteration      = 0
 		self.mShowMap        = 0
-		self.mShowAllMap    = 0
+		self.mShowAllNeighbors    = 0
 		self.mOutputToFile   = 0
 		self.mOutputFilename = "last_testlog.csv"
 		self.exportData      = {}
@@ -39,7 +39,7 @@ class interactGUI(object):
 
 	def getParams(self):
 		'''get the params of the interactGUI object'''
-		return (self.mPktSize, self.mPktInt, self.mPktRes, self.mPktCnt, self.mRootCnt, self.mIteration, self.mShowMap, self.mShowAllMap, self.mOutputToFile, self.mOutputFilename)	
+		return (self.mPktSize, self.mPktInt, self.mPktRes, self.mPktCnt, self.mRootCnt, self.mIteration, self.mShowMap, self.mShowAllNeighbors, self.mOutputToFile, self.mOutputFilename)	
 
 	def logCmdHistory(self, funcName, html='', cmdType="default", append=True):
 		'''To show the log in the command history field
@@ -110,7 +110,7 @@ class interactGUI(object):
 		self.ui.rootCntVal.textChanged.connect(lambda: self.interact(self.ui.rootCntVal))
 		self.ui.IterVal.textChanged.connect(lambda: self.interact(self.ui.IterVal))
 		self.ui.showMap.stateChanged.connect(lambda: self.interact(self.ui.showMap))
-		self.ui.showAllMap.stateChanged.connect(lambda: self.interact(self.ui.showAllMap))
+		self.ui.showAllNeighbors.stateChanged.connect(lambda: self.interact(self.ui.showAllNeighbors))
 		self.ui.outputToFile.stateChanged.connect(lambda: self.interact(self.ui.outputToFile))
 		self.ui.scrollToLastCmdHistory.stateChanged.connect(lambda: self.interact(self.ui.scrollToLastCmdHistory))
 		self.ui.outputFilenameVal.textChanged.connect(lambda: self.interact(self.ui.outputFilenameVal))
@@ -139,7 +139,7 @@ class interactGUI(object):
 		'''Create a command string for the output'''
 		mCmdStr = "*** COMMAND *** <br>"
 		if self.mShowMap==1:
-			mCmdStr+=" Show <b>MAPPING between SHORT_ADR and H/W or EXT_addr</b> for"
+			mCmdStr+=" Show <b>MAPPING between SHORT_ADR and H/W or EXT_addr</b>"
 		else:
 			mCmdStr+=" Send <b>'{}' PING{}</b>".format(self.mPktCnt,"(s)" if int(self.mPktCnt) > 1 else "")
 			if int(self.mPktCnt) > 1:
@@ -147,6 +147,8 @@ class interactGUI(object):
 			mCmdStr+=" of SIZE <b>'{}' Bytes</b> with ".format(self.mPktSize)        
 			mCmdStr+="RESPONSE TIME of <b>'{}' seconds</b>".format(self.mPktRes)
 
+		if self.mShowAllNeighbors:
+			mCmdStr+=" for <b>ALL neighbors</b>"
 		# mCmdStr+=" 'all BACTs'"
 		if self.mShowMap==0 and int(self.mIteration) > 1:
 		    mCmdStr+=", REPEAT Test <b>'x{}'</b>".format(self.mIteration)
@@ -274,11 +276,10 @@ class interactGUI(object):
 				self.ui.pktSizeDial.setEnabled(1)
 				self.ui.IterVal.setEnabled(1)
 			self.mShowMap = myObjVal
-			self.ui.showAllMap.setEnabled(myObjVal)
 
-		elif myObjName == "showAllMap":
+		elif myObjName == "showAllNeighbors":
 			myObjVal         = 0 if myObj.checkState() == 0 else 1
-			self.mShowAllMap = True if myObjVal == 1 else False
+			self.mShowAllNeighbors = True if myObjVal == 1 else False
 
 		elif myObjName == "outputToFile":
 			myObjVal           = 0 if myObj.checkState() == 0 else 1
