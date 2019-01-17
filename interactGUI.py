@@ -851,7 +851,7 @@ class pingThread(QThread):
 			cnt                         = 0
 
 			self.sigUpperText.emit("### ITERATION {}/{}\n".format(reps,total_iterations),"info")
-			self.myApp.display_test_nodes()
+			# self.myApp.display_test_nodes()
 			if reps > 1 :
 				# when higher reps, if the time between the iterations for a same node  is less than MIN_TIME_BEFORE_ITERATE, we need to sleep befre repeating the nodes
 				delta = abs(last_iteration_time - datetime.today()).total_seconds()
@@ -870,7 +870,7 @@ class pingThread(QThread):
 			
 			while self.myApp.testNodesPending:
 				listSize = len(self.myApp.testNodesPending)
-				ret, retStr = test_ssh(rootIpAddr,"pib -gn .rf_mac.status.sync_mgr.macTSN")
+				ret, retStr = test_ssh(rootIpAddr,CMD_MAC_TSN)
 				
 				if ret!=RET_SUCC:
 					print("some error while retreiving TSN")
@@ -884,7 +884,8 @@ class pingThread(QThread):
 				# if extAddr is not found, simply wait for the timeslot to finish
 				if extAddr == RET_FAIL:
 					self.sigUpperText.emit("TSN={}({}) [{}] NextTSN {}-->N/A".format(camTSN,hex(camTSN),slotNum, nextslotNum),"info")
-					self.sigStatusBar.emit("Waiting for {:.2f} seconds from {} to next timeslot... ".format((BACT_TIME_SLOT-0.3), get_date()))
+					if (DEBUG_MODE):
+						self.sigStatusBar.emit("Waiting for {:.2f} seconds from {} to next timeslot... ".format((BACT_TIME_SLOT-0.3), get_date()))
 
 					sleep(BACT_TIME_SLOT-0.3)
 				else:
@@ -923,6 +924,7 @@ class pingThread(QThread):
 					if retCode == RET_FAIL:
 						sleep(BACT_TIME_SLOT-0.3)
 						self.sigStatusBar.emit("Waiting for {:.2f} seconds from {} to next timeslot... ".format((BACT_TIME_SLOT-0.3), get_date()))
+					
 					# remove from the pending list
 					del self.myApp.testNodesPending[extAddr]
 
