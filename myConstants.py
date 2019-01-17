@@ -5,7 +5,7 @@ import pprint
 
 OS_POSIX   = "posix"
 OS_WIN     = "nt"
-DEBUG_MODE = False
+DEBUG_MODE = True
 logMsg     = ""
 
 __VERSION__        = "1.3.2"

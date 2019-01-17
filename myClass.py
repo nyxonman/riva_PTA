@@ -78,7 +78,7 @@ class App():
 	def display_test_nodes_per_slot(self):
 		print((self.testNodesPerSlot))
 	def display_test_nodes(self):
-		pprint(self.testNodes)
+		print((self.testNodes))
 
 	def process_ping_result(self,extAddr, output, last_mac_tx_succ, last_mac_tx_fail):
 		panId  = self.mapExt2PanId[extAddr]

@@ -587,27 +587,27 @@ class interactGUI(object):
 							</tr>
 					'''			
 			myApp.exportData["finalStats"]=[]
-			for item in myApp.testNodes:
-				for extAddr in item:
-					# ipAddr  = item[extAddr]
-					myDate = get_date()
-					# params = self.add_to_output_data(extAddr,myDate, 1)
-					panId = myApp.mapExt2PanId[extAddr]
-					node = Node()
-					if extAddr in myApp.mapList:
-						sAddr  = myApp.mapList[extAddr] 
-						node   = myApp.pans[panId].nodeList[sAddr]
-						params = node.get_params(1)
-					else:
-						params = unavailable_node(extAddr, 1)
-					myHtml+= "<tr>"
+			
+			for extAddr, ipAddr in myApp.testNodes.items():
+				# ipAddr  = item[extAddr]
+				myDate = get_date()
+				# params = self.add_to_output_data(extAddr,myDate, 1)
+				panId = myApp.mapExt2PanId[extAddr]
+				node = Node()
+				if extAddr in myApp.mapList:
+					sAddr  = myApp.mapList[extAddr] 
+					node   = myApp.pans[panId].nodeList[sAddr]
+					params = node.get_params(1)
+				else:
+					params = unavailable_node(extAddr, 1)
+				myHtml+= "<tr>"
 
-					params[-1] = str( round (sum( node.finalAvgRTT) / len(node.finalAvgRTT),3 ) ) if len(node.finalAvgRTT) >0 else '-'
-					for col in params:
-						style = ' align="center" style="color:#FF0000"' if col == "-" or col =="100%" else ''
-						myHtml += "<td{}>{}</td>".format(style, col)
-					myHtml+= "</tr>"
-					myApp.exportData["finalStats"].append(params)
+				params[-1] = str( round (sum( node.finalAvgRTT) / len(node.finalAvgRTT),3 ) ) if len(node.finalAvgRTT) >0 else '-'
+				for col in params:
+					style = ' align="center" style="color:#FF0000"' if col == "-" or col =="100%" else ''
+					myHtml += "<td{}>{}</td>".format(style, col)
+				myHtml+= "</tr>"
+				myApp.exportData["finalStats"].append(params)
 
 			myHtml += "</table><br/>"
 					
@@ -843,17 +843,15 @@ class pingThread(QThread):
 		append2csv(self.myApp.outputFilename,self.myApp.exportData["header"],"w")
 		
 		self.myApp.exportData["main"]=[]
-		# print(self.myApp.testNodesPerSlot)
+		
 		# iterate through each repetitions
 		for reps in range(1,total_iterations+1):
 			self.myApp.outputAppData    = []
-			self.myApp.testNodesPending = self.myApp.testNodes
+			self.myApp.testNodesPending = dict(self.myApp.testNodes)
 			cnt                         = 0
-			# for item in self.myApp.testNodes:
-			# 	for extAddr in item:
-			# 		self.myApp.testNodesPending.append(extAddr)
 
-			self.sigUpperText.emit("### ITERATION {}".format(reps),"info")
+			self.sigUpperText.emit("### ITERATION {}/{}\n".format(reps,total_iterations),"info")
+			self.myApp.display_test_nodes()
 			if reps > 1 :
 				# when higher reps, if the time between the iterations for a same node  is less than MIN_TIME_BEFORE_ITERATE, we need to sleep befre repeating the nodes
 				delta = abs(last_iteration_time - datetime.today()).total_seconds()
@@ -883,10 +881,10 @@ class pingThread(QThread):
 				# extract the ext addr for the next timeslot
 				extAddr = extractExtAddrforSlot(self.myApp.testNodesPending,nextslotNum)
 
-				# if extAddr is not found simply wait for the timeslot to finish
+				# if extAddr is not found, simply wait for the timeslot to finish
 				if extAddr == RET_FAIL:
 					self.sigUpperText.emit("TSN={}({}) [{}] NextTSN {}-->N/A".format(camTSN,hex(camTSN),slotNum, nextslotNum),"info")
-					self.sigStatusBar.emit("Waiting for {} seconds from {} to next timeslot... ".format(round(BACT_TIME_SLOT-0.3,2), get_date()))
+					self.sigStatusBar.emit("Waiting for {:.2f} seconds from {} to next timeslot... ".format((BACT_TIME_SLOT-0.3), get_date()))
 
 					sleep(BACT_TIME_SLOT-0.3)
 				else:
@@ -924,6 +922,7 @@ class pingThread(QThread):
 
 					if retCode == RET_FAIL:
 						sleep(BACT_TIME_SLOT-0.3)
+						self.sigStatusBar.emit("Waiting for {:.2f} seconds from {} to next timeslot... ".format((BACT_TIME_SLOT-0.3), get_date()))
 					# remove from the pending list
 					del self.myApp.testNodesPending[extAddr]
 
@@ -975,12 +974,16 @@ class pingThread(QThread):
 
 			myDate = get_date()
 			# self.myApp.add_header_2_output(myDate,int(self.myApp.iteration) +1, False)
-			for item in self.myApp.testNodes:
-				for extAddr in item:
-					# ipAddr  = item[extAddr]
-					myDate = get_date()
-					params = self.myApp.add_to_output_data(extAddr,myDate, 1)
-					self.myApp.add_to_output_str(params, 1)
+			for extAddr, ipAddr in self.myApp.testNodes:
+				myDate = get_date()
+				params = self.myApp.add_to_output_data(extAddr,myDate, 1)
+				self.myApp.add_to_output_str(params, 1)
+			# for item in self.myApp.testNodes:
+			# 	for extAddr in item:
+			# 		# ipAddr  = item[extAddr]
+			# 		myDate = get_date()
+			# 		params = self.myApp.add_to_output_data(extAddr,myDate, 1)
+			# 		self.myApp.add_to_output_str(params, 1)
 					
 		myDate = get_date()
 				
