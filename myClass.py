@@ -21,9 +21,9 @@ class App():
 		self.pktResTime     = str(DFT_PKT_RESP_TIME)
 		self.version        = APP_VERSION
 		self.help           = False
-		self.testNodes      = []
+		self.testNodes      = {}
 		self.testNodesPerSlot = {}
-		self.testNodesPending  = []
+		self.testNodesPending  = {}
 		self.mapStr         = ""
 		self.pans           = {}
 		self.fromConfig     = True
@@ -72,7 +72,8 @@ class App():
 		print("TSN"+ str(rem))
 		self.testNodesPerSlot[rem].append({extAddr:ipAddr})
 	def add_test_node(self,extAddr,ipAddr):
-		self.testNodes.append({extAddr:ipAddr})
+		# self.testNodes.append({extAddr:ipAddr})
+		self.testNodes[extAddr]=ipAddr
 
 	def display_test_nodes_per_slot(self):
 		print((self.testNodesPerSlot))

@@ -366,16 +366,14 @@ def prepare_output_mapping(myApp):
                             <th>PAN ID</th>
                         </tr>
                     '''
-    for item in myApp.testNodes:
-        for extAddr in item:
-            ipAddr       = item.get(extAddr)
-            panId        = myApp.mapExt2PanId[extAddr]
-            sAddr        = ipAddr.split(":")[-1]
-            # myApp.mapStr += myApp.disp_line(" ","{:<18s} | {:>04s} | {:<6s}".format(extAddr,sAddr,hex(int(panId))) , 0 , length) + "\n"
-            style = ' style="color:#FF0000"' if ipAddr == IP_NA else ""
-            myApp.mapStr += '<tr{}><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>'.format(style, extAddr,get_modulo_10(extAddr),sAddr,hex(int(panId)))
-            params = [extAddr, sAddr, hex(int(panId))]
-            myApp.exportData["mapList"].append(params)
+    
+    for extAddr, ipAddr in myApp.testNodes.items():
+        panId        = myApp.mapExt2PanId[extAddr]
+        sAddr        = ipAddr.split(":")[-1]
+        style = ' style="color:#FF0000"' if ipAddr == IP_NA else ""
+        myApp.mapStr += '<tr{}><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>'.format(style, extAddr,get_modulo_10(extAddr),sAddr,hex(int(panId)))
+        params = [extAddr, sAddr, hex(int(panId))]
+        myApp.exportData["mapList"].append(params)
     myApp.mapStr += "<table>"
 
     return RET_SUCC   
@@ -446,17 +444,16 @@ def get_modulo_10(hex):
     intNum = int(hex,16)
     return intNum%10
 
-def extractExtIpAddrforSlot(nodeList, slot):
+def extractExtAddrforSlot(nodeList, slot):
     # print (nodeList)
-    ipAddr = IP_NA
-    for item in nodeList:
-        for extAddr in item:
-            if get_modulo_10(extAddr) == slot:
-                ipAddr = item[extAddr]
-                nodeList.remove(item)
-                return extAddr, ipAddr
+    for extAddr in nodeList:
+        if get_modulo_10(extAddr) == slot:
+                return extAddr
+    # for item in nodeList:
+    #     for extAddr in item:
+    #         if get_modulo_10(extAddr) == slot:
+    #             ipAddr = item[extAddr]
+    #             nodeList.remove(item)
+    #             return extAddr, ipAddr
 
-    return RET_FAIL, ipAddr
-            # panId  = self.myApp.mapExt2PanId[extAddr]
-            # ipAddr = item[extAddr]
-            # if slot
+    return RET_FAIL

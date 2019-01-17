@@ -864,10 +864,9 @@ class pingThread(QThread):
 				# self.myApp.add_header_2_output(myDate,reps, False)
 
 			last_iteration_time = datetime.today()
-			for item in self.myApp.testNodes:
-				for extAddr in item:
-					panId  = self.myApp.mapExt2PanId[extAddr]
-					break;
+			# TODO: to solve for multiple pans
+			for key in self.myApp.testNodes:
+				panId = self.myApp.mapExt2PanId[key]
 				break;
 			rootIpAddr = self.myApp.pans[panId].rootAddr
 			
@@ -882,7 +881,7 @@ class pingThread(QThread):
 				slotNum = get_modulo_10(retStr)
 				nextslotNum = (slotNum+1)%10
 				# extract the ext addr for the next timeslot
-				extAddr, ipAddr = extractExtIpAddrforSlot(self.myApp.testNodesPending,nextslotNum)
+				extAddr = extractExtAddrforSlot(self.myApp.testNodesPending,nextslotNum)
 
 				# if extAddr is not found simply wait for the timeslot to finish
 				if extAddr == RET_FAIL:
@@ -894,7 +893,7 @@ class pingThread(QThread):
 					self.sigUpperText.emit("TSN={}({}) [{}] NextTSN {}-->{} size={}".format(camTSN,hex(camTSN), slotNum,nextslotNum, extAddr, listSize-1),"info")
 					# send ping stuff
 					panId  = self.myApp.mapExt2PanId[extAddr]
-					# ipAddr = self.myApp.testNodes[extAddr]
+					ipAddr = self.myApp.testNodes[extAddr]
 					sAddr  = self.myApp.mapList[extAddr] if ipAddr != IP_NA else IP_NA
 
 					# update the status bar
@@ -925,8 +924,8 @@ class pingThread(QThread):
 
 					if retCode == RET_FAIL:
 						sleep(BACT_TIME_SLOT-0.3)
-					#remove from the pending list
-					# self.myApp.testNodesPending.remove(extAddr)
+					# remove from the pending list
+					del self.myApp.testNodesPending[extAddr]
 
 					
 
