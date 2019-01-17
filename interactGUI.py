@@ -151,7 +151,7 @@ class interactGUI(object):
 			mCmdStr+=" for <b>ALL neighbors</b>"
 		# mCmdStr+=" 'all BACTs'"
 		if self.mShowMap==0 and int(self.mIteration) > 1:
-		    mCmdStr+=", REPEAT Test <b>'x{}'</b>".format(self.mIteration)
+			mCmdStr+=", REPEAT Test <b>'x{}'</b>".format(self.mIteration)
 
 		if self.mOutputToFile == 1:
 			mCmdStr+=" and WRITE the result statistics to <b>file '{}'</b>".format(self.mOutputFilename)
@@ -549,7 +549,7 @@ class interactGUI(object):
 			self.ui.lowerText.setHtml('')
 			with open(file,'r') as stream:
 				myHtml = '<table border="1" width="100%">'
-		                        
+								
 				for rowdata in csv.reader(stream):
 					if row < 5:
 						pass
@@ -715,9 +715,10 @@ class interactGUI(object):
 			logMsg += "OK [{}/{}]".format(ret,len(myApp.testNodes))
 			myApp.validNodesCnt = ret
 			self.logCmdHistory(func_name(),logMsg,"info")
-
+			# print(myApp.testNodes)
 			# prepare the output mapping
 			prepare_output_mapping(myApp)
+			self.logCmdHistory(func_name(),myApp.mapStr,"info") #TODO: delete
 
 			# if show only map show the mapstr and exit
 			if myApp.map == True:
@@ -830,7 +831,7 @@ class pingThread(QThread):
 
 	def __del__(self):
 		self.wait()
-	
+
 	def run(self):
 		tot                 = len(self.myApp.testNodes)
 		reps                = 1
@@ -842,28 +843,58 @@ class pingThread(QThread):
 		append2csv(self.myApp.outputFilename,self.myApp.exportData["header"],"w")
 		
 		self.myApp.exportData["main"]=[]
-
+		# print(self.myApp.testNodesPerSlot)
 		# iterate through each repetitions
 		for reps in range(1,total_iterations+1):
-			self.myApp.outputAppData=[]
-			cnt    = 0
+			self.myApp.outputAppData    = []
+			self.myApp.testNodesPending = self.myApp.testNodes
+			cnt                         = 0
+			# for item in self.myApp.testNodes:
+			# 	for extAddr in item:
+			# 		self.myApp.testNodesPending.append(extAddr)
 
+			self.sigUpperText.emit("### ITERATION {}".format(reps),"info")
 			if reps > 1 :
 				# when higher reps, if the time between the iterations for a same node  is less than MIN_TIME_BEFORE_ITERATE, we need to sleep befre repeating the nodes
 				delta = abs(last_iteration_time - datetime.today()).total_seconds()
 				if delta < MIN_TIME_BEFORE_ITERATE:
-					self.ui.statusbar.showMessage("Waiting for {} seconds from {} before iterating... ".format(int(MIN_TIME_BEFORE_ITERATE - delta), get_date()))
+					self.sigStatusBar.emit("Waiting for {} seconds from {} before iterating... ".format(int(MIN_TIME_BEFORE_ITERATE - delta), get_date()))
 					sleep(MIN_TIME_BEFORE_ITERATE - delta)
 				myDate = get_date()
 				# self.myApp.add_header_2_output(myDate,reps, False)
 
 			last_iteration_time = datetime.today()
-
-			# iterate through each test nodes
 			for item in self.myApp.testNodes:
 				for extAddr in item:
 					panId  = self.myApp.mapExt2PanId[extAddr]
-					ipAddr = item[extAddr]
+					break;
+				break;
+			rootIpAddr = self.myApp.pans[panId].rootAddr
+			
+			while self.myApp.testNodesPending:
+				listSize = len(self.myApp.testNodesPending)
+				ret, retStr = test_ssh(rootIpAddr,"pib -gn .rf_mac.status.sync_mgr.macTSN")
+				
+				if ret!=RET_SUCC:
+					print("some error while retreiving TSN")
+					self.sigUpperText.emit("Error while retreiving TSN...","err")
+				camTSN = int(retStr,16)
+				slotNum = get_modulo_10(retStr)
+				nextslotNum = (slotNum+1)%10
+				# extract the ext addr for the next timeslot
+				extAddr, ipAddr = extractExtIpAddrforSlot(self.myApp.testNodesPending,nextslotNum)
+
+				# if extAddr is not found simply wait for the timeslot to finish
+				if extAddr == RET_FAIL:
+					self.sigUpperText.emit("TSN={}({}) [{}] NextTSN {}-->N/A".format(camTSN,hex(camTSN),slotNum, nextslotNum),"info")
+					self.sigStatusBar.emit("Waiting for {} seconds from {} to next timeslot... ".format(round(BACT_TIME_SLOT-0.3,2), get_date()))
+
+					sleep(BACT_TIME_SLOT-0.3)
+				else:
+					self.sigUpperText.emit("TSN={}({}) [{}] NextTSN {}-->{} size={}".format(camTSN,hex(camTSN), slotNum,nextslotNum, extAddr, listSize-1),"info")
+					# send ping stuff
+					panId  = self.myApp.mapExt2PanId[extAddr]
+					# ipAddr = self.myApp.testNodes[extAddr]
 					sAddr  = self.myApp.mapList[extAddr] if ipAddr != IP_NA else IP_NA
 
 					# update the status bar
@@ -891,7 +922,48 @@ class pingThread(QThread):
 					
 					cnt+=1
 					self.sigProgressBar.emit(self.ui.progressBar.value() + 1)
-				# end of one repetition
+
+					if retCode == RET_FAIL:
+						sleep(BACT_TIME_SLOT-0.3)
+					#remove from the pending list
+					# self.myApp.testNodesPending.remove(extAddr)
+
+					
+
+
+			# # iterate through each test nodes
+			# for item in self.myApp.testNodes:
+			# 	for extAddr in item:
+			# 		panId  = self.myApp.mapExt2PanId[extAddr]
+			# 		ipAddr = item[extAddr]
+			# 		sAddr  = self.myApp.mapList[extAddr] if ipAddr != IP_NA else IP_NA
+
+			# 		# update the status bar
+			# 		if ipAddr == IP_NA:
+			# 			self.sigStatusBar.emit("TEST for {}".format(extAddr))
+			# 		else:
+			# 			myNode = self.myApp.pans[panId].nodeList[sAddr]
+			# 			self.sigStatusBar.emit("Test for {} (losts {}) in [{}/{}]  ".format(extAddr, myNode.finalTx - myNode.finalRx, reps, total_iterations))
+					
+			# 		retCode = RET_FAIL
+			# 		myDate = get_date()
+
+			# 		if ipAddr != IP_NA:
+			# 			last_mac_tx_succ, last_mac_tx_fail = self.myApp.get_mac_stats(extAddr)
+			# 			retCode, ret = (self.myApp.send_ping(ipAddr))
+			# 		if retCode == RET_FAIL:  
+			# 			self.sigUpperText.emit("Failed for...{} in [{}/{}]".format(extAddr,reps, total_iterations),"error")
+			# 		else:
+			# 			self.myApp.process_ping_result(extAddr, ret, last_mac_tx_succ, last_mac_tx_fail)
+			# 			self.myApp.get_mod_rssi(extAddr)
+					
+			# 		params = self.myApp.add_to_output_data(extAddr,myDate)
+			# 		self.myApp.outputAppData.append(params)
+			# 		self.myApp.add_to_output_str(params)
+					
+			# 		cnt+=1
+			# 		self.sigProgressBar.emit(self.ui.progressBar.value() + 1)
+			# 	# end of one repetition
 
 			# write the result to the file after each repetition
 			append2csv(self.myApp.outputFilename,self.myApp.outputAppData)
@@ -924,4 +996,98 @@ class pingThread(QThread):
 		self.ui.tabWidget.setCurrentIndex(0)
 
 		self.sigDone.emit(True)
+	
+	# def run(self):
+	# 	tot                 = len(self.myApp.testNodes)
+	# 	reps                = 1
+	# 	total_iterations    = int(self.myApp.iteration)
+	# 	myDate              = get_date()
+	# 	last_iteration_time = 0
+
+	# 	self.myApp.add_header_2_output(myDate,reps, True)
+	# 	append2csv(self.myApp.outputFilename,self.myApp.exportData["header"],"w")
+		
+	# 	self.myApp.exportData["main"]=[]
+
+	# 	# iterate through each repetitions
+	# 	for reps in range(1,total_iterations+1):
+	# 		self.myApp.outputAppData=[]
+	# 		cnt    = 0
+
+	# 		if reps > 1 :
+	# 			# when higher reps, if the time between the iterations for a same node  is less than MIN_TIME_BEFORE_ITERATE, we need to sleep befre repeating the nodes
+	# 			delta = abs(last_iteration_time - datetime.today()).total_seconds()
+	# 			if delta < MIN_TIME_BEFORE_ITERATE:
+	# 				self.ui.statusbar.showMessage("Waiting for {} seconds from {} before iterating... ".format(int(MIN_TIME_BEFORE_ITERATE - delta), get_date()))
+	# 				sleep(MIN_TIME_BEFORE_ITERATE - delta)
+	# 			myDate = get_date()
+	# 			# self.myApp.add_header_2_output(myDate,reps, False)
+
+	# 		last_iteration_time = datetime.today()
+
+	# 		# iterate through each test nodes
+	# 		for item in self.myApp.testNodes:
+	# 			for extAddr in item:
+	# 				panId  = self.myApp.mapExt2PanId[extAddr]
+	# 				ipAddr = item[extAddr]
+	# 				sAddr  = self.myApp.mapList[extAddr] if ipAddr != IP_NA else IP_NA
+
+	# 				# update the status bar
+	# 				if ipAddr == IP_NA:
+	# 					self.sigStatusBar.emit("TEST for {}".format(extAddr))
+	# 				else:
+	# 					myNode = self.myApp.pans[panId].nodeList[sAddr]
+	# 					self.sigStatusBar.emit("Test for {} (losts {}) in [{}/{}]  ".format(extAddr, myNode.finalTx - myNode.finalRx, reps, total_iterations))
+					
+	# 				retCode = RET_FAIL
+	# 				myDate = get_date()
+
+	# 				if ipAddr != IP_NA:
+	# 					last_mac_tx_succ, last_mac_tx_fail = self.myApp.get_mac_stats(extAddr)
+	# 					retCode, ret = (self.myApp.send_ping(ipAddr))
+	# 				if retCode == RET_FAIL:  
+	# 					self.sigUpperText.emit("Failed for...{} in [{}/{}]".format(extAddr,reps, total_iterations),"error")
+	# 				else:
+	# 					self.myApp.process_ping_result(extAddr, ret, last_mac_tx_succ, last_mac_tx_fail)
+	# 					self.myApp.get_mod_rssi(extAddr)
+					
+	# 				params = self.myApp.add_to_output_data(extAddr,myDate)
+	# 				self.myApp.outputAppData.append(params)
+	# 				self.myApp.add_to_output_str(params)
+					
+	# 				cnt+=1
+	# 				self.sigProgressBar.emit(self.ui.progressBar.value() + 1)
+	# 			# end of one repetition
+
+	# 		# write the result to the file after each repetition
+	# 		append2csv(self.myApp.outputFilename,self.myApp.outputAppData)
+	# 		self.myApp.exportData["main"].extend(self.myApp.outputAppData)
+	# 		self.sigOutput2console.emit(self.myApp, self.myApp.outputFilename, reps)
+	# 		# end of for loop reps
+
+	# 	# prepare final statistics if more iterations
+	# 	if int(self.myApp.iteration) > 1:
+
+	# 		myDate = get_date()
+	# 		# self.myApp.add_header_2_output(myDate,int(self.myApp.iteration) +1, False)
+	# 		for item in self.myApp.testNodes:
+	# 			for extAddr in item:
+	# 				# ipAddr  = item[extAddr]
+	# 				myDate = get_date()
+	# 				params = self.myApp.add_to_output_data(extAddr,myDate, 1)
+	# 				self.myApp.add_to_output_str(params, 1)
+					
+	# 	myDate = get_date()
+				
+	# 	self.ui.exportDataBtn.setEnabled(1)
+
+	# 	# display the mapping
+	# 	self.sigDisplayMap.emit(self.myApp.mapStr)
+
+	# 	# copy export data
+	# 	self.sigCopyExportData.emit(self.myApp.exportData)
+		
+	# 	self.ui.tabWidget.setCurrentIndex(0)
+
+	# 	self.sigDone.emit(True)
 		

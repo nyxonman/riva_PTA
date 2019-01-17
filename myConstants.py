@@ -8,7 +8,7 @@ OS_WIN     = "nt"
 DEBUG_MODE = False
 logMsg     = ""
 
-__VERSION__        = "1.3.1"
+__VERSION__        = "1.3.2"
 APP_VERSION        = __VERSION__ +" {OS: " + os.name + "} (debug)" if DEBUG_MODE == True else __VERSION__ +" {OS: " + os.name + "}"
 
 CAM_VERSION = 3

@@ -304,7 +304,10 @@ def process_neighbor_data(pan, panId, data, interactGuiObj):
 def prepare_test(myApp):
     '''Prepare the sorted list of the nodes'''
     validNodesCnt = 0
-
+    # for x in range(0,10):
+    #     myApp.testNodesPerSlot["SLOT_"+str(x)]=[]
+    #     myApp.testNodesPerSlot[x]=[]
+    # myApp.display_test_nodes_per_slot()
     # if all neighbors is not checked
     if myApp.fromConfig == True:
         for extAddr in myApp.fileList:
@@ -319,6 +322,7 @@ def prepare_test(myApp):
             else:
                 ipAddr = IP_NA
             myApp.add_test_node(extAddr, ipAddr)
+            # myApp.add_test_node_per_slot(extAddr, ipAddr)
 
     else:
         for keyPanId in myApp.pans:
@@ -334,8 +338,8 @@ def prepare_test(myApp):
                     return RET_FAIL
                 myApp.add_test_node(extAddr, ipAddr)
                 validNodesCnt+=1
-    # print("{} = {}".format(extAddr,sAddr))
-    # myApp.display_test_nodes()
+    # myApp.display_test_nodes_per_slot()
+    # print(myApp.testNodes)
 
     return validNodesCnt
 
@@ -369,7 +373,7 @@ def prepare_output_mapping(myApp):
             sAddr        = ipAddr.split(":")[-1]
             # myApp.mapStr += myApp.disp_line(" ","{:<18s} | {:>04s} | {:<6s}".format(extAddr,sAddr,hex(int(panId))) , 0 , length) + "\n"
             style = ' style="color:#FF0000"' if ipAddr == IP_NA else ""
-            myApp.mapStr += '<tr{}><td>{}</td><td>{}</td><td>{}</td></tr>'.format(style, extAddr,sAddr,hex(int(panId)))
+            myApp.mapStr += '<tr{}><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>'.format(style, extAddr,get_modulo_10(extAddr),sAddr,hex(int(panId)))
             params = [extAddr, sAddr, hex(int(panId))]
             myApp.exportData["mapList"].append(params)
     myApp.mapStr += "<table>"
@@ -438,3 +442,21 @@ def append2csv(csvfile = "app_testlog.csv", res="", mode="a"):
         for r in res:
             writer.writerow(r)
 
+def get_modulo_10(hex):
+    intNum = int(hex,16)
+    return intNum%10
+
+def extractExtIpAddrforSlot(nodeList, slot):
+    # print (nodeList)
+    ipAddr = IP_NA
+    for item in nodeList:
+        for extAddr in item:
+            if get_modulo_10(extAddr) == slot:
+                ipAddr = item[extAddr]
+                nodeList.remove(item)
+                return extAddr, ipAddr
+
+    return RET_FAIL, ipAddr
+            # panId  = self.myApp.mapExt2PanId[extAddr]
+            # ipAddr = item[extAddr]
+            # if slot

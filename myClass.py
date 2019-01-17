@@ -1,4 +1,5 @@
 from PyQt5 import QtGui
+import pprint
 from myConstants import *
 from myFunctions import *
 
@@ -8,6 +9,7 @@ class App():
 		self.nbrOfRoots     = 1
 		self.pktCnt         = str(DFT_PKT_CNT)
 		self.hwAddr         = "-"
+		self.listentPeriod  = 60
 		self.file           = ""
 		self.pktIntv        = str(DFT_PKT_INTV)
 		self.map            = False
@@ -20,6 +22,8 @@ class App():
 		self.version        = APP_VERSION
 		self.help           = False
 		self.testNodes      = []
+		self.testNodesPerSlot = {}
+		self.testNodesPending  = []
 		self.mapStr         = ""
 		self.pans           = {}
 		self.fromConfig     = True
@@ -62,12 +66,18 @@ class App():
 		print ('----------------------------------------')
 		self.display_test_nodes()        
 
-
+	def add_test_node_per_slot(self, extAddr, ipAddr):
+		print("{} {}".format(extAddr, int(extAddr,16)))
+		rem = get_modulo_10(extAddr)
+		print("TSN"+ str(rem))
+		self.testNodesPerSlot[rem].append({extAddr:ipAddr})
 	def add_test_node(self,extAddr,ipAddr):
 		self.testNodes.append({extAddr:ipAddr})
 
+	def display_test_nodes_per_slot(self):
+		print((self.testNodesPerSlot))
 	def display_test_nodes(self):
-		print(self.testNodes)
+		pprint(self.testNodes)
 
 	def process_ping_result(self,extAddr, output, last_mac_tx_succ, last_mac_tx_fail):
 		panId  = self.mapExt2PanId[extAddr]
