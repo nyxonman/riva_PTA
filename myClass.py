@@ -190,9 +190,9 @@ class App():
 			print("")
 			exit()
 		lines       = output.splitlines()
-		splitted    = lines[0].split('=')
+		splitted    = lines[0].split('=') #DataConfirmSUccess
 		mac_tx_succ = int(splitted[1].strip(), 16)
-		splitted    = lines[1].split('=')
+		splitted    = lines[1].split('=') #DataConfirmFailure
 		mac_tx_fail = int(splitted[1].strip(), 16)
 
 		return mac_tx_succ,mac_tx_fail

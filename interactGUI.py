@@ -976,7 +976,7 @@ class pingThread(QThread):
 
 			myDate = get_date()
 			# self.myApp.add_header_2_output(myDate,int(self.myApp.iteration) +1, False)
-			for extAddr, ipAddr in self.myApp.testNodes:
+			for extAddr, ipAddr in self.myApp.testNodes.items():
 				myDate = get_date()
 				params = self.myApp.add_to_output_data(extAddr,myDate, 1)
 				self.myApp.add_to_output_str(params, 1)
