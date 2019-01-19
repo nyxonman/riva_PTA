@@ -366,7 +366,6 @@ def prepare_output_mapping(myApp):
                             <th>PAN ID</th>
                         </tr>
                     '''
-    
     for extAddr, ipAddr in myApp.testNodes.items():
         panId        = myApp.mapExt2PanId[extAddr]
         sAddr        = ipAddr.split(":")[-1]
@@ -441,6 +440,8 @@ def append2csv(csvfile = "app_testlog.csv", res="", mode="a"):
             writer.writerow(r)
 
 def get_modulo_10(hex):
+    if hex=="-":
+        return "err"
     intNum = int(hex,16)
     return intNum%10
 
