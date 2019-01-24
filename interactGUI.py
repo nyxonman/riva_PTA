@@ -93,6 +93,8 @@ class interactGUI(object):
 			if len(self.mOutputFilename) < 1  :
 				errMsg+="Outfile Name is '{}'. Please provide a filename.</br>".format(self.mOutputFilename)
 			self.mOutputFilename = self.mOutputFilename.split('.')[0] + '.csv'
+		if (not self.mPktSize.isdigit()) or int(self.mPktSize)<MIN_PING_PAYLOAD or int(self.mPktSize)>MAX_PING_PAYLOAD:
+			errMsg+="Packet size should be between {} and {}. '{}' provided.</br>".format(MIN_PING_PAYLOAD, MAX_PING_PAYLOAD,self.mPktSize)
 
 		return errMsg
 
@@ -102,6 +104,7 @@ class interactGUI(object):
 
 		# ping controls
 		self.ui.pktSizeDial.valueChanged.connect(lambda: self.interact(self.ui.pktSizeDial))
+		self.ui.pktSizeVal.textChanged.connect(lambda: self.interact(self.ui.pktSizeVal))
 		self.ui.pktCntDial.valueChanged.connect(lambda: self.interact(self.ui.pktCntDial))
 		self.ui.pktIntDial.valueChanged.connect(lambda: self.interact(self.ui.pktIntDial))
 		self.ui.pktResDial.valueChanged.connect(lambda: self.interact(self.ui.pktResDial))
@@ -191,9 +194,14 @@ class interactGUI(object):
 		'''Handles the interaction with the GUI'''
 		mError    = 0
 		exclude   = 0
+		retMsg    = ""
 		myObjName = myObj.property("objectName")
 		
-		if myObjName=="pktSizeDial":
+		if myObjName=="pktSizeVal":
+			myObjVal      = myObj.text()
+			self.mPktSize = str(myObjVal)
+		
+		elif myObjName=="pktSizeDial":
 			myObjVal      = myObj.value()
 			myObjVal      = 2<<(myObjVal-1)
 			self.mPktSize = str(myObjVal)

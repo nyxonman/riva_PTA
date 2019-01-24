@@ -561,7 +561,7 @@
           <item row="4" column="0">
            <widget class="QLineEdit" name="pktSizeVal">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="font">
              <font>
@@ -569,7 +569,7 @@
              </font>
             </property>
             <property name="cursor">
-             <cursorShape>ForbiddenCursor</cursorShape>
+             <cursorShape>IBeamCursor</cursorShape>
             </property>
             <property name="autoFillBackground">
              <bool>true</bool>
