@@ -196,6 +196,7 @@ class interactGUI(object):
 		exclude   = 0
 		retMsg    = ""		
 		myObjName = myObj.property("objectName")
+		
 		if myObjName=="pktSizeVal":
 			myObjVal      = myObj.text()
 			self.mPktSize = str(myObjVal)
