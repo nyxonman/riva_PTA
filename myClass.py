@@ -231,7 +231,7 @@ class App():
 			self.exportData["header"].append(["pktSize","pktCnt","pktInt","pktResp", "Iteration", "Nodes"])
 			self.exportData["header"].append([self.pktSize, self.pktCnt, self.pktIntv, self.pktResTime, self.iteration, "{}/{}".format(self.validNodesCnt, len(self.testNodes))])
 			self.exportData["header"].append([])
-			self.exportData["header"].append(["TimeStamp","extAddr", "sAddr", "hwType", "best_RF", "RSSI_I", "RSSI_M", "tx", "rx", "macTxSucc", "macTxFail", "loss", "minRTT", "maxRTT", "mdevRTT", "avgRTT"])
+			self.exportData["header"].append(["TimeStamp","extAddr","sAddr","hwType","best_RF","RSSI_I","RSSI_M","tx","rx","loss","macTxSucc","macTxFail","macTxAck","macTxCts","macRxRts","macRxAck","minRTT","maxRTT","mdevRTT","avgRTT"])
 			
 			
 	def verifyInputParams(self):
