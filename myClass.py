@@ -89,12 +89,10 @@ class App():
 		myNode.finalRx        += myNode.rx
 		myNode.finalMacTxSucc += myNode.macTxSucc
 		myNode.finalMacTxFail += myNode.macTxFail
-		myNode.finalMacTxSucc      += myNode.macTxSucc
-		myNode.finalMacTxFail      += myNode.macTxFail
-		myNode.finalMacTxAck       += myNode.macTxAck
-		myNode.finalMacTxCts       += myNode.macTxCts
-		myNode.finalMacRxRts       += myNode.macRxRts
-		myNode.finalMacRxAck       += myNode.macRxAck
+		myNode.finalMacTxAck  += myNode.macTxAck
+		myNode.finalMacTxCts  += myNode.macTxCts
+		myNode.finalMacRxRts  += myNode.macRxRts
+		myNode.finalMacRxAck  += myNode.macRxAck
 		myNode.finalLoss      = str( round(100 - myNode.finalRx/myNode.finalTx *100)) +'%'
 		self.losts            += myNode.tx - myNode.rx #for display
 		if not isinstance(myNode.minRTT, str):

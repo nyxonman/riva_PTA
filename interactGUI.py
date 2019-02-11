@@ -922,7 +922,7 @@ class pingThread(QThread):
 					# ipAddr  = item[extAddr]
 					myDate = get_date()
 					params = self.myApp.add_to_output_data(extAddr,myDate, 1)
-					self.myApp.add_to_output_str(params, 1)
+					# self.myApp.add_to_output_str(params, 1)
 					
 		myDate = get_date()
 				
