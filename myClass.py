@@ -83,7 +83,6 @@ class App():
 		myNode.macTxAck  = fsm_ack_send - last_fsm_ack_send
 		myNode.macTxCts  = fsm_cts_send - last_fsm_cts_send
 
-		
 		# final values
 		myNode.finalTx        += myNode.tx
 		myNode.finalRx        += myNode.rx
