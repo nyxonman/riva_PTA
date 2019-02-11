@@ -454,11 +454,11 @@ class interactGUI(object):
 				if incTestInfo:
 					for r in self.exportData["header"]:
 						writer.writerow(r)
-				
+
 				# write main data
 				if incData:
 					if not incTestInfo:
-						writer.writerow(["TimeStamp","extAddr","sAddr","hwType","best_RF","RSSI_I","RSSI_M","tx","rx","macTxSucc","macTxFail","loss","minRTT","maxRTT","mdevRTT","avgRTT"])
+						writer.writerow(["TimeStamp","extAddr","sAddr","hwType","best_RF","RSSI_I","RSSI_M","tx","rx","loss","macTxSucc","macTxFail","macTxAck","macTxCts","macRxRts","macRxAck","minRTT","maxRTT","mdevRTT","avgRTT"])
 					for r in self.exportData["main"]:
 						writer.writerow(r)
 					writer.writerow(empty)
@@ -466,7 +466,7 @@ class interactGUI(object):
 				# write the final stats
 				if incFinalStats:
 					writer.writerow(["final"])
-					writer.writerow(["TimeStamp","extAddr","sAddr","hwType","best_RF","RSSI_I","RSSI_M","tx","rx","macTxSucc","macTxFail","loss","minRTT","maxRTT","avgRTT"])
+					writer.writerow(["TimeStamp","extAddr","sAddr","hwType","best_RF","RSSI_I","RSSI_M","tx","rx","loss","macTxSucc","macTxFail","macTxAck","macTxCts","macRxRts","macRxAck","minRTT","maxRTT","avgRTT"])
 
 					for r in self.exportData["finalStats"]:
 						writer.writerow(r)
