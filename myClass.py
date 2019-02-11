@@ -353,7 +353,7 @@ class Node() :
 
 	def get_params(self, final):
 
- 		if final==0:
+		if final==0:
 			return [str(self.timeStamp), str(self.extAddr), str(self.sAddr), str(self.hwType), str(self.best_RF), str(self.RSSI_I), str(self.RSSI_M), str(self.tx), str(self.rx), str(self.loss), str(self.macTxSucc), str(self.macTxFail), str(self.macTxAck), str(self.macTxCts), str(self.macRxRts), str(self.macRxAck), str(self.minRTT), str(self.maxRTT), str(self.mdevRTT), str(self. avgRTT)]
 		else:
 			return [str(self.timeStamp), str(self.extAddr), str(self.sAddr), str(self.hwType), str(self.best_RF), str(self.RSSI_I), str(self.RSSI_M), str(self.finalTx), str(self.finalRx), str(self.finalLoss), str(self.finalMacTxSucc), str(self.finalMacTxFail), str(self.finalMacTxAck), str(self.finalMacTxCts), str(self.finalMacRxRts), str(self.finalMacRxAck), str(self.finalMinRTT), str(self.finalMaxRTT), str(self.finalAvgRTT)]
