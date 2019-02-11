@@ -179,6 +179,7 @@ class App():
 			print("")
 			exit()
 		lines       = output.splitlines()
+		print(lines)
 		splitted    = lines[0].split('=')
 		mac_tx_succ = int(splitted[1].strip(), 16)
 		splitted    = lines[1].split('=')
