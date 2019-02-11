@@ -69,21 +69,32 @@ class App():
 	def display_test_nodes(self):
 		print(self.testNodes)
 
-	def process_ping_result(self,extAddr, output, last_mac_tx_succ, last_mac_tx_fail):
+	def process_ping_result(self,extAddr, output, last_mac_tx_succ, last_mac_tx_fail, last_rx_frame_kind_ack, last_rx_frame_kind_rts, last_fsm_ack_send, last_fsm_cts_send):
 		panId  = self.mapExt2PanId[extAddr]
 		sAddr  = self.mapList[extAddr]
 		myNode = self.pans[panId].nodeList[sAddr]
 		myNode.tx, myNode.rx, myNode.loss, myNode.time, myNode.minRTT, myNode.avgRTT, myNode.maxRTT, myNode.mdevRTT = output
-		mac_tx_succ, mac_tx_fail = self.get_mac_stats(extAddr)
+		mac_tx_succ, mac_tx_fail, rx_frame_kind_ack, rx_frame_kind_rts, fsm_ack_send, fsm_cts_send = self.get_mac_stats(extAddr)
 					
 		myNode.macTxSucc = mac_tx_succ - last_mac_tx_succ
 		myNode.macTxFail = mac_tx_fail - last_mac_tx_fail
+		myNode.macRxAck  = rx_frame_kind_ack - last_rx_frame_kind_ack
+		myNode.macRxRts  = rx_frame_kind_rts - last_rx_frame_kind_rts
+		myNode.macTxAck  = fsm_ack_send - last_fsm_ack_send
+		myNode.macTxCts  = fsm_cts_send - last_fsm_cts_send
+
 		
 		# final values
 		myNode.finalTx        += myNode.tx
 		myNode.finalRx        += myNode.rx
 		myNode.finalMacTxSucc += myNode.macTxSucc
 		myNode.finalMacTxFail += myNode.macTxFail
+		myNode.finalMacTxSucc      += myNode.macTxSucc
+		myNode.finalMacTxFail      += myNode.macTxFail
+		myNode.finalMacTxAck       += myNode.macTxAck
+		myNode.finalMacTxCts       += myNode.macTxCts
+		myNode.finalMacRxRts       += myNode.macRxRts
+		myNode.finalMacRxAck       += myNode.macRxAck
 		myNode.finalLoss      = str( round(100 - myNode.finalRx/myNode.finalTx *100)) +'%'
 		self.losts            += myNode.tx - myNode.rx #for display
 		if not isinstance(myNode.minRTT, str):
@@ -179,13 +190,28 @@ class App():
 			print("")
 			exit()
 		lines       = output.splitlines()
-		print(lines)
+		print(output)
+		# DataConfirmSuccess
 		splitted    = lines[0].split('=')
 		mac_tx_succ = int(splitted[1].strip(), 16)
+		# DataConfirmFailure
 		splitted    = lines[1].split('=')
 		mac_tx_fail = int(splitted[1].strip(), 16)
+		# rx_frame_kind_ack
+		splitted    = lines[2].split('=')
+		rx_frame_kind_ack = int(splitted[1].strip(), 16)
+		# rx_frame_kind_rts
+		splitted    = lines[3].split('=')
+		rx_frame_kind_rts = int(splitted[1].strip(), 16)
+		# fsm_ack_send
+		splitted    = lines[5].split('=')
+		fsm_ack_send = int(splitted[1].strip(), 16)
+		# fsm_cts_send
+		splitted    = lines[6].split('=')
+		fsm_cts_send = int(splitted[1].strip(), 16)
 
-		return mac_tx_succ,mac_tx_fail
+		# return mac_tx_succ,mac_tx_fail
+		return mac_tx_succ, mac_tx_fail, rx_frame_kind_ack, rx_frame_kind_rts, fsm_ack_send, fsm_cts_send
 
 	def add_map_2_output_data(self):
 		self.outputData.append([])
@@ -301,6 +327,10 @@ class Node() :
 		self.rx             = 0
 		self.macTxSucc      = 0
 		self.macTxFail      = 0
+		self.macTxAck       = 0
+		self.macTxCts       = 0
+		self.macRxRts       = 0
+		self.macRxAck       = 0
 		self.loss           = 0
 		self.minRTT         = 86400000
 		self.maxRTT         = 0
@@ -310,6 +340,10 @@ class Node() :
 		self.finalRx        = 0
 		self.finalMacTxSucc = 0
 		self.finalMacTxFail = 0
+		self.finalMacTxAck  = 0
+		self.finalMacTxCts  = 0
+		self.finalMacRxRts  = 0
+		self.finalMacRxAck  = 0
 		self.finalLoss      = 0
 		self.finalMinRTT    = 86400000
 		self.finalMaxRTT    = 0

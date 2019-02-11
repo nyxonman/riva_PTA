@@ -886,12 +886,12 @@ class pingThread(QThread):
 					myDate = get_date()
 
 					if ipAddr != IP_NA:
-						last_mac_tx_succ, last_mac_tx_fail = self.myApp.get_mac_stats(extAddr)
+						last_mac_tx_succ, last_mac_tx_fail, last_rx_frame_kind_ack, last_rx_frame_kind_rts, last_fsm_ack_send, last_fsm_cts_send = self.myApp.get_mac_stats(extAddr)
 						retCode, ret = (self.myApp.send_ping(ipAddr))
 					if retCode == RET_FAIL:  
 						self.sigUpperText.emit("Failed for...{} in [{}/{}]".format(extAddr,reps, total_iterations),"error")
 					else:
-						self.myApp.process_ping_result(extAddr, ret, last_mac_tx_succ, last_mac_tx_fail)
+						self.myApp.process_ping_result(extAddr, ret, last_mac_tx_succ, last_mac_tx_fail, last_rx_frame_kind_ack, last_rx_frame_kind_rts, last_fsm_ack_send, last_fsm_cts_send)
 						self.myApp.get_mod_rssi(extAddr)
 					
 					params = self.myApp.add_to_output_data(extAddr,myDate)
