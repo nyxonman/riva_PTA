@@ -379,9 +379,9 @@ def prepare_output_mapping(myApp):
 def unavailable_node(extAddr, final):
     # date, "extAddr", "sAddr", "hwType", "best_RF", "RSSI_I", "RSSI_M", "tx", "time", "rx", "macTxSucc", "macTxFail", "loss", "minRTT", "maxRTT", "mdevRTT", "avgRTT", "finalTx", "finalRx", "finalMacTxSucc", "finalMacTxFail", "finalLoss", "finalMinRTT", "finalMaxRTT", "finalAvgRTT"
     if final == 0:
-        return ["", extAddr, "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"]
+        return ["", extAddr, "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"]
     else:
-        return ["", extAddr, "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"]
+        return ["", extAddr, "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"]
 
 def process_ping_output(output, retCode):
     'Process the ping output results to get the necessary counters and RTT values'

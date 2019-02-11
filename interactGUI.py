@@ -587,9 +587,13 @@ class interactGUI(object):
 								<th>RSSI_M</th>
 								<th>tx</th>
 								<th>rx</th>
+								<th>loss</th>
 								<th>macTxSucc</th>
 								<th>macTxFail</th>
-								<th>loss</th>
+								<th>macTxAck</th>
+								<th>macTxCts</th>
+								<th>macRxRts</th>
+								<th>macRxAck</th>
 								<th>minRTT</th>
 								<th>maxRTT</th>								
 								<th>avgRTT</th>
@@ -896,7 +900,7 @@ class pingThread(QThread):
 					
 					params = self.myApp.add_to_output_data(extAddr,myDate)
 					self.myApp.outputAppData.append(params)
-					self.myApp.add_to_output_str(params)
+					# self.myApp.add_to_output_str(params)
 					
 					cnt+=1
 					self.sigProgressBar.emit(self.ui.progressBar.value() + 1)
