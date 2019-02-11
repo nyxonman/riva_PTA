@@ -323,38 +323,40 @@ class Node() :
 		self.RSSI_I         = RSSI_I
 		self.RSSI_M         = RSSI_M
 		self.tx             = 0
-		self.time           = 0
 		self.rx             = 0
+		self.loss           = 0
 		self.macTxSucc      = 0
 		self.macTxFail      = 0
 		self.macTxAck       = 0
 		self.macTxCts       = 0
 		self.macRxRts       = 0
 		self.macRxAck       = 0
-		self.loss           = 0
 		self.minRTT         = 86400000
 		self.maxRTT         = 0
 		self.mdevRTT        = 0
 		self.avgRTT         = 0
 		self.finalTx        = 0
 		self.finalRx        = 0
+		self.finalLoss      = 0
 		self.finalMacTxSucc = 0
 		self.finalMacTxFail = 0
 		self.finalMacTxAck  = 0
 		self.finalMacTxCts  = 0
 		self.finalMacRxRts  = 0
 		self.finalMacRxAck  = 0
-		self.finalLoss      = 0
 		self.finalMinRTT    = 86400000
 		self.finalMaxRTT    = 0
 		self.finalAvgRTT    = []
+		self.time           = 0
+
 		# change in get_params,add_header_2_output, unavailable node
 
 	def get_params(self, final):
-		if final==0:
-			return [str(self.timeStamp), str(self.extAddr), str(self.sAddr), str(self.hwType), str(self.best_RF), str(self.RSSI_I), str(self.RSSI_M), str(self.tx), str(self.rx), str(self.macTxSucc), str(self.macTxFail), str(self.loss), str(self.minRTT), str(self.maxRTT), str(self.mdevRTT), str(self.avgRTT)]
+
+ 		if final==0:
+			return [str(self.timeStamp), str(self.extAddr), str(self.sAddr), str(self.hwType), str(self.best_RF), str(self.RSSI_I), str(self.RSSI_M), str(self.tx), str(self.rx), str(self.loss), str(self.macTxSucc), str(self.macTxFail), str(self.macTxAck), str(self.macTxCts), str(self.macRxRts), str(self.macRxAck), str(self.minRTT), str(self.maxRTT), str(self.mdevRTT), str(self. avgRTT)]
 		else:
-			return [str(self.timeStamp), str(self.extAddr), str(self.sAddr), str(self.hwType), str(self.best_RF), str(self.RSSI_I), str(self.RSSI_M), str(self.finalTx), str(self.finalRx), str(self.finalMacTxSucc), str(self.finalMacTxFail), str(self.finalLoss), str(self.finalMinRTT), str(self.finalMaxRTT), str(self.finalAvgRTT)]
+			return [str(self.timeStamp), str(self.extAddr), str(self.sAddr), str(self.hwType), str(self.best_RF), str(self.RSSI_I), str(self.RSSI_M), str(self.finalTx), str(self.finalRx), str(self.finalLoss), str(self.finalMacTxSucc), str(self.finalMacTxFail), str(self.finalMacTxAck), str(self.finalMacTxCts), str(self.finalMacRxRts), str(self.finalMacRxAck), str(self.finalMinRTT), str(self.finalMaxRTT), str(self.finalAvgRTT)]
 
 
 	def ping_stat(self, tx, rx, loss, minRTT, maxRTT, avgRTT):
