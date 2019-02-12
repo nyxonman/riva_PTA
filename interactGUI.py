@@ -118,6 +118,7 @@ class interactGUI(object):
 		self.ui.outputToFile.stateChanged.connect(lambda: self.interact(self.ui.outputToFile))
 		self.ui.scrollToLastCmdHistory.stateChanged.connect(lambda: self.interact(self.ui.scrollToLastCmdHistory))
 		self.ui.outputFilenameVal.textChanged.connect(lambda: self.interact(self.ui.outputFilenameVal))
+		self.ui.camVersionDropBox.currentIndexChanged.connect(lambda: self.interact(self.ui.camVersionDropBox))
 		
 		# button controls
 		self.ui.addRowBtn.clicked.connect(lambda:self.interact(self.ui.addRowBtn))
@@ -236,6 +237,10 @@ class interactGUI(object):
 		elif myObjName == "IterVal":
 			myObjVal        = myObj.text() if myObj.text() !="" else "0"
 			self.mIteration = myObjVal
+
+		elif myObjName == "camVersionDropBox":
+			myObjVal = self.ui.camVersionDropBox.currentText()[-1]
+			set_cam_version(myObjVal)
 
 		elif myObjName == "addRowBtn":
 			self.updateTable(self.mRootCnt,1)
