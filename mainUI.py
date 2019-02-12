@@ -286,7 +286,7 @@ class Ui_MainObj(object):
         self.pktSizeDial.setCursor(QtGui.QCursor(QtCore.Qt.ClosedHandCursor))
         self.pktSizeDial.setStatusTip("")
         self.pktSizeDial.setWhatsThis("")
-        self.pktSizeDial.setMinimum(3)
+        self.pktSizeDial.setMinimum(4)
         self.pktSizeDial.setMaximum(10)
         self.pktSizeDial.setPageStep(2)
         self.pktSizeDial.setProperty("value", 6)
