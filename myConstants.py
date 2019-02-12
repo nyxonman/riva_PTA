@@ -89,6 +89,10 @@ def set_debug_mode(mode):
 	global DEBUG_MODE
 	DEBUG_MODE = mode
 
+def set_cam_version(version):
+	global CAM_VERSION
+	CAM_VERSION = version
+
 def func_name():
     return "["+inspect.stack()[1][3]+"] " if DEBUG_MODE == True else ""
 
