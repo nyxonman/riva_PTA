@@ -820,11 +820,12 @@ class interactGUI(object):
 		"""		
 		Disable Stop button, enable the Start one and reset progress bar to 0
 		"""
-		self.ui.upperText.append(logDef("<br/><b><center>~~~ TEST FINISHED at {} ~~~<b></center>".format(get_date()),"","#006400"))
+		myDate = get_date()
+		self.ui.upperText.append(logDef("<br/><b><center>~~~ TEST FINISHED at {} ~~~<b></center>".format(myDate),"","#006400"))
 		if(self.ui.scrollToLastOutput.checkState!=0):
 			self.ui.lowerText.moveCursor(QtGui.QTextCursor.End)
 		self.logCmdHistory(func_name(),"BACT Ping Test <b>{}</b>".format("SUCCESS" if runOk == True else "FAILED"), "succ" if runOk == True else "error")
-		self.statusBarMsg("Test Completed")
+		self.statusBarMsg("Test Completed at {}".format(myDate))
 		self.showDialog("Success","Test Success","information") if runOk == True else self.showDialog("FAILED","Test Failed. Please try again.","critical")
 		self.enableInputs(1)
 		self.ui.progressBar.setValue(0)
