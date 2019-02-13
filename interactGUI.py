@@ -93,8 +93,9 @@ class interactGUI(object):
 			if len(self.mOutputFilename) < 1  :
 				errMsg+="Outfile Name is '{}'. Please provide a filename.</br>".format(self.mOutputFilename)
 			self.mOutputFilename = self.mOutputFilename.split('.')[0] + '.csv'
+		
 		if (not self.mPktSize.isdigit()) or int(self.mPktSize)<MIN_PING_PAYLOAD or int(self.mPktSize)>MAX_PING_PAYLOAD:
-			errMsg+="Packet size should be between {} and {}. '{}' provided.</br>".format(MIN_PING_PAYLOAD, MAX_PING_PAYLOAD,self.mPktSize)
+			errMsg+="Packet size should be numeric and between {} and {}. '{}' provided.</br>".format(MIN_PING_PAYLOAD, MAX_PING_PAYLOAD,self.mPktSize)
 
 		return errMsg
 
@@ -117,6 +118,7 @@ class interactGUI(object):
 		self.ui.outputToFile.stateChanged.connect(lambda: self.interact(self.ui.outputToFile))
 		self.ui.scrollToLastCmdHistory.stateChanged.connect(lambda: self.interact(self.ui.scrollToLastCmdHistory))
 		self.ui.outputFilenameVal.textChanged.connect(lambda: self.interact(self.ui.outputFilenameVal))
+		self.ui.camVersionDropBox.currentIndexChanged.connect(lambda: self.interact(self.ui.camVersionDropBox))
 		
 		# button controls
 		self.ui.addRowBtn.clicked.connect(lambda:self.interact(self.ui.addRowBtn))
@@ -235,6 +237,10 @@ class interactGUI(object):
 		elif myObjName == "IterVal":
 			myObjVal        = myObj.text() if myObj.text() !="" else "0"
 			self.mIteration = myObjVal
+
+		elif myObjName == "camVersionDropBox":
+			myObjVal = self.ui.camVersionDropBox.currentText()[-1]
+			set_cam_version(myObjVal)
 
 		elif myObjName == "addRowBtn":
 			self.updateTable(self.mRootCnt,1)
@@ -445,7 +451,8 @@ class interactGUI(object):
 		incData = 0 if self.ui.exportIncData.checkState() == 0 else 1
 		incFinalStats = 0 if self.ui.exportIncFinalStats.checkState() == 0 else 1
 		incMapList = 0 if self.ui.exportIncMapList.checkState() == 0 else 1
-		path, fileType = QFileDialog.getSaveFileName(QtWidgets.QWidget(), 'Export CSV File', DFT_OUTPUTFILENAME, 'CSV(*.csv)')
+		filename = "testlog_"+str(datetime.now().strftime('%d_%m_%Y'))+"_{}B_{}reps".format(self.mPktSize, self.mIteration)+".csv"
+		path, fileType = QFileDialog.getSaveFileName(QtWidgets.QWidget(), 'Export CSV File', filename, 'CSV(*.csv)')
 		if path:
 			with open(path,"w", newline='') as stream:
 				writer = csv.writer(stream)
