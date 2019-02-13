@@ -1,5 +1,4 @@
 from PyQt5 import QtGui
-from myConstants import *
 from myFunctions import *
 
 class App():

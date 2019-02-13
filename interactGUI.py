@@ -4,7 +4,6 @@ from PyQt5.QtWidgets import QMessageBox, QFileDialog, QDesktopWidget
 from PyQt5.QtCore import QThread,pyqtSignal
 
 #import my libraries
-# from myConstants import *
 from myFunctions import *
 from myClass import *
 
@@ -238,10 +237,9 @@ class interactGUI(object):
 			myObjVal        = myObj.text() if myObj.text() !="" else "0"
 			self.mIteration = myObjVal
 
-		# elif myObjName == "camVersionDropBox":
-		# 	myObjVal = self.ui.camVersionDropBox.currentText()[-1]
-		# 	set_cam_version(myObjVal)
-		# 	print(CAM_VERSION, CMD_GET_PANID)
+		elif myObjName == "camVersionDropBox":
+			myObjVal = self.ui.camVersionDropBox.currentText()[-1]
+			set_cam_version(myObjVal)
 
 		elif myObjName == "addRowBtn":
 			self.updateTable(self.mRootCnt,1)

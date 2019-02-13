@@ -219,10 +219,10 @@ def verifyRootAddr(rootIpv6Addr, interactGuiObj):
     retMsg += "SYCnEt..."
         
     # retrieve the panId
-    ret, output = test_ssh(rootIpv6Addr,CMD_GET_PANID)
+    ret, output = test_ssh(rootIpv6Addr, glob["CMD_GET_PANID"])
     if ret != RET_SUCC:
         retMsg +="FAILED<br>"
-        retMsg += "Cannot retrieve PANID for Root {}".format(rootIpv6Addr)
+        retMsg += "Cannot retrieve PANID for Root {}, Check if CAM Version is correct(current={})".format(rootIpv6Addr, glob["CAM_VERSION"])
         interactGuiObj.logCmdHistory(func_name(),retMsg,"error")
         return RET_FAIL
 

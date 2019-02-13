@@ -3,6 +3,9 @@ import os
 from datetime import datetime
 import pprint
 
+# list of global variables subject to change
+glob={}
+
 OS_POSIX   = "posix"
 OS_WIN     = "nt"
 DEBUG_MODE = False
@@ -11,7 +14,7 @@ logMsg     = ""
 __VERSION__        = "1.3.1"
 APP_VERSION        = __VERSION__ +" {OS: " + os.name + "} (debug)" if DEBUG_MODE == True else __VERSION__ +" {OS: " + os.name + "}"
 
-CAM_VERSION = 3
+glob["CAM_VERSION"] = 3
 DFT_PKT_CNT        = "1"
 DFT_PKT_INTV       = "180"
 DFT_PKT_SIZE       = "64"
@@ -51,8 +54,8 @@ CMD_MAC_TX_STAT   = 'pib -gln /mas/statistics/f2_txmgr |grep "DataConfirmSuccess
 # .rf_mac.dynamic_config.f0_MAC_IDs.macSrcPANid = 47de
 # pib -gn /rf_mac/dynamic_config/mac_mgr/macPANID for CAM3
 # /rf_mac/status/f0_MAC_status/macNETRegistered = 0001
-# CMD_GET_PANID     = "pib -gln /rf_mac/dynamic_config/f0_MAC_IDs/macSrcPANid"
-CMD_GET_PANID     = "pib -gn /rf_mac/dynamic_config/f0_MAC_IDs/macSrcPANid" if CAM_VERSION == 1 else "pib -gn /rf_mac/dynamic_config/mac_mgr/macPANID"
+# CMD_GET_PANID = "pib -gln /rf_mac/dynamic_config/f0_MAC_IDs/macSrcPANid"
+glob["CMD_GET_PANID"]   = "pib -gn /rf_mac/dynamic_config/f0_MAC_IDs/macSrcPANid" if glob["CAM_VERSION"] == 1 else "pib -gn /rf_mac/dynamic_config/mac_mgr/macPANID"
 CMD_RPL_STATUS    = "pib -gn /mas/status/f0_core/NetRegisteredFlag"
 # CMD_RPL_STATUS    = "ImProvHelper.sh --ReadLid ILID_ACT_NETWORK_STATUS"
 
@@ -90,8 +93,8 @@ def set_debug_mode(mode):
 	DEBUG_MODE = mode
 
 def set_cam_version(version):
-	global CAM_VERSION
-	CAM_VERSION = int(version)
+	glob["CAM_VERSION"] = int(version)
+	glob["CMD_GET_PANID"]   = "pib -gn /rf_mac/dynamic_config/f0_MAC_IDs/macSrcPANid" if glob["CAM_VERSION"] == 1 else "pib -gn /rf_mac/dynamic_config/mac_mgr/macPANID"
 
 def func_name():
     return "["+inspect.stack()[1][3]+"] " if DEBUG_MODE == True else ""
