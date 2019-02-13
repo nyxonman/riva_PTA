@@ -939,7 +939,7 @@ class pingThread(QThread):
 		# copy export data
 		self.sigCopyExportData.emit(self.myApp.exportData)
 		
-		self.ui.tabWidget.setCurrentIndex(0)
+		# self.ui.tabWidget.setCurrentIndex(0)
 
 		self.sigDone.emit(True)
 		
