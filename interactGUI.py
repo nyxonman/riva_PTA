@@ -123,6 +123,8 @@ class interactGUI(object):
 		self.ui.addRowBtn.clicked.connect(lambda:self.interact(self.ui.addRowBtn))
 		self.ui.removeRowBtn.clicked.connect(lambda:self.interact(self.ui.removeRowBtn))
 		self.ui.startTestBtn.clicked.connect(lambda:self.interact(self.ui.startTestBtn))
+		self.ui.stopTestBtn.clicked.connect(lambda:self.interact(self.ui.stopTestBtn))
+		self.ui.stopTestBtn2.clicked.connect(lambda:self.interact(self.ui.stopTestBtn2))
 		self.ui.clearLogBtn.clicked.connect(lambda:self.interact(self.ui.clearLogBtn))
 		self.ui.resetEntryBtn.clicked.connect(lambda:self.interact(self.ui.resetEntryBtn))
 		self.ui.saveEntryBtn.clicked.connect(lambda:self.interact(self.ui.saveEntryBtn))
@@ -254,6 +256,10 @@ class interactGUI(object):
 			exclude = 1
 			self.ui.startTestBtn.setEnabled(0)
 			self.startTest()
+
+		elif myObjName == "stopTestBtn" or myObjName == "stopTestBtn2":
+			myObjVal="pressed"
+			self.stopTest()
 
 		elif myObjName == "clearLogBtn":
 			myObjVal="pressed"
@@ -637,6 +643,7 @@ class interactGUI(object):
 	def enableInputs(self, enable):
 
 		self.ui.pktSizeDial.setEnabled(enable)
+		self.ui.pktSizeVal.setEnabled(enable)
 		self.ui.pktCntDial.setEnabled(enable)
 		self.ui.pktIntDial.setEnabled(enable)
 		self.ui.pktResDial.setEnabled(enable)
@@ -651,8 +658,14 @@ class interactGUI(object):
 		self.ui.saveEntryBtn.setEnabled(enable)
 		self.ui.resetEntryBtn.setEnabled(enable)
 		self.ui.startTestBtn.setEnabled(enable)
+		self.ui.camVersionDropBox.setEnabled(enable)
+		self.ui.showAllNeighbors.setEnabled(enable)
+		self.ui.stopTestBtn.setEnabled(not enable)
+		self.ui.stopTestBtn2.setEnabled(not enable)
 
-	# def enableAllInputs()
+	def stopTest(self):
+		self.enableInputs(1)
+		self.pingThreadObj.quit()
 
 	def startTest(self):
 		RUN_OK = True
