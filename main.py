@@ -1,5 +1,4 @@
 
-from myConstants import *
 from mainUI import *
 from myClass import *
 from interactGUI import *
