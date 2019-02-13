@@ -92,7 +92,7 @@ class interactGUI(object):
 			if len(self.mOutputFilename) < 1  :
 				errMsg+="Outfile Name is '{}'. Please provide a filename.</br>".format(self.mOutputFilename)
 			self.mOutputFilename = self.mOutputFilename.split('.')[0] + '.csv'
-		
+
 		if (not self.mPktSize.isdigit()) or int(self.mPktSize)<MIN_PING_PAYLOAD or int(self.mPktSize)>MAX_PING_PAYLOAD:
 			errMsg+="Packet size should be numeric and between {} and {}. '{}' provided.</br>".format(MIN_PING_PAYLOAD, MAX_PING_PAYLOAD,self.mPktSize)
 
@@ -195,7 +195,7 @@ class interactGUI(object):
 		'''Handles the interaction with the GUI'''
 		mError    = 0
 		exclude   = 0
-		retMsg    = ""
+		retMsg    = ""		
 		myObjName = myObj.property("objectName")
 		
 		if myObjName=="pktSizeVal":
