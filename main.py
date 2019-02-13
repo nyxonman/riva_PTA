@@ -12,13 +12,13 @@ if __name__ == "__main__":
     # initialize the ui
     ui = Ui_MainObj()
     ui.setupUi(MainObj)
-    MainObj.show()
+    # MainObj.show()
     centerPoint = centerPoint - QtCore.QPoint(MainObj.width()/2,MainObj.height()/2)
     MainObj.move(centerPoint)
     
     # rename the window
     MainObj.setWindowTitle("Ping Test Application v" + APP_VERSION)
-    
+    print(get_date())
     # interact with the ui
     uiInteractObj = interactGUI(ui)
     

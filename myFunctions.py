@@ -47,7 +47,8 @@ def logDef(myLog, funcName="", myColor='#000000'):
 
 def get_date():
     'get current date in a particular format'
-    return (datetime.now().strftime('%d %b %Y %H:%M:%S'))
+    # return (datetime.now().strftime('%d %b %Y %H:%M:%S'))
+    return (datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
 def test_ssh(host, command):
     'Runs a command on a remote node by passing the password depending upon the OS'
