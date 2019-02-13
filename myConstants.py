@@ -3,6 +3,9 @@ import os
 from datetime import datetime
 import pprint
 
+# list of global variables subject to change
+glob={}
+
 OS_POSIX   = "posix"
 OS_WIN     = "nt"
 DEBUG_MODE = False
@@ -11,7 +14,7 @@ logMsg     = ""
 __VERSION__        = "1.3.1"
 APP_VERSION        = __VERSION__ +" {OS: " + os.name + "} (debug)" if DEBUG_MODE == True else __VERSION__ +" {OS: " + os.name + "}"
 
-CAM_VERSION = 3
+glob["CAM_VERSION"] = 3
 DFT_PKT_CNT        = "1"
 DFT_PKT_INTV       = "180"
 DFT_PKT_SIZE       = "64"
@@ -34,9 +37,9 @@ RET_FAIL = -1
 ADD_ROW = 1
 DEL_ROW = -1
 
-MIN_TIME_BEFORE_ITERATE  = 10
+MIN_TIME_BEFORE_ITERATE  = 12
 MAX_PING_PAYLOAD = 1024
-MIN_PING_PAYLOAD = 8
+MIN_PING_PAYLOAD = 16
 
 NEIGHBOR_DUMP  = 1
 DODAG_DUMP     = 2
@@ -45,13 +48,14 @@ BPD_HW_TYPE_ID = 2
 # commands to run with ssh
 CMD_NEIGHBOR_DUMP = "neighbor-dump -t0"
 CMD_DODAG_DUMP    = "cat /proc/net/ipv6_dodag"
-CMD_MAC_TX_STAT   = 'pib -gln /mas/statistics/f2_txmgr |grep "DataConfirmSuccess\|DataConfirmFailure"'
+# CMD_MAC_TX_STAT   = 'pib -gln /mas/statistics/f2_txmgr |grep "DataConfirmSuccess\|DataConfirmFailure"'
+CMD_MAC_TX_STAT   = 'pib -gln /mas/statistics/f2_txmgr |grep "DataConfirmSuccess\|DataConfirmFailure" && pib -gln /rf_mac/statistics/chan_mgr |grep "rx_frame_kind_rts\|fsm_cts_send\|rx_frame_kind_ack\|fsm_ack_send"'
 # CMD_MAC_TX_STAT   = "pib -gln /rf_mac/statistics/f4_LowMacDebug | grep Transmission"
 # .rf_mac.dynamic_config.f0_MAC_IDs.macSrcPANid = 47de
 # pib -gn /rf_mac/dynamic_config/mac_mgr/macPANID for CAM3
 # /rf_mac/status/f0_MAC_status/macNETRegistered = 0001
-# CMD_GET_PANID     = "pib -gln /rf_mac/dynamic_config/f0_MAC_IDs/macSrcPANid"
-CMD_GET_PANID     = "pib -gn /rf_mac/dynamic_config/f0_MAC_IDs/macSrcPANid" if CAM_VERSION == 1 else "pib -gn /rf_mac/dynamic_config/mac_mgr/macPANID"
+# CMD_GET_PANID = "pib -gln /rf_mac/dynamic_config/f0_MAC_IDs/macSrcPANid"
+glob["CMD_GET_PANID"]   = "pib -gn /rf_mac/dynamic_config/f0_MAC_IDs/macSrcPANid" if glob["CAM_VERSION"] == 1 else "pib -gn /rf_mac/dynamic_config/mac_mgr/macPANID"
 CMD_RPL_STATUS    = "pib -gn /mas/status/f0_core/NetRegisteredFlag"
 # CMD_RPL_STATUS    = "ImProvHelper.sh --ReadLid ILID_ACT_NETWORK_STATUS"
 
@@ -87,6 +91,10 @@ CHECKBOX_STATE_UNCHECKED = 0
 def set_debug_mode(mode):
 	global DEBUG_MODE
 	DEBUG_MODE = mode
+
+def set_cam_version(version):
+	glob["CAM_VERSION"] = int(version)
+	glob["CMD_GET_PANID"]   = "pib -gn /rf_mac/dynamic_config/f0_MAC_IDs/macSrcPANid" if glob["CAM_VERSION"] == 1 else "pib -gn /rf_mac/dynamic_config/mac_mgr/macPANID"
 
 def func_name():
     return "["+inspect.stack()[1][3]+"] " if DEBUG_MODE == True else ""

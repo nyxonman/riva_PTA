@@ -4,7 +4,6 @@ from PyQt5.QtWidgets import QMessageBox, QFileDialog, QDesktopWidget
 from PyQt5.QtCore import QThread,pyqtSignal
 
 #import my libraries
-from myConstants import *
 from myFunctions import *
 from myClass import *
 
@@ -93,7 +92,7 @@ class interactGUI(object):
 			if len(self.mOutputFilename) < 1  :
 				errMsg+="Outfile Name is '{}'. Please provide a filename.</br>".format(self.mOutputFilename)
 			self.mOutputFilename = self.mOutputFilename.split('.')[0] + '.csv'
-		
+
 		if (not self.mPktSize.isdigit()) or int(self.mPktSize)<MIN_PING_PAYLOAD or int(self.mPktSize)>MAX_PING_PAYLOAD:
 			errMsg+="Packet size should be numeric and between {} and {}. '{}' provided.</br>".format(MIN_PING_PAYLOAD, MAX_PING_PAYLOAD,self.mPktSize)
 
@@ -460,11 +459,11 @@ class interactGUI(object):
 				if incTestInfo:
 					for r in self.exportData["header"]:
 						writer.writerow(r)
-				
+
 				# write main data
 				if incData:
 					if not incTestInfo:
-						writer.writerow(["TimeStamp","extAddr","sAddr","hwType","best_RF","RSSI_I","RSSI_M","tx","rx","macTxSucc","macTxFail","loss","minRTT","maxRTT","mdevRTT","avgRTT"])
+						writer.writerow(["TimeStamp","extAddr","sAddr","hwType","best_RF","RSSI_I","RSSI_M","tx","rx","loss","macTxSucc","macTxFail","macTxAck","macTxCts","macRxRts","macRxAck","minRTT","maxRTT","mdevRTT","avgRTT"])
 					for r in self.exportData["main"]:
 						writer.writerow(r)
 					writer.writerow(empty)
@@ -472,7 +471,7 @@ class interactGUI(object):
 				# write the final stats
 				if incFinalStats:
 					writer.writerow(["final"])
-					writer.writerow(["TimeStamp","extAddr","sAddr","hwType","best_RF","RSSI_I","RSSI_M","tx","rx","macTxSucc","macTxFail","loss","minRTT","maxRTT","avgRTT"])
+					writer.writerow(["TimeStamp","extAddr","sAddr","hwType","best_RF","RSSI_I","RSSI_M","tx","rx","loss","macTxSucc","macTxFail","macTxAck","macTxCts","macRxRts","macRxAck","minRTT","maxRTT","avgRTT"])
 
 					for r in self.exportData["finalStats"]:
 						writer.writerow(r)
@@ -593,9 +592,13 @@ class interactGUI(object):
 								<th>RSSI_M</th>
 								<th>tx</th>
 								<th>rx</th>
+								<th>loss</th>
 								<th>macTxSucc</th>
 								<th>macTxFail</th>
-								<th>loss</th>
+								<th>macTxAck</th>
+								<th>macTxCts</th>
+								<th>macRxRts</th>
+								<th>macRxAck</th>
 								<th>minRTT</th>
 								<th>maxRTT</th>								
 								<th>avgRTT</th>
@@ -892,17 +895,17 @@ class pingThread(QThread):
 					myDate = get_date()
 
 					if ipAddr != IP_NA:
-						last_mac_tx_succ, last_mac_tx_fail = self.myApp.get_mac_stats(extAddr)
+						last_mac_tx_succ, last_mac_tx_fail, last_rx_frame_kind_ack, last_rx_frame_kind_rts, last_fsm_ack_send, last_fsm_cts_send = self.myApp.get_mac_stats(extAddr)
 						retCode, ret = (self.myApp.send_ping(ipAddr))
 					if retCode == RET_FAIL:  
 						self.sigUpperText.emit("Failed for...{} in [{}/{}]".format(extAddr,reps, total_iterations),"error")
 					else:
-						self.myApp.process_ping_result(extAddr, ret, last_mac_tx_succ, last_mac_tx_fail)
+						self.myApp.process_ping_result(extAddr, ret, last_mac_tx_succ, last_mac_tx_fail, last_rx_frame_kind_ack, last_rx_frame_kind_rts, last_fsm_ack_send, last_fsm_cts_send)
 						self.myApp.get_mod_rssi(extAddr)
 					
 					params = self.myApp.add_to_output_data(extAddr,myDate)
 					self.myApp.outputAppData.append(params)
-					self.myApp.add_to_output_str(params)
+					# self.myApp.add_to_output_str(params)
 					
 					cnt+=1
 					self.sigProgressBar.emit(self.ui.progressBar.value() + 1)
@@ -924,7 +927,7 @@ class pingThread(QThread):
 					# ipAddr  = item[extAddr]
 					myDate = get_date()
 					params = self.myApp.add_to_output_data(extAddr,myDate, 1)
-					self.myApp.add_to_output_str(params, 1)
+					# self.myApp.add_to_output_str(params, 1)
 					
 		myDate = get_date()
 				

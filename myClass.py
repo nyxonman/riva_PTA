@@ -1,5 +1,4 @@
 from PyQt5 import QtGui
-from myConstants import *
 from myFunctions import *
 
 class App():
@@ -69,21 +68,29 @@ class App():
 	def display_test_nodes(self):
 		print(self.testNodes)
 
-	def process_ping_result(self,extAddr, output, last_mac_tx_succ, last_mac_tx_fail):
+	def process_ping_result(self,extAddr, output, last_mac_tx_succ, last_mac_tx_fail, last_rx_frame_kind_ack, last_rx_frame_kind_rts, last_fsm_ack_send, last_fsm_cts_send):
 		panId  = self.mapExt2PanId[extAddr]
 		sAddr  = self.mapList[extAddr]
 		myNode = self.pans[panId].nodeList[sAddr]
 		myNode.tx, myNode.rx, myNode.loss, myNode.time, myNode.minRTT, myNode.avgRTT, myNode.maxRTT, myNode.mdevRTT = output
-		mac_tx_succ, mac_tx_fail = self.get_mac_stats(extAddr)
+		mac_tx_succ, mac_tx_fail, rx_frame_kind_ack, rx_frame_kind_rts, fsm_ack_send, fsm_cts_send = self.get_mac_stats(extAddr)
 					
 		myNode.macTxSucc = mac_tx_succ - last_mac_tx_succ
 		myNode.macTxFail = mac_tx_fail - last_mac_tx_fail
-		
+		myNode.macRxAck  = rx_frame_kind_ack - last_rx_frame_kind_ack
+		myNode.macRxRts  = rx_frame_kind_rts - last_rx_frame_kind_rts
+		myNode.macTxAck  = fsm_ack_send - last_fsm_ack_send
+		myNode.macTxCts  = fsm_cts_send - last_fsm_cts_send
+
 		# final values
 		myNode.finalTx        += myNode.tx
 		myNode.finalRx        += myNode.rx
 		myNode.finalMacTxSucc += myNode.macTxSucc
 		myNode.finalMacTxFail += myNode.macTxFail
+		myNode.finalMacTxAck  += myNode.macTxAck
+		myNode.finalMacTxCts  += myNode.macTxCts
+		myNode.finalMacRxRts  += myNode.macRxRts
+		myNode.finalMacRxAck  += myNode.macRxAck
 		myNode.finalLoss      = str( round(100 - myNode.finalRx/myNode.finalTx *100)) +'%'
 		self.losts            += myNode.tx - myNode.rx #for display
 		if not isinstance(myNode.minRTT, str):
@@ -179,12 +186,28 @@ class App():
 			print("")
 			exit()
 		lines       = output.splitlines()
+		# print(output)
+		# DataConfirmSuccess
 		splitted    = lines[0].split('=')
 		mac_tx_succ = int(splitted[1].strip(), 16)
+		# DataConfirmFailure
 		splitted    = lines[1].split('=')
 		mac_tx_fail = int(splitted[1].strip(), 16)
+		# rx_frame_kind_ack
+		splitted    = lines[2].split('=')
+		rx_frame_kind_ack = int(splitted[1].strip(), 16)
+		# rx_frame_kind_rts
+		splitted    = lines[3].split('=')
+		rx_frame_kind_rts = int(splitted[1].strip(), 16)
+		# fsm_ack_send
+		splitted    = lines[5].split('=')
+		fsm_ack_send = int(splitted[1].strip(), 16)
+		# fsm_cts_send
+		splitted    = lines[6].split('=')
+		fsm_cts_send = int(splitted[1].strip(), 16)
 
-		return mac_tx_succ,mac_tx_fail
+		# return mac_tx_succ,mac_tx_fail
+		return mac_tx_succ, mac_tx_fail, rx_frame_kind_ack, rx_frame_kind_rts, fsm_ack_send, fsm_cts_send
 
 	def add_map_2_output_data(self):
 		self.outputData.append([])
@@ -207,7 +230,7 @@ class App():
 			self.exportData["header"].append(["pktSize","pktCnt","pktInt","pktResp", "Iteration", "Nodes"])
 			self.exportData["header"].append([self.pktSize, self.pktCnt, self.pktIntv, self.pktResTime, self.iteration, "{}/{}".format(self.validNodesCnt, len(self.testNodes))])
 			self.exportData["header"].append([])
-			self.exportData["header"].append(["TimeStamp","extAddr", "sAddr", "hwType", "best_RF", "RSSI_I", "RSSI_M", "tx", "rx", "macTxSucc", "macTxFail", "loss", "minRTT", "maxRTT", "mdevRTT", "avgRTT"])
+			self.exportData["header"].append(["TimeStamp","extAddr","sAddr","hwType","best_RF","RSSI_I","RSSI_M","tx","rx","loss","macTxSucc","macTxFail","macTxAck","macTxCts","macRxRts","macRxAck","minRTT","maxRTT","mdevRTT","avgRTT"])
 			
 			
 	def verifyInputParams(self):
@@ -296,30 +319,40 @@ class Node() :
 		self.RSSI_I         = RSSI_I
 		self.RSSI_M         = RSSI_M
 		self.tx             = 0
-		self.time           = 0
 		self.rx             = 0
+		self.loss           = 0
 		self.macTxSucc      = 0
 		self.macTxFail      = 0
-		self.loss           = 0
+		self.macTxAck       = 0
+		self.macTxCts       = 0
+		self.macRxRts       = 0
+		self.macRxAck       = 0
 		self.minRTT         = 86400000
 		self.maxRTT         = 0
 		self.mdevRTT        = 0
 		self.avgRTT         = 0
 		self.finalTx        = 0
 		self.finalRx        = 0
+		self.finalLoss      = 0
 		self.finalMacTxSucc = 0
 		self.finalMacTxFail = 0
-		self.finalLoss      = 0
+		self.finalMacTxAck  = 0
+		self.finalMacTxCts  = 0
+		self.finalMacRxRts  = 0
+		self.finalMacRxAck  = 0
 		self.finalMinRTT    = 86400000
 		self.finalMaxRTT    = 0
 		self.finalAvgRTT    = []
+		self.time           = 0
+
 		# change in get_params,add_header_2_output, unavailable node
 
 	def get_params(self, final):
+
 		if final==0:
-			return [str(self.timeStamp), str(self.extAddr), str(self.sAddr), str(self.hwType), str(self.best_RF), str(self.RSSI_I), str(self.RSSI_M), str(self.tx), str(self.rx), str(self.macTxSucc), str(self.macTxFail), str(self.loss), str(self.minRTT), str(self.maxRTT), str(self.mdevRTT), str(self.avgRTT)]
+			return [str(self.timeStamp), str(self.extAddr), str(self.sAddr), str(self.hwType), str(self.best_RF), str(self.RSSI_I), str(self.RSSI_M), str(self.tx), str(self.rx), str(self.loss), str(self.macTxSucc), str(self.macTxFail), str(self.macTxAck), str(self.macTxCts), str(self.macRxRts), str(self.macRxAck), str(self.minRTT), str(self.maxRTT), str(self.mdevRTT), str(self. avgRTT)]
 		else:
-			return [str(self.timeStamp), str(self.extAddr), str(self.sAddr), str(self.hwType), str(self.best_RF), str(self.RSSI_I), str(self.RSSI_M), str(self.finalTx), str(self.finalRx), str(self.finalMacTxSucc), str(self.finalMacTxFail), str(self.finalLoss), str(self.finalMinRTT), str(self.finalMaxRTT), str(self.finalAvgRTT)]
+			return [str(self.timeStamp), str(self.extAddr), str(self.sAddr), str(self.hwType), str(self.best_RF), str(self.RSSI_I), str(self.RSSI_M), str(self.finalTx), str(self.finalRx), str(self.finalLoss), str(self.finalMacTxSucc), str(self.finalMacTxFail), str(self.finalMacTxAck), str(self.finalMacTxCts), str(self.finalMacRxRts), str(self.finalMacRxAck), str(self.finalMinRTT), str(self.finalMaxRTT), str(self.finalAvgRTT)]
 
 
 	def ping_stat(self, tx, rx, loss, minRTT, maxRTT, avgRTT):

@@ -219,10 +219,10 @@ def verifyRootAddr(rootIpv6Addr, interactGuiObj):
     retMsg += "SYCnEt..."
         
     # retrieve the panId
-    ret, output = test_ssh(rootIpv6Addr,CMD_GET_PANID)
+    ret, output = test_ssh(rootIpv6Addr, glob["CMD_GET_PANID"])
     if ret != RET_SUCC:
         retMsg +="FAILED<br>"
-        retMsg += "Cannot retrieve PANID for Root {}".format(rootIpv6Addr)
+        retMsg += "Cannot retrieve PANID for Root {}, Check if CAM Version is correct(current={})".format(rootIpv6Addr, glob["CAM_VERSION"])
         interactGuiObj.logCmdHistory(func_name(),retMsg,"error")
         return RET_FAIL
 
@@ -379,9 +379,9 @@ def prepare_output_mapping(myApp):
 def unavailable_node(extAddr, final):
     # date, "extAddr", "sAddr", "hwType", "best_RF", "RSSI_I", "RSSI_M", "tx", "time", "rx", "macTxSucc", "macTxFail", "loss", "minRTT", "maxRTT", "mdevRTT", "avgRTT", "finalTx", "finalRx", "finalMacTxSucc", "finalMacTxFail", "finalLoss", "finalMinRTT", "finalMaxRTT", "finalAvgRTT"
     if final == 0:
-        return ["", extAddr, "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"]
+        return ["", extAddr, "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"]
     else:
-        return ["", extAddr, "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"]
+        return ["", extAddr, "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"]
 
 def process_ping_output(output, retCode):
     'Process the ping output results to get the necessary counters and RTT values'
