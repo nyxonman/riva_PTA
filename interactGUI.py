@@ -665,7 +665,8 @@ class interactGUI(object):
 
 	def stopTest(self):
 		self.enableInputs(1)
-		self.pingThreadObj.quit()
+		self.pingThreadObj.exit()
+		self.pingThreadObj.terminate()
 
 	def startTest(self):
 		RUN_OK = True
