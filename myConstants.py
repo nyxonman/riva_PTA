@@ -49,7 +49,7 @@ BPD_HW_TYPE_ID = 2
 CMD_NEIGHBOR_DUMP = "neighbor-dump -t0"
 CMD_DODAG_DUMP    = "cat /proc/net/ipv6_dodag"
 # CMD_MAC_TX_STAT   = 'pib -gln /mas/statistics/f2_txmgr |grep "DataConfirmSuccess\|DataConfirmFailure"'
-CMD_MAC_TX_STAT   = 'pib -gln /mas/statistics/f2_txmgr |grep "DataConfirmSuccess\|DataConfirmFailure" && pib -gln /rf_mac/statistics/chan_mgr |grep "rx_frame_kind_rts\|fsm_cts_send\|rx_frame_kind_ack\|fsm_ack_send"'
+glob["CMD_MAC_TX_STAT"]   = 'pib -gln /mas/statistics/f2_txmgr |grep "DataConfirmSuccess\|DataConfirmFailure" && pib -gln /rf_mac/statistics/chan_mgr |grep "rx_frame_kind_rts\|fsm_cts_send\|rx_frame_kind_ack\|fsm_ack_send"'
 # CMD_MAC_TX_STAT   = "pib -gln /rf_mac/statistics/f4_LowMacDebug | grep Transmission"
 # .rf_mac.dynamic_config.f0_MAC_IDs.macSrcPANid = 47de
 # pib -gn /rf_mac/dynamic_config/mac_mgr/macPANID for CAM3
@@ -95,6 +95,7 @@ def set_debug_mode(mode):
 def set_cam_version(version):
 	glob["CAM_VERSION"] = int(version)
 	glob["CMD_GET_PANID"]   = "pib -gn /rf_mac/dynamic_config/f0_MAC_IDs/macSrcPANid" if glob["CAM_VERSION"] == 1 else "pib -gn /rf_mac/dynamic_config/mac_mgr/macPANID"
+	glob["CMD_MAC_TX_STAT"] = 'pib -gln /mas/statistics/f2_txmgr |grep "DataConfirmSuccess\|DataConfirmFailure" && pib -gln /rf_mac/statistics/f1_ChannelAccessDataExchange |grep "RTSRxForMeCnt3\|CTSsentCnt32\|.ACKrxForMeCnt32\|.ACKsentCnt32"' if glob["CAM_VERSION"] == 1 else 'pib -gln /mas/statistics/f2_txmgr |grep "DataConfirmSuccess\|DataConfirmFailure" && pib -gln /rf_mac/statistics/chan_mgr |grep "rx_frame_kind_rts\|fsm_cts_send\|rx_frame_kind_ack\|fsm_ack_send"'
 
 def func_name():
     return "["+inspect.stack()[1][3]+"] " if DEBUG_MODE == True else ""

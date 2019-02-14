@@ -178,7 +178,7 @@ class App():
 	def get_mac_stats(self, extAddr):
 		panId           = self.mapExt2PanId[extAddr]
 		pan             = self.pans[panId]
-		retCode, output = test_ssh(pan.rootAddr,CMD_MAC_TX_STAT)
+		retCode, output = test_ssh(pan.rootAddr,glob["CMD_MAC_TX_STAT"])
 
 		if retCode!=0:
 			LOGE(func_name(),"Unable to retrieve MAC TX Stats from {}. Probably lost connection with the ROOT {}.".format(hex(int(panId)),pan.rootAddr))
@@ -194,16 +194,16 @@ class App():
 		splitted    = lines[1].split('=')
 		mac_tx_fail = int(splitted[1].strip(), 16)
 		# rx_frame_kind_ack
-		splitted    = lines[2].split('=')
+		splitted    = lines[2].split('=') if glob["CAM_VERSION"]==3 else lines[5].split('=')
 		rx_frame_kind_ack = int(splitted[1].strip(), 16)
 		# rx_frame_kind_rts
-		splitted    = lines[3].split('=')
+		splitted    = lines[3].split('=') if glob["CAM_VERSION"]==3 else lines[2].split('=')
 		rx_frame_kind_rts = int(splitted[1].strip(), 16)
 		# fsm_ack_send
-		splitted    = lines[5].split('=')
+		splitted    = lines[5].split('=') if glob["CAM_VERSION"]==3 else lines[4].split('=')
 		fsm_ack_send = int(splitted[1].strip(), 16)
 		# fsm_cts_send
-		splitted    = lines[6].split('=')
+		splitted    = lines[6].split('=') if glob["CAM_VERSION"]==3 else lines[3].split('=')
 		fsm_cts_send = int(splitted[1].strip(), 16)
 
 		# return mac_tx_succ,mac_tx_fail
