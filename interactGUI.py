@@ -248,8 +248,18 @@ class interactGUI(object):
 			myObjVal = "1 row added"
 
 		elif myObjName == "removeRowBtn":
-			self.updateTable(self.mRootCnt,-1)
-			myObjVal = "1 row removed"
+			currentRow=self.ui.tableWidget.currentRow()
+			totalRows = self.ui.tableWidget.rowCount()
+			currentRow = currentRow if currentRow>-1 else totalRows-1
+			print(currentRow)
+			if totalRows > 1 and currentRow > 0:
+				self.ui.tableWidget.removeRow(currentRow)
+				myObjVal = "Row {} row removed".format(currentRow)
+			else:
+				mError   = 1
+				retMsg = "First Row cannot be removed"
+			# self.updateTable(self.mRootCnt,-1,currentRow)
+			
 
 		elif myObjName == "startTestBtn":
 			myObjVal="pressed"
@@ -341,18 +351,19 @@ class interactGUI(object):
 				self.ui.startTestBtn.setEnabled(0)
 
 		# command history logs
-		if not exclude:
+		if not exclude and not mError:
 			self.logCmdHistory(func_name(),myObjName +":" + str(myObjVal))
 		if len(retMsg) > 1:
 			self.logCmdHistory(func_name(),retMsg, "error")
 		
 
-	def updateTable(self, nRootCnt, addRow=0):
+	def updateTable(self, nRootCnt, addRow=0, rowNum=-1):
 		nRootCnt = int(nRootCnt)
 		# self.ui.tableWidget.clearContents()
 		rows = self.ui.tableWidget.rowCount()
 		cols = self.ui.tableWidget.columnCount()
 		self.ui.tableWidget.setColumnCount(nRootCnt)
+		self.ui.tableWidget.insertRow(rowNum)
 
 		if addRow==1 or rows>2:
 			self.ui.tableWidget.setRowCount(rows+addRow)
