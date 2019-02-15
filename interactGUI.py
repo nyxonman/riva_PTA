@@ -244,7 +244,18 @@ class interactGUI(object):
 			set_cam_version(myObjVal)
 
 		elif myObjName == "addRowBtn":
-			self.updateTable(self.mRootCnt,1)
+			# self.updateTable(self.mRootCnt,1)
+			currentRow=self.ui.tableWidget.currentRow()
+			totalRows = self.ui.tableWidget.rowCount()
+			currentRow = currentRow if currentRow>-1 else totalRows
+			print(currentRow)
+			self.ui.tableWidget.setRowCount(totalRows+1)
+			item = QtWidgets.QTableWidgetItem()
+			self.ui.tableWidget.setVerticalHeaderItem(currentRow, item)
+			item.setText("Entry " + str(currentRow))
+			
+
+
 			myObjVal = "1 row added"
 
 		elif myObjName == "removeRowBtn":
@@ -258,8 +269,6 @@ class interactGUI(object):
 			else:
 				mError   = 1
 				retMsg = "First Row cannot be removed"
-			# self.updateTable(self.mRootCnt,-1,currentRow)
-			
 
 		elif myObjName == "startTestBtn":
 			myObjVal="pressed"
