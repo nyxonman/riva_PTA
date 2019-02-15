@@ -667,6 +667,7 @@ class interactGUI(object):
 		self.enableInputs(1)
 		self.pingThreadObj.exit()
 		self.pingThreadObj.terminate()
+		self.statusBarMsg("Test Stopped at {}!!".format(get_date()))
 
 	def startTest(self):
 		RUN_OK = True
