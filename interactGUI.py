@@ -247,15 +247,11 @@ class interactGUI(object):
 			# self.updateTable(self.mRootCnt,1)
 			currentRow=self.ui.tableWidget.currentRow()
 			totalRows = self.ui.tableWidget.rowCount()
-			currentRow = currentRow if currentRow>-1 else totalRows
-			print(currentRow)
-			self.ui.tableWidget.setRowCount(totalRows+1)
+			currentRow = currentRow if currentRow>-1 else totalRows-1
+			self.ui.tableWidget.insertRow(currentRow+1)
 			item = QtWidgets.QTableWidgetItem()
-			self.ui.tableWidget.setVerticalHeaderItem(currentRow, item)
-			item.setText("Entry " + str(currentRow))
-			
-
-
+			self.ui.tableWidget.setVerticalHeaderItem(currentRow+1, item)
+			item.setText("Entry " + str(totalRows))
 			myObjVal = "1 row added"
 
 		elif myObjName == "removeRowBtn":
@@ -265,7 +261,7 @@ class interactGUI(object):
 			print(currentRow)
 			if totalRows > 1 and currentRow > 0:
 				self.ui.tableWidget.removeRow(currentRow)
-				myObjVal = "Row {} row removed".format(currentRow)
+				myObjVal = "Row {} removed".format(currentRow)
 			else:
 				mError   = 1
 				retMsg = "First Row cannot be removed"
