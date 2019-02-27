@@ -175,9 +175,16 @@ def conv_ipv6(ipAddr):
     return err, ipAddr
 
 def verifyRootAddr(rootIpv6Addr, interactGuiObj):
-    retMsg = ""    
-    retMsg = "Verifying ROOT {}...".format(rootIpv6Addr)
-    # print("\t\t - Verifying ROOT {}...".format(rootIpv6Addr),end=' ')
+    retMsg       = ""    
+    retMsg       = "Verifying ROOT {}".format(rootIpv6Addr)
+    interface    = ""
+    rootIpv6Addr = rootIpv6Addr.strip()
+
+    if "%" in rootIpv6Addr:
+        rootIpv6Addr, interface = rootIpv6Addr.split('%')
+        retMsg += " (link-local)..."
+    else:
+        retMsg += " (global)..."
 
     # check IPv6 Addr validity
     try:            
@@ -188,13 +195,14 @@ def verifyRootAddr(rootIpv6Addr, interactGuiObj):
         return RET_FAIL
     retMsg += "VALID..."
 
+    rootIpv6Addr = rootIpv6Addr if not interface else rootIpv6Addr + '%' + interface
     # check the reachability of the root
     if checkRootReachability(rootIpv6Addr) == RET_FAIL:
 
         retMsg += "FAILED<br>"
         retMsg +=  " ERR:'{}' is UNREACHABLE.".format(rootIpv6Addr)
         retMsg +=  " If you are using link-local address, please mention the interface as well."
-        # retMsg +=  " Example: fe80::207:81ff:feff:cc01%eth1"
+        retMsg +=  " Example: fe80::207:81ff:feff:cc01%eth1"
         interactGuiObj.logCmdHistory(func_name(),retMsg,"error")
 
         return RET_FAIL
@@ -209,9 +217,7 @@ def verifyRootAddr(rootIpv6Addr, interactGuiObj):
         interactGuiObj.logCmdHistory(func_name(),retMsg,"error")
         return RET_FAIL
 
-    # splitted = output.split('=')
     rplStat = int(output)
-    # rplStat = int(splitted[1].strip())
     if rplStat != 1:
         retMsg +="FAILED<br>"
         retMsg += "ROOT not SYCnEt Yet. Please wait until Root is RUNNING"
