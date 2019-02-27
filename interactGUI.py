@@ -472,7 +472,7 @@ class interactGUI(object):
 		incData = 0 if self.ui.exportIncData.checkState() == 0 else 1
 		incFinalStats = 0 if self.ui.exportIncFinalStats.checkState() == 0 else 1
 		incMapList = 0 if self.ui.exportIncMapList.checkState() == 0 else 1
-		filename = "testlog_"+str(datetime.now().strftime('%d_%m_%Y'))+"_{}B_{}reps".format(self.mPktSize, self.mIteration)+".csv"
+		filename = "testlog_"+str(datetime.now().strftime('%d_%m_%Y'))+"_CAM{}_{}B_{}reps".format(glob["CAM_VERSION"], self.mPktSize, self.mIteration)+".csv"
 		path, fileType = QFileDialog.getSaveFileName(QtWidgets.QWidget(), 'Export CSV File', filename, 'CSV(*.csv)')
 		if path:
 			with open(path,"w", newline='') as stream:
