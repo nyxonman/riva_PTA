@@ -258,7 +258,6 @@ class interactGUI(object):
 			currentRow=self.ui.tableWidget.currentRow()
 			totalRows = self.ui.tableWidget.rowCount()
 			currentRow = currentRow if currentRow>-1 else totalRows-1
-			print(currentRow)
 			if totalRows > 1 and currentRow > 0:
 				self.ui.tableWidget.removeRow(currentRow)
 				myObjVal = "Row {} removed".format(currentRow)
