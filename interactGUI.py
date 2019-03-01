@@ -40,6 +40,32 @@ class interactGUI(object):
 		'''get the params of the interactGUI object'''
 		return (self.mPktSize, self.mPktInt, self.mPktRes, self.mPktCnt, self.mRootCnt, self.mIteration, self.mShowMap, self.mShowAllNeighbors, self.mOutputToFile, self.mOutputFilename)	
 
+	def logRootCmdOutput(self, funcName, html='', cmdType="default", append=True):
+		'''To show the log in the root tab output  field
+		funcName: name of the function
+		html: the html message
+		cmdType: "default", "error", "warn", "succ"
+		append: True will always append to the last, False will insert new log
+		'''
+		cmdType = cmdType.lower()
+		html+= " [" + datetime.now().strftime("%Y/%m/%d %H:%M:%S") + "]"
+		
+		if cmdType == "error":
+			html = logErr(html, funcName)
+		elif cmdType == "info":
+			html = logInfo(html, funcName)
+		elif cmdType == "warn":
+			html = logWarn(html, funcName)
+		elif cmdType == "succ":
+			html = logSucc(html, funcName)
+		else:
+			html = logDef(html, funcName)
+
+		self.ui.rootOutputText.append(html)	if append == True else self.ui.rootOutputText.setHtml(html)
+		# if (self.ui.scrollToLastrootOutputText.checkState()!=0):
+		self.ui.rootOutputText.moveCursor(QtGui.QTextCursor.End)
+		self.refresh()
+	
 	def logCmdHistory(self, funcName, html='', cmdType="default", append=True):
 		'''To show the log in the command history field
 		funcName: name of the function
@@ -133,6 +159,8 @@ class interactGUI(object):
 		# self.ui.resetEntryBtn
 		self.ui.quitBtn.clicked.connect(self.closeApp)
 
+		# Root tab interactions
+		self.ui.testConnectionBtn.clicked.connect(lambda:self.interact_root(self.ui.testConnectionBtn))
 		#Menu Actions
 		self.ui.actionAbout.triggered.connect(lambda:self.interact(self.ui.actionAbout))
 		self.ui.actionDebug_Mode.triggered.connect(lambda:self.interact(self.ui.actionDebug_Mode))
@@ -157,7 +185,7 @@ class interactGUI(object):
 			mCmdStr+=" for <b>ALL neighbors</b>"
 		# mCmdStr+=" 'all BACTs'"
 		if self.mShowMap==0 and int(self.mIteration) > 1:
-		    mCmdStr+=", REPEAT Test <b>'x{}'</b>".format(self.mIteration)
+			mCmdStr+=", REPEAT Test <b>'x{}'</b>".format(self.mIteration)
 
 		if self.mOutputToFile == 1:
 			mCmdStr+=" and WRITE the result statistics to <b>file '{}'</b>".format(self.mOutputFilename)
@@ -191,6 +219,36 @@ class interactGUI(object):
 
 		cmdStr = self.createCmdStr() 
 		self.ui.outputCmd.setHtml(cmdStr)
+
+	def interact_root(self, myObj):
+		'''Handles the interaction with the GUI Root tab'''
+		mError    = 0
+		exclude   = 0
+		retMsg    = ""		
+		myObjName = myObj.property("objectName")
+		myObjVal  = ""
+
+		if myObjName == "testConnectionBtn":
+			myObjVal = "Pressed"
+			root = self.ui.rootAddrVal.text().strip()
+			if not root:
+				mError=1
+				retMsg = "Root IPv6 Addr Empty"
+				self.ui.rootAddrVal.setFocus()
+			else:
+				ret = verifyRootAddr(root, self)
+				if ret == RET_FAIL:
+					mError = 1
+					retMsg = "Error connecting with '{}'".format(root)
+		else:
+			myObjVal = "Not Found"
+			mError   = 1
+
+		if not exclude and not mError:
+			self.logRootCmdOutput(func_name(),myObjName +":" + str(myObjVal))
+		if len(retMsg) > 1:
+			self.logRootCmdOutput(func_name(),retMsg, "error")
+
 
 
 	def interact(self, myObj):
@@ -584,7 +642,7 @@ class interactGUI(object):
 			self.ui.lowerText.setHtml('')
 			with open(file,'r') as stream:
 				myHtml = '<table border="1" width="100%">'
-		                        
+								
 				for rowdata in csv.reader(stream):
 					if row < 5:
 						pass
