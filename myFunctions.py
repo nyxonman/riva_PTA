@@ -58,7 +58,7 @@ def test_ssh(host, command):
     PWD = "itron"
     # runn ssh or plink depending upon the os
     if os.name == OS_POSIX:
-        p1 = subprocess.Popen(['sshpass','-p', PWD, 'ssh', "-o StrictHostKeyChecking=no" ,"-o LogLevel=ERROR", "-o UserKnownHostsFile=/dev/null", HOST,COMMAND], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+        p1 = subprocess.Popen(['sshpass','-p', PWD, 'ssh', "-o StrictHostKeyChecking=no" ,"-o LogLevel=ERROR", "-o UserKnownHostsFile=/dev/null", HOST,COMMAND], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
         # plink -v youruser@yourhost.com -pw yourpw "some linux command"
         p1 = subprocess.Popen(['plink',"-pw", PWD, HOST,COMMAND], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
@@ -66,8 +66,10 @@ def test_ssh(host, command):
     raw_output,err = p1.communicate()
 
     if p1.returncode !=0 :        
-        return p1.returncode,"ERR: Error while running the command '{}' to host {}".format(command, HOST)
-    # print(raw_output)
+        return p1.returncode,str(err.decode()).strip()
+        # return p1.returncode,"ERR: Error while running the command '{}' to host {}".format(command, HOST)
+    # print(raw_output.decode())
+
     return p1.returncode,str(raw_output.decode()).strip()
 
 def checkRootReachability(ipv6Addr):
