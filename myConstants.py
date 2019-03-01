@@ -11,7 +11,7 @@ OS_WIN     = "nt"
 DEBUG_MODE = False
 logMsg     = ""
 
-__VERSION__        = "1.3.1"
+__VERSION__        = "1.3.4"
 APP_VERSION        = __VERSION__ +" {OS: " + os.name + "} (debug)" if DEBUG_MODE == True else __VERSION__ +" {OS: " + os.name + "}"
 
 glob["CAM_VERSION"] = 3
