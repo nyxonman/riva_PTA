@@ -281,6 +281,7 @@ class interactGUI(object):
 					self.ui.runCmdVal.setFocus()
 
 				if not mError:
+					self.statusBarMsg("Running Command " + cmd + " ...")
 					myObjVal = ' <b><i style="color:#FF7800;">' + cmd + '</i></b>' + "<br>"
 					retCode, output = test_ssh(root, cmd)
 					if retCode != RET_SUCC:
@@ -290,6 +291,8 @@ class interactGUI(object):
 						# myObjVal += "<br>" + output
 						for line in output.split('\n'):
 							myObjVal += line +"<br>"
+					self.statusBarMsg("Running cmd " +cmd+" ...DONE")
+
 
 			else:
 				retMsg += myObjName + ": Not Found"
