@@ -62,8 +62,8 @@ class interactGUI(object):
 			html = logDef(html, funcName)
 
 		self.ui.rootOutputText.append(html)	if append == True else self.ui.rootOutputText.setHtml(html)
-		# if (self.ui.scrollToLastrootOutputText.checkState()!=0):
-		self.ui.rootOutputText.moveCursor(QtGui.QTextCursor.End)
+		if (self.ui.scrollToLastCmdHistory.checkState()!=0):
+			self.ui.rootOutputText.moveCursor(QtGui.QTextCursor.End)
 		self.refresh()
 	
 	def logCmdHistory(self, funcName, html='', cmdType="default", append=True):
@@ -161,6 +161,10 @@ class interactGUI(object):
 
 		# Root tab interactions
 		self.ui.testConnectionBtn.clicked.connect(lambda:self.interact_root(self.ui.testConnectionBtn))
+		self.ui.runCmdBtn.clicked.connect(lambda:self.interact_root(self.ui.runCmdBtn))
+		self.ui.rootClearBtn.clicked.connect(lambda:self.interact_root(self.ui.rootClearBtn))
+		self.ui.rootScrollToLast.stateChanged.connect(lambda: self.interact_root(self.ui.rootScrollToLast))
+
 		#Menu Actions
 		self.ui.actionAbout.triggered.connect(lambda:self.interact(self.ui.actionAbout))
 		self.ui.actionDebug_Mode.triggered.connect(lambda:self.interact(self.ui.actionDebug_Mode))
@@ -220,6 +224,13 @@ class interactGUI(object):
 		cmdStr = self.createCmdStr() 
 		self.ui.outputCmd.setHtml(cmdStr)
 
+	def enableRootButtons(self, enable):
+		self.ui.rootClearBtn.setEnabled(enable)
+		self.ui.testConnectionBtn.setEnabled(enable)
+		self.ui.runCmdBtn.setEnabled(enable)
+		self.ui.runPibCmdBtn.setEnabled(enable)
+		self.ui.searchPibBtn.setEnabled(enable)
+
 	def interact_root(self, myObj):
 		'''Handles the interaction with the GUI Root tab'''
 		mError    = 0
@@ -227,27 +238,69 @@ class interactGUI(object):
 		retMsg    = ""		
 		myObjName = myObj.property("objectName")
 		myObjVal  = ""
+		verifyRoot = False if myObjName == "rootClearBtn" or myObjName == "rootScrollToLast" else True
+		# print(myObjName)
 
-		if myObjName == "testConnectionBtn":
-			myObjVal = "Pressed"
-			root = self.ui.rootAddrVal.text().strip()
-			if not root:
-				mError=1
-				retMsg = "Root IPv6 Addr Empty"
-				self.ui.rootAddrVal.setFocus()
-			else:
+		# disable all btns to prevent from multiple clicks because sometimes it takes a longer time to fetch the command results
+		self.enableRootButtons(0)
+
+		# root is needed for all commands here in root tab so it should not be empty
+		root = self.ui.rootAddrVal.text().strip()
+		if verifyRoot and not root:
+			mError = 1
+			retMsg = "Root IPv6 Addr Empty"
+			self.ui.rootAddrVal.setFocus()
+		else:
+			if verifyRoot:
+				self.ui.rootOutputText.append("<br>")
 				ret = verifyRootAddr(root, self)
 				if ret == RET_FAIL:
 					mError = 1
 					retMsg = "Error connecting with '{}'".format(root)
-		else:
-			myObjVal = "Not Found"
-			mError   = 1
+			# testConnectionBtn
+			if myObjName == "testConnectionBtn":
+				myObjVal = "Connection OK"
+
+			# clear btn
+			elif myObjName == "rootClearBtn":
+				myObjVal = " Cleared"
+				self.ui.rootOutputText.setHtml('')
+			
+			# rootScrollToLast
+			elif myObjName == "rootScrollToLast":
+				myObjVal = 0 if myObj.checkState() == 0 else 1
+				if myObjVal == 1:
+					self.ui.cmdHistory.moveCursor(QtGui.QTextCursor.End)
+			
+			# runCmdBtn
+			elif myObjName == "runCmdBtn":
+				cmd = self.ui.runCmdVal.text().strip()
+				if not cmd:
+					mError = 1
+					retMsg = "Command String Empty"
+					self.ui.runCmdVal.setFocus()
+
+				if not mError:
+					myObjVal = ' <b><i style="color:#FF7800;">' + cmd + '</i></b>' + "<br>"
+					retCode, output = test_ssh(root, cmd)
+					if retCode != RET_SUCC:
+						mError = 1
+						retMsg += output
+					else:
+						# myObjVal += "<br>" + output
+						for line in output.split('\n'):
+							myObjVal += line +"<br>"
+
+			else:
+				retMsg += myObjName + ": Not Found"
+				mError   = 1
 
 		if not exclude and not mError:
 			self.logRootCmdOutput(func_name(),myObjName +":" + str(myObjVal))
 		if len(retMsg) > 1:
 			self.logRootCmdOutput(func_name(),retMsg, "error")
+
+		self.enableRootButtons(1)
 
 
 
