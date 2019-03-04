@@ -245,19 +245,23 @@ class interactGUI(object):
 		# disable all btns to prevent from multiple clicks because sometimes it takes a longer time to fetch the command results
 		self.enableRootButtons(0)
 
-		# root is needed for all commands here in root tab so it should not be empty
-		root = self.ui.rootAddrVal.text().strip()
-		if verifyRoot and not root:
-			mError = 1
-			retMsg = "Root IPv6 Addr Empty"
-			self.ui.rootAddrVal.setFocus()
-		else:
+		while 1:
+			# root is needed for all commands here in root tab so it should not be empty
+			root = self.ui.rootAddrVal.text().strip()
+			if verifyRoot and not root:
+				mError = 1
+				retMsg = "Root IPv6 Addr Empty"
+				self.ui.rootAddrVal.setFocus()
+				break;
+
 			if verifyRoot:
 				self.ui.rootOutputText.append("<br>")
 				ret = verifyRootAddr(root, self)
 				if ret == RET_FAIL:
 					mError = 1
 					retMsg = "Error connecting with '{}'".format(root)
+					break;
+
 			# testConnectionBtn
 			if myObjName == "testConnectionBtn":
 				myObjVal = "Connection OK"
@@ -280,19 +284,19 @@ class interactGUI(object):
 					mError = 1
 					retMsg = "Command String Empty"
 					self.ui.runCmdVal.setFocus()
+					break;
 
-				if not mError:
-					self.statusBarMsg("Running Command " + cmd + " ...")
-					myObjVal = ' <b><i style="color:#FF7800;">' + cmd + '</i></b>' + "<br>"
-					retCode, output = test_ssh(root, cmd)
-					if retCode != RET_SUCC:
-						mError = 1
-						retMsg += output
-					else:
-						# myObjVal += "<br>" + output
-						for line in output.split('\n'):
-							myObjVal += line +"<br>"
-					self.statusBarMsg("Running cmd " +cmd+" ...DONE")
+				self.statusBarMsg("Running Command " + cmd + " ...")
+				myObjVal = ' <b><i style="color:#FF7800;">' + cmd + '</i></b>' + "<br>"
+				retCode, output = test_ssh(root, cmd)
+				if retCode != RET_SUCC:
+					mError = 1
+					retMsg += output
+				else:
+					# myObjVal += "<br>" + output
+					for line in output.split('\n'):
+						myObjVal += line +"<br>"
+				self.statusBarMsg("Running cmd " +cmd+" ...DONE")
 			# searchPibBtn
 			elif myObjName == "searchPibBtn":
 				myObjVal = self.ui.pibSearchVal.text().strip()
@@ -300,11 +304,14 @@ class interactGUI(object):
 					mError = 1
 					retMsg = "Search String Empty"
 					self.ui.pibSearchVal.setFocus()
+					break;
 
 			else:
 				retMsg += myObjName + ": Not Found"
 				mError   = 1
 
+			break;
+		
 		if not exclude and not mError:
 			self.logRootCmdOutput(func_name(),myObjName +":" + str(myObjVal))
 		if len(retMsg) > 1:
