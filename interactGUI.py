@@ -48,7 +48,7 @@ class interactGUI(object):
 		append: True will always append to the last, False will insert new log
 		'''
 		cmdType = cmdType.lower()
-		html+= " [" + datetime.now().strftime("%Y/%m/%d %H:%M:%S") + "]"
+		html = "[" + datetime.now().strftime("%Y/%m/%d %H:%M:%S") + "] " + html
 		
 		if cmdType == "error":
 			html = logErr(html, funcName)
@@ -164,6 +164,7 @@ class interactGUI(object):
 		self.ui.runCmdBtn.clicked.connect(lambda:self.interact_root(self.ui.runCmdBtn))
 		self.ui.rootClearBtn.clicked.connect(lambda:self.interact_root(self.ui.rootClearBtn))
 		self.ui.rootScrollToLast.stateChanged.connect(lambda: self.interact_root(self.ui.rootScrollToLast))
+		self.ui.searchPibBtn.clicked.connect(lambda: self.interact_root(self.ui.searchPibBtn))
 
 		#Menu Actions
 		self.ui.actionAbout.triggered.connect(lambda:self.interact(self.ui.actionAbout))
@@ -292,7 +293,13 @@ class interactGUI(object):
 						for line in output.split('\n'):
 							myObjVal += line +"<br>"
 					self.statusBarMsg("Running cmd " +cmd+" ...DONE")
-
+			# searchPibBtn
+			elif myObjName == "searchPibBtn":
+				myObjVal = self.ui.pibSearchVal.text().strip()
+				if not myObjVal:
+					mError = 1
+					retMsg = "Search String Empty"
+					self.ui.pibSearchVal.setFocus()
 
 			else:
 				retMsg += myObjName + ": Not Found"
