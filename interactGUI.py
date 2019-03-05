@@ -333,10 +333,10 @@ class interactGUI(object):
 					break
 				myObjVal = '<b><i style="color:#FF7800;">' + myObjVal + '</i></b>'
 				for line in output.split('\n'):
-						line = line.replace(searchStr.strip(),'<i style="color:#FF7800;">' + searchStr + '</i>')
-						line = line.replace(searchStr.upper(),'<i style="color:#FF7800;">' + searchStr.upper() + '</i>')
-						line = line.replace(searchStr.lower(),'<i style="color:#FF7800;">' + searchStr.lower() + '</i>')
-						line = line.replace(searchStr.capitalize(),'<i style="color:#FF7800;">' + searchStr.capitalize() + '</i>')
+						line = line.replace(searchStr.strip(),'<font style="color:#FF7800;">' + searchStr + '</font>')
+						line = line.replace(searchStr.upper(),'<font style="color:#FF7800;">' + searchStr.upper() + '</font>')
+						line = line.replace(searchStr.lower(),'<font style="color:#FF7800;">' + searchStr.lower() + '</font>')
+						line = line.replace(searchStr.capitalize(),'<font style="color:#FF7800;">' + searchStr.capitalize() + '</font>')
 						myObjVal += "<br>" + line 
 						
 				self.statusBarMsg("Searching {} '".format(param) + searchStr + "' ...DONE")
