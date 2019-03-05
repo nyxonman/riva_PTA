@@ -51,6 +51,16 @@
     </size>
    </property>
    <layout class="QFormLayout" name="formLayout_2">
+    <item row="1" column="0" colspan="2">
+     <widget class="QProgressBar" name="progressBar">
+      <property name="toolTip">
+       <string>Progress Bar</string>
+      </property>
+      <property name="value">
+       <number>0</number>
+      </property>
+     </widget>
+    </item>
     <item row="0" column="0" colspan="2">
      <widget class="QTabWidget" name="tabWidget">
       <property name="tabPosition">
@@ -1048,16 +1058,30 @@
         <string>Root</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_6">
-        <item row="1" column="0">
+        <item row="5" column="0">
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
            <widget class="QTextBrowser" name="rootOutputText"/>
           </item>
          </layout>
         </item>
-        <item row="0" column="0">
-         <layout class="QGridLayout" name="gridLayout_7">
-          <item row="6" column="2">
+        <item row="2" column="0">
+         <layout class="QGridLayout" name="gridLayout_7" rowstretch="0,0,0,0,0,0,0,0,0,0,0,0" columnstretch="0,0,0,0,0,0,0,0,0,0,0">
+          <item row="3" column="0" colspan="11">
+           <widget class="Line" name="line_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="5" colspan="5">
+           <widget class="QPushButton" name="lidSearchBtn">
+            <property name="text">
+             <string>Search Lid</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="1" colspan="3">
            <widget class="QComboBox" name="pibLayerCombo">
             <item>
              <property name="text">
@@ -1081,123 +1105,63 @@
             </item>
            </widget>
           </item>
-          <item row="6" column="3">
-           <widget class="QComboBox" name="pibTypeCombo">
-            <item>
-             <property name="text">
-              <string>All</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>dynamic_config</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>hardcoded</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>static_config</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>statistics</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>status</string>
-             </property>
-            </item>
+          <item row="11" column="0" colspan="4">
+           <widget class="QPushButton" name="pibSearchBtn">
+            <property name="text">
+             <string>Search Pib</string>
+            </property>
            </widget>
           </item>
-          <item row="4" column="2">
+          <item row="10" column="0" colspan="4">
+           <widget class="QLineEdit" name="pibSetVal">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="1" colspan="3">
+           <widget class="QLineEdit" name="pibSearchVal">
+            <property name="text">
+             <string>pan</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="5">
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>Lid String</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="4" rowspan="8">
+           <widget class="Line" name="line_4">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="10">
+           <widget class="QPushButton" name="rootExportPib">
+            <property name="text">
+             <string>Export Pibs</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="0">
            <widget class="QLabel" name="label_8">
             <property name="text">
-             <string>Layer</string>
+             <string>Pib Str</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
-          <item row="4" column="3">
-           <widget class="QLabel" name="label_9">
-            <property name="text">
-             <string>Type</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="4">
-           <widget class="QLabel" name="label_10">
-            <property name="text">
-             <string>Identifier</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QLabel" name="label_7">
-            <property name="text">
-             <string>Get/Set</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="4">
-           <widget class="QComboBox" name="pibIdentifierCombo">
-            <item>
-             <property name="text">
-              <string>All</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>dynamic_config</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>hardcoded</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>static_config</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>statistics</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>status</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="0" column="5">
-           <widget class="QPushButton" name="testConnectionBtn">
-            <property name="text">
-             <string>Test Connection</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="1">
-           <widget class="QComboBox" name="getSetCombo">
+          <item row="7" column="1" colspan="3">
+           <widget class="QComboBox" name="pibGetSetCombo">
             <item>
              <property name="text">
               <string>GET</string>
@@ -1210,102 +1174,149 @@
             </item>
            </widget>
           </item>
-          <item row="1" column="5">
-           <widget class="QPushButton" name="runCmdBtn">
+          <item row="8" column="0">
+           <widget class="QLabel" name="label_13">
             <property name="text">
-             <string>Run</string>
+             <string>Layer</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
-          <item row="6" column="5">
-           <widget class="QPushButton" name="runPibCmdBtn">
-            <property name="text">
-             <string>Run</string>
-            </property>
-            <property name="autoDefault">
-             <bool>false</bool>
-            </property>
-            <property name="default">
-             <bool>false</bool>
-            </property>
-            <property name="flat">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="5">
-           <widget class="QPushButton" name="searchPibBtn">
-            <property name="text">
-             <string>Search</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="rootAddrLab">
-            <property name="text">
-             <string>Root IPv6 Address </string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0" colspan="6">
-           <widget class="Line" name="line_3">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0" rowspan="4">
-           <widget class="QLabel" name="pibCmdLab">
-            <property name="text">
-             <string>Pib Commands</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="2" colspan="3">
-           <widget class="QLineEdit" name="pibSetVal">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1" colspan="4">
-           <widget class="QLineEdit" name="runCmdVal">
-            <property name="text">
-             <string>modversion.sh</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" colspan="4">
-           <widget class="QLineEdit" name="rootAddrVal">
-            <property name="text">
-             <string>dddd::1</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="1">
-           <widget class="QLineEdit" name="pibSearchVal"/>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="runCmdLab">
-            <property name="text">
-             <string>Run command</string>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="3" colspan="2">
+          <item row="11" column="10">
            <widget class="QPushButton" name="rootClearBtn">
             <property name="text">
              <string>Clear log</string>
             </property>
            </widget>
           </item>
-          <item row="8" column="5">
-           <widget class="QCheckBox" name="rootScrollToLast">
-            <property name="text">
-             <string>Scroll To Last</string>
+          <item row="4" column="0" colspan="4">
+           <widget class="QLabel" name="label_10">
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
             </property>
-            <property name="checked">
-             <bool>true</bool>
+            <property name="text">
+             <string>PIB</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="5" colspan="5">
+           <widget class="QLabel" name="label_9">
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>LID</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="6" colspan="4">
+           <widget class="QLineEdit" name="lidSearchVal">
+            <property name="text">
+             <string>pwr</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="label_26">
+            <property name="text">
+             <string>Get/Set</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="5">
+           <widget class="QLabel" name="label_27">
+            <property name="text">
+             <string>Get/Set</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="6" colspan="4">
+           <widget class="QComboBox" name="LidGetSetCombo">
+            <item>
+             <property name="text">
+              <string>GET</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>SET</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="8" colspan="3">
+           <widget class="QPushButton" name="testConnectionBtn">
+            <property name="text">
+             <string>Test Connection</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="8" colspan="3">
+           <widget class="QPushButton" name="runCmdBtn">
+            <property name="text">
+             <string>Run Command</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="3">
+           <widget class="QLabel" name="rootAddrLab">
+            <property name="text">
+             <string>Root IPv6 Address </string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="3">
+           <widget class="QLabel" name="runCmdLab">
+            <property name="text">
+             <string>Run command</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3" colspan="5">
+           <widget class="QLineEdit" name="rootAddrVal">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>dddd::d1</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3" colspan="5">
+           <widget class="QLineEdit" name="runCmdVal">
+            <property name="text">
+             <string>modversion.sh</string>
             </property>
            </widget>
           </item>
@@ -1313,16 +1324,6 @@
         </item>
        </layout>
       </widget>
-     </widget>
-    </item>
-    <item row="1" column="0" colspan="2">
-     <widget class="QProgressBar" name="progressBar">
-      <property name="toolTip">
-       <string>Progress Bar</string>
-      </property>
-      <property name="value">
-       <number>0</number>
-      </property>
      </widget>
     </item>
    </layout>
