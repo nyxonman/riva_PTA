@@ -169,6 +169,7 @@ class interactGUI(object):
 		self.ui.pibSearchVal.returnPressed.connect(lambda: self.interact_root(self.ui.pibSearchBtn))
 		self.ui.lidSearchBtn.clicked.connect(lambda: self.interact_root(self.ui.lidSearchBtn))
 		self.ui.lidSearchVal.returnPressed.connect(lambda: self.interact_root(self.ui.lidSearchBtn))
+		self.ui.rootExportPib.clicked.connect(lambda: self.interact_root(self.ui.rootExportPib))
 
 		#Menu Actions
 		self.ui.actionAbout.triggered.connect(lambda:self.interact(self.ui.actionAbout))
@@ -340,6 +341,15 @@ class interactGUI(object):
 						
 				self.statusBarMsg("Searching {} '".format(param) + searchStr + "' ...DONE")
 
+			elif myObjName == "rootExportPib":
+				exclude = 1
+				retCode, output = test_ssh(root,CMD_PIB_TABLE)
+
+				if retCode != RET_SUCC:
+					mError = 1
+					retMsg+= output
+					break
+				self.exportPibs2csv(output)
 			else:
 				retMsg += myObjName + ": Not Found"
 				mError   = 1
@@ -672,6 +682,20 @@ class interactGUI(object):
 			self.showDialog("Export successfull", msg,"information")
 		else:
 			self.logCmdHistory(func_name(),"Filename not provided","error")	
+			self.showDialog("Export Failed", "Filename not provided","critical")
+
+	def exportPibs2csv(self, pibData):
+		filename = "pib_table_"+str(datetime.now().strftime('%d_%m_%Y'))+"_CAM{}".format(glob["CAM_VERSION"])+".csv"
+		path, fileType = QFileDialog.getSaveFileName(QtWidgets.QWidget(), 'Export CSV File', filename, 'CSV(*.csv)')
+		if path:
+			f = open(path,'w', encoding="utf8")
+			f.writelines(pibData)
+
+			msg = "Exported to {}".format(path)
+			self.logRootCmdOutput(func_name(),msg,"info")
+			self.showDialog("Export successfull", msg,"information")
+		else:
+			self.logRootCmdOutput(func_name(),"Filename not provided","error")	
 			self.showDialog("Export Failed", "Filename not provided","critical")
 
 

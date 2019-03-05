@@ -15,15 +15,15 @@ __VERSION__        = "1.3.4"
 APP_VERSION        = __VERSION__ +" {OS: " + os.name + "} (debug)" if DEBUG_MODE == True else __VERSION__ +" {OS: " + os.name + "}"
 
 glob["CAM_VERSION"] = 3
-DFT_PKT_CNT        = "1"
-DFT_PKT_INTV       = "180"
-DFT_PKT_SIZE       = "64"
-DFT_ITERATION      = "2"
-DFT_PKT_RESP_TIME  = "180"
-DFT_ROOTS_CNT      = "1"
-BACT_TIME_SLOT     = 6
-CONFIG_FILENAME    = "configPTA.csv"
-DFT_OUTPUTFILENAME = "testlog_"+str(datetime.now().strftime('%d_%m_%Y'))+".csv"
+DFT_PKT_CNT         = "1"
+DFT_PKT_INTV        = "180"
+DFT_PKT_SIZE        = "64"
+DFT_ITERATION       = "2"
+DFT_PKT_RESP_TIME   = "180"
+DFT_ROOTS_CNT       = "1"
+BACT_TIME_SLOT      = 6
+CONFIG_FILENAME     = "configPTA.csv"
+DFT_OUTPUTFILENAME  = "testlog_"+str(datetime.now().strftime('%d_%m_%Y'))+".csv"
 
 
 # win_size = os.get_terminal_size().columns
@@ -37,16 +37,17 @@ RET_FAIL = -1
 ADD_ROW = 1
 DEL_ROW = -1
 
-MIN_TIME_BEFORE_ITERATE  = 12
-MAX_PING_PAYLOAD = 1024
-MIN_PING_PAYLOAD = 16
+MIN_TIME_BEFORE_ITERATE = 12
+MAX_PING_PAYLOAD        = 1024
+MIN_PING_PAYLOAD        = 16
 
 NEIGHBOR_DUMP  = 1
 DODAG_DUMP     = 2
 BPD_HW_TYPE_ID = 2
 
 # commands to run with ssh
-CMD_ROOT_VERSION = "cat /etc/Version.txt"
+CMD_ROOT_VERSION  = "cat /etc/Version.txt"
+CMD_PIB_TABLE     = "cat /etc/pib_table.csv"
 CMD_NEIGHBOR_DUMP = "neighbor-dump -t0"
 CMD_DODAG_DUMP    = "cat /proc/net/ipv6_dodag"
 # CMD_MAC_TX_STAT   = 'pib -gln /mas/statistics/f2_txmgr |grep "DataConfirmSuccess\|DataConfirmFailure"'
@@ -86,7 +87,7 @@ elif os.name == OS_WIN:
 	CLEAR_CMD = 'cls'
 
 
-CHECKBOX_STATE_CHECKED = 2
+CHECKBOX_STATE_CHECKED   = 2
 CHECKBOX_STATE_UNCHECKED = 0
 
 def set_debug_mode(mode):
@@ -94,7 +95,7 @@ def set_debug_mode(mode):
 	DEBUG_MODE = mode
 
 def set_cam_version(version):
-	glob["CAM_VERSION"] = int(version)
+	glob["CAM_VERSION"]     = int(version)
 	glob["CMD_GET_PANID"]   = "pib -gn /rf_mac/dynamic_config/f0_MAC_IDs/macSrcPANid" if glob["CAM_VERSION"] == 1 else "pib -gn /rf_mac/dynamic_config/mac_mgr/macPANID"
 	glob["CMD_MAC_TX_STAT"] = 'pib -gln /mas/statistics/f2_txmgr |grep "DataConfirmSuccess\|DataConfirmFailure" && pib -gln /rf_mac/statistics/f1_ChannelAccessDataExchange |grep "RTSRxForMeCnt3\|CTSsentCnt32\|.ACKrxForMeCnt32\|.ACKsentCnt32"' if glob["CAM_VERSION"] == 1 else 'pib -gln /mas/statistics/f2_txmgr |grep "DataConfirmSuccess\|DataConfirmFailure" && pib -gln /rf_mac/statistics/chan_mgr |grep "rx_frame_kind_rts\|fsm_cts_send\|rx_frame_kind_ack\|fsm_ack_send"'
 
