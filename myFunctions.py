@@ -65,12 +65,26 @@ def test_ssh(host, command):
 
     raw_output,err = p1.communicate()
 
-    if p1.returncode !=0 :        
+    if p1.returncode != RET_SUCC :        
         return p1.returncode,str(err.decode()).strip()
         # return p1.returncode,"ERR: Error while running the command '{}' to host {}".format(command, HOST)
     # print(raw_output.decode())
 
     return p1.returncode,str(raw_output.decode()).strip()
+
+def getPibValue(root, filterStr="", pibLayer="All",identifier="",  pibType="All"):
+    pibCmd = ""
+    # print(root, filterStr, pibLayer, pibType, identifier)
+    if pibLayer == "All":
+        # (pib -gln rf_mac | grep -i pan) && (pib -gln rf_phy |grep -i pan) && (pib -gln mas |grep -i pan)
+        pibCmd += "(pib -gln rf_phy | grep -i {}".format(filterStr) + ") ; "
+        pibCmd += "(pib -gln rf_mac | grep -i {}".format(filterStr) + ") ; "
+        pibCmd += "(pib -gln mas | grep -i {}".format(filterStr) + ")"
+    else:
+        pibCmd += "pib -gln {} | grep -i {}".format(pibLayer, filterStr)
+
+    retCode, output = test_ssh(root, pibCmd)
+    return retCode, output
 
 def checkRootReachability(ipv6Addr):
     # print("pinging "+ ipv6Addr)

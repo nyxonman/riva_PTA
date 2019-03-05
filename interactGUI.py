@@ -242,7 +242,7 @@ class interactGUI(object):
 		verifyRoot = False if myObjName == "rootClearBtn" or myObjName == "rootScrollToLast" else True
 		# print(myObjName)
 
-		# disable all btns to prevent from multiple clicks because sometimes it takes a longer time to fetch the command results
+		# disable all buttons to prevent from multiple clicks because sometimes it takes a longer time to fetch the command results
 		self.enableRootButtons(0)
 
 		while 1:
@@ -252,7 +252,7 @@ class interactGUI(object):
 				mError = 1
 				retMsg = "Root IPv6 Addr Empty"
 				self.ui.rootAddrVal.setFocus()
-				break;
+				break
 
 			if verifyRoot:
 				self.ui.rootOutputText.append("<br>")
@@ -260,7 +260,7 @@ class interactGUI(object):
 				if ret == RET_FAIL:
 					mError = 1
 					retMsg = "Error connecting with '{}'".format(root)
-					break;
+					break
 
 			# testConnectionBtn
 			if myObjName == "testConnectionBtn":
@@ -284,10 +284,10 @@ class interactGUI(object):
 					mError = 1
 					retMsg = "Command String Empty"
 					self.ui.runCmdVal.setFocus()
-					break;
+					break
 
 				self.statusBarMsg("Running Command " + cmd + " ...")
-				myObjVal = ' <b><i style="color:#FF7800;">' + cmd + '</i></b>' + "<br>"
+				myObjVal = ' <b><i style="color:#FF7800;">' + cmd + '</i></b>' 
 				retCode, output = test_ssh(root, cmd)
 				if retCode != RET_SUCC:
 					mError = 1
@@ -295,16 +295,32 @@ class interactGUI(object):
 				else:
 					# myObjVal += "<br>" + output
 					for line in output.split('\n'):
-						myObjVal += line +"<br>"
+						myObjVal += "<br>" + line 
 				self.statusBarMsg("Running cmd " +cmd+" ...DONE")
+			
 			# searchPibBtn
 			elif myObjName == "searchPibBtn":
 				myObjVal = self.ui.pibSearchVal.text().strip()
+
 				if not myObjVal:
 					mError = 1
 					retMsg = "Search String Empty"
 					self.ui.pibSearchVal.setFocus()
-					break;
+					break
+				self.statusBarMsg("Searching Pib " + myObjVal + " ...")
+
+				retCode, output = getPibValue(root,myObjVal)
+				myObjVal = ' <b><i style="color:#FF7800;">' + myObjVal + '</i></b>'
+
+				if retCode != RET_SUCC:
+					mError = 1
+					retMsg+= output
+					break
+
+				for line in output.split('\n'):
+						myObjVal += "<br>" + line 
+				
+				self.statusBarMsg("Searching Pib " + myObjVal + " ...DONE")
 
 			else:
 				retMsg += myObjName + ": Not Found"
