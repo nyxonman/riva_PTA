@@ -164,7 +164,7 @@ class interactGUI(object):
 		self.ui.runCmdBtn.clicked.connect(lambda:self.interact_root(self.ui.runCmdBtn))
 		self.ui.runCmdVal.returnPressed.connect(lambda:self.interact_root(self.ui.runCmdBtn))
 		self.ui.rootClearBtn.clicked.connect(lambda:self.interact_root(self.ui.rootClearBtn))
-		# self.ui.rootScrollToLast.stateChanged.connect(lambda: self.interact_root(self.ui.rootScrollToLast))
+		# self.ui.rootAppendLogsCheckBox.stateChanged.connect(lambda: self.interact_root(self.ui.rootAppendLogsCheckBox))
 		self.ui.pibSearchBtn.clicked.connect(lambda: self.interact_root(self.ui.pibSearchBtn))
 		self.ui.pibSearchVal.returnPressed.connect(lambda: self.interact_root(self.ui.pibSearchBtn))
 		self.ui.lidSearchBtn.clicked.connect(lambda: self.interact_root(self.ui.lidSearchBtn))
@@ -346,9 +346,10 @@ class interactGUI(object):
 
 			break;
 		
+		flagAppend = 0 if self.ui.rootAppendLogsCheckBox.checkState() == 0 else 1
 		if not exclude and not mError:
 			self.ui.rootOutputText.append("")
-			self.logRootCmdOutput(func_name(),myObjName +":" + str(myObjVal))
+			self.logRootCmdOutput(func_name(),myObjName +":" + str(myObjVal), append=flagAppend)
 		if len(retMsg) > 1:
 			self.logRootCmdOutput(func_name(),retMsg, "error")
 
