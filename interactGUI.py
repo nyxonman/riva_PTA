@@ -161,11 +161,15 @@ class interactGUI(object):
 
 		# Root tab interactions
 		self.ui.testConnectionBtn.clicked.connect(lambda:self.interact_root(self.ui.testConnectionBtn))
+		self.ui.rootAddrVal.returnPressed.connect(lambda:self.interact_root(self.ui.testConnectionBtn))
 		self.ui.runCmdBtn.clicked.connect(lambda:self.interact_root(self.ui.runCmdBtn))
+		self.ui.runCmdVal.returnPressed.connect(lambda:self.interact_root(self.ui.runCmdBtn))
 		self.ui.rootClearBtn.clicked.connect(lambda:self.interact_root(self.ui.rootClearBtn))
 		# self.ui.rootScrollToLast.stateChanged.connect(lambda: self.interact_root(self.ui.rootScrollToLast))
 		self.ui.pibSearchBtn.clicked.connect(lambda: self.interact_root(self.ui.pibSearchBtn))
+		self.ui.pibSearchVal.returnPressed.connect(lambda: self.interact_root(self.ui.pibSearchBtn))
 		self.ui.lidSearchBtn.clicked.connect(lambda: self.interact_root(self.ui.lidSearchBtn))
+		self.ui.lidSearchVal.returnPressed.connect(lambda: self.interact_root(self.ui.lidSearchBtn))
 
 		#Menu Actions
 		self.ui.actionAbout.triggered.connect(lambda:self.interact(self.ui.actionAbout))
