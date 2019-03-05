@@ -300,7 +300,7 @@ class interactGUI(object):
 			
 			# searchPibBtn
 			elif myObjName == "searchPibBtn":
-				myObjVal = self.ui.pibSearchVal.text().strip()
+				searchStr = myObjVal = self.ui.pibSearchVal.text().strip()
 
 				if not myObjVal:
 					mError = 1
@@ -310,17 +310,20 @@ class interactGUI(object):
 				self.statusBarMsg("Searching Pib " + myObjVal + " ...")
 
 				retCode, output = getPibValue(root,myObjVal)
-				myObjVal = ' <b><i style="color:#FF7800;">' + myObjVal + '</i></b>'
 
 				if retCode != RET_SUCC:
 					mError = 1
 					retMsg+= output
 					break
-
+				myObjVal = '<b><i style="color:#FF7800;">' + myObjVal + '</i></b>'
 				for line in output.split('\n'):
+						line = line.replace(searchStr.strip(),'<i style="color:#FF7800;">' + searchStr + '</i>')
+						line = line.replace(searchStr.upper(),'<i style="color:#FF7800;">' + searchStr.upper() + '</i>')
+						line = line.replace(searchStr.lower(),'<i style="color:#FF7800;">' + searchStr.lower() + '</i>')
+						line = line.replace(searchStr.capitalize(),'<i style="color:#FF7800;">' + searchStr.capitalize() + '</i>')
 						myObjVal += "<br>" + line 
-				
-				self.statusBarMsg("Searching Pib " + myObjVal + " ...DONE")
+						
+				self.statusBarMsg("Searching Pib " + searchStr + " ...DONE")
 
 			else:
 				retMsg += myObjName + ": Not Found"
