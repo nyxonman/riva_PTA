@@ -255,7 +255,7 @@ class interactGUI(object):
 				break
 
 			if verifyRoot:
-				self.ui.rootOutputText.append("<br>")
+				# self.ui.rootOutputText.append("<br>")
 				ret = verifyRootAddr(root, self)
 				if ret == RET_FAIL:
 					mError = 1
@@ -301,19 +301,22 @@ class interactGUI(object):
 			# searchPibBtn
 			elif myObjName == "searchPibBtn":
 				searchStr = myObjVal = self.ui.pibSearchVal.text().strip()
+				layerStr = self.ui.pibLayerCombo.currentText().strip()
 
 				if not myObjVal:
 					mError = 1
 					retMsg = "Search String Empty"
 					self.ui.pibSearchVal.setFocus()
 					break
-				self.statusBarMsg("Searching Pib " + myObjVal + " ...")
+				self.statusBarMsg("Searching Pib '" + myObjVal + "' ...")
 
-				retCode, output = getPibValue(root,myObjVal)
-
+				retCode, output = getPibValue(root, myObjVal, layerStr)
+				# print(retCode, output)
 				if retCode != RET_SUCC:
 					mError = 1
 					retMsg+= output
+					self.statusBarMsg("Searching Pib '" + searchStr + "' ...EMPTY/INCOMPLETE")
+
 					break
 				myObjVal = '<b><i style="color:#FF7800;">' + myObjVal + '</i></b>'
 				for line in output.split('\n'):
@@ -323,7 +326,7 @@ class interactGUI(object):
 						line = line.replace(searchStr.capitalize(),'<i style="color:#FF7800;">' + searchStr.capitalize() + '</i>')
 						myObjVal += "<br>" + line 
 						
-				self.statusBarMsg("Searching Pib " + searchStr + " ...DONE")
+				self.statusBarMsg("Searching Pib '" + searchStr + "' ...DONE")
 
 			else:
 				retMsg += myObjName + ": Not Found"
@@ -332,6 +335,7 @@ class interactGUI(object):
 			break;
 		
 		if not exclude and not mError:
+			self.ui.rootOutputText.append("<br>")
 			self.logRootCmdOutput(func_name(),myObjName +":" + str(myObjVal))
 		if len(retMsg) > 1:
 			self.logRootCmdOutput(func_name(),retMsg, "error")
