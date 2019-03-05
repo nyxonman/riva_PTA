@@ -72,7 +72,13 @@ def test_ssh(host, command):
 
     return p1.returncode,str(raw_output.decode()).strip()
 
-def getPibValue(root, filterStr="", pibLayer="All",identifier="",  pibType="All"):
+def getLidValue(root, filterStr=""):
+    lidCmd = ""
+    lidCmd = "LoadMonitorInit --verify | grep -i {}".format(filterStr)
+    retCode, output = test_ssh(root, lidCmd)
+    return retCode, output
+    
+def getPibValue(root, filterStr="", pibLayer="All", pibType="All", identifier=""):
     pibCmd = ""
     # print(root, filterStr, pibLayer, pibType, identifier)
     if pibLayer == "All":

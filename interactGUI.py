@@ -163,8 +163,9 @@ class interactGUI(object):
 		self.ui.testConnectionBtn.clicked.connect(lambda:self.interact_root(self.ui.testConnectionBtn))
 		self.ui.runCmdBtn.clicked.connect(lambda:self.interact_root(self.ui.runCmdBtn))
 		self.ui.rootClearBtn.clicked.connect(lambda:self.interact_root(self.ui.rootClearBtn))
-		self.ui.rootScrollToLast.stateChanged.connect(lambda: self.interact_root(self.ui.rootScrollToLast))
-		self.ui.searchPibBtn.clicked.connect(lambda: self.interact_root(self.ui.searchPibBtn))
+		# self.ui.rootScrollToLast.stateChanged.connect(lambda: self.interact_root(self.ui.rootScrollToLast))
+		self.ui.pibSearchBtn.clicked.connect(lambda: self.interact_root(self.ui.pibSearchBtn))
+		self.ui.lidSearchBtn.clicked.connect(lambda: self.interact_root(self.ui.lidSearchBtn))
 
 		#Menu Actions
 		self.ui.actionAbout.triggered.connect(lambda:self.interact(self.ui.actionAbout))
@@ -229,8 +230,9 @@ class interactGUI(object):
 		self.ui.rootClearBtn.setEnabled(enable)
 		self.ui.testConnectionBtn.setEnabled(enable)
 		self.ui.runCmdBtn.setEnabled(enable)
-		self.ui.runPibCmdBtn.setEnabled(enable)
-		self.ui.searchPibBtn.setEnabled(enable)
+		self.ui.pibSearchBtn.setEnabled(enable)
+		self.ui.lidSearchBtn.setEnabled(enable)
+		self.ui.rootExportPib.setEnabled(enable)
 
 	def interact_root(self, myObj):
 		'''Handles the interaction with the GUI Root tab'''
@@ -294,29 +296,36 @@ class interactGUI(object):
 					retMsg += output
 				else:
 					# myObjVal += "<br>" + output
+					# print(output)
 					for line in output.split('\n'):
 						myObjVal += "<br>" + line 
 				self.statusBarMsg("Running cmd " +cmd+" ...DONE")
 			
-			# searchPibBtn
-			elif myObjName == "searchPibBtn":
-				searchStr = myObjVal = self.ui.pibSearchVal.text().strip()
-				layerStr = self.ui.pibLayerCombo.currentText().strip()
+			# pibSearchBtn
+			elif myObjName == "pibSearchBtn" or myObjName == "lidSearchBtn":
+				param = myObjName[0:3] #can be pib or lid				
+				if param == "pib":
+					searchStr = myObjVal = self.ui.pibSearchVal.text().strip()
+					layerStr = self.ui.pibLayerCombo.currentText().strip()
+				else:
+					searchStr = myObjVal = self.ui.lidSearchVal.text().strip()
 
 				if not myObjVal:
 					mError = 1
-					retMsg = "Search String Empty"
-					self.ui.pibSearchVal.setFocus()
+					retMsg = "Search {} String Empty".format(param)
+					self.ui.pibSearchVal.setFocus() if param == "pib" else self.ui.lidSearchVal.setFocus()
 					break
-				self.statusBarMsg("Searching Pib '" + myObjVal + "' ...")
+				self.statusBarMsg("Searching {} '".format(param) + myObjVal + "' ...")
 
-				retCode, output = getPibValue(root, myObjVal, layerStr)
+				if param == "pib":
+					retCode, output = getPibValue(root, myObjVal, layerStr)
+				else:
+					retCode, output = getLidValue(root, myObjVal)
 				# print(retCode, output)
 				if retCode != RET_SUCC:
 					mError = 1
 					retMsg+= output
-					self.statusBarMsg("Searching Pib '" + searchStr + "' ...EMPTY/INCOMPLETE")
-
+					self.statusBarMsg("Searching {} '".format(param) + searchStr + "' ...EMPTY/INCOMPLETE")
 					break
 				myObjVal = '<b><i style="color:#FF7800;">' + myObjVal + '</i></b>'
 				for line in output.split('\n'):
@@ -326,7 +335,7 @@ class interactGUI(object):
 						line = line.replace(searchStr.capitalize(),'<i style="color:#FF7800;">' + searchStr.capitalize() + '</i>')
 						myObjVal += "<br>" + line 
 						
-				self.statusBarMsg("Searching Pib '" + searchStr + "' ...DONE")
+				self.statusBarMsg("Searching {} '".format(param) + searchStr + "' ...DONE")
 
 			else:
 				retMsg += myObjName + ": Not Found"
@@ -335,7 +344,7 @@ class interactGUI(object):
 			break;
 		
 		if not exclude and not mError:
-			self.ui.rootOutputText.append("<br>")
+			self.ui.rootOutputText.append("")
 			self.logRootCmdOutput(func_name(),myObjName +":" + str(myObjVal))
 		if len(retMsg) > 1:
 			self.logRootCmdOutput(func_name(),retMsg, "error")
