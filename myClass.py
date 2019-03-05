@@ -178,6 +178,7 @@ class App():
 	def get_mac_stats(self, extAddr):
 		panId           = self.mapExt2PanId[extAddr]
 		pan             = self.pans[panId]
+		set_cam_version(self.pans[panId].rootVersion)
 		retCode, output = test_ssh(pan.rootAddr,glob["CMD_MAC_TX_STAT"])
 
 		if retCode!=0:
@@ -371,13 +372,14 @@ class Node() :
 		self.finalAvgRTT.append(avgRTT)
 
 class Pan():
-	def __init__(self, prefix="", length="", nodes="", saddr="", rootAddr=""):
+	def __init__(self, prefix="", length="", nodes="", saddr="", rootAddr="", rootVersion=3):
 		self.rootAddr = rootAddr
 		self.prefix   = prefix
 		self.length   = length
 		self.nodes    = nodes
 		self.sAddr    = saddr
 		self.nodeList = {}
+		self.rootVersion = rootVersion
 
 	def add_node(self, extAddr, sAddr, hwType, best_RF='-', RSSI_I='-',RSSI_M='-' ):
 		# self, extAddr, sAddr, hwType, best_RF='-', RSSI_I='-',RSSI_M='-'

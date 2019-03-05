@@ -77,7 +77,7 @@ def getLidValue(root, filterStr=""):
     lidCmd = "LoadMonitorInit --verify | grep -i {}".format(filterStr)
     retCode, output = test_ssh(root, lidCmd)
     return retCode, output
-    
+
 def getPibValue(root, filterStr="", pibLayer="All", pibType="All", identifier=""):
     pibCmd = ""
     # print(root, filterStr, pibLayer, pibType, identifier)
@@ -121,7 +121,7 @@ def verifyConfigFile(myApp, interactGuiObj):
                 splitted = line[:-1].replace(',',' ').split()
                 
                 for root in splitted:
-                    ret = verifyRootAddr(root, interactGuiObj)
+                    rootVersion, ret = verifyRootAddr(root, interactGuiObj)
                     if ret == RET_FAIL:
                         return RET_FAIL
                     panId = ret
@@ -214,7 +214,7 @@ def verifyRootAddr(rootIpv6Addr, interactGuiObj):
     except :  # not a valid address
         retMsg += "FAILED. '{}' is NOT a valid IPv6 Address".format(rootIpv6Addr)
         interactGuiObj.logCmdHistory(func_name(),retMsg,"error")
-        return RET_FAIL
+        return RET_FAIL, RET_FAIL
     retMsg += "VALID..."
 
     rootIpv6Addr = rootIpv6Addr if not interface else rootIpv6Addr + '%' + interface
@@ -227,9 +227,21 @@ def verifyRootAddr(rootIpv6Addr, interactGuiObj):
         retMsg +=  " Example: fe80::207:81ff:feff:cc01%eth1"
         interactGuiObj.logCmdHistory(func_name(),retMsg,"error")
 
-        return RET_FAIL
+        return RET_FAIL, RET_FAIL
     retMsg += "REACHABLE..."
 
+    # check between CAM3 and CAM1 or PIM or ACT ROOT
+    ret, output = test_ssh(rootIpv6Addr,CMD_ROOT_VERSION)    
+    if ret != RET_SUCC:
+        retMsg +="FAILED<br>"
+        retMsg += "Cannot retrieve Version of Root{}".format(rootIpv6Addr)
+        interactGuiObj.logCmdHistory(func_name(),retMsg,"error")
+        return RET_FAIL, RET_FAIL
+    
+    rootVersion = 3 if "CAM3" in output else 1
+    set_cam_version(rootVersion)
+
+    retMsg += "CAM{}...".format(rootVersion)
     # check if root is SYCnEt or not
     ret, output = test_ssh(rootIpv6Addr,CMD_RPL_STATUS)
     # print(ret, output)
@@ -237,23 +249,23 @@ def verifyRootAddr(rootIpv6Addr, interactGuiObj):
         retMsg +="FAILED<br>"
         retMsg += "Cannot retrieve RPL-Status of Root{}".format(rootIpv6Addr)
         interactGuiObj.logCmdHistory(func_name(),retMsg,"error")
-        return RET_FAIL
+        return RET_FAIL, RET_FAIL
 
     rplStat = int(output)
     if rplStat != 1:
         retMsg +="FAILED<br>"
         retMsg += "ROOT not SYCnEt Yet. Please wait until Root is RUNNING"
         interactGuiObj.logCmdHistory(func_name(),retMsg,"error")
-        return RET_FAIL
+        return RET_FAIL, RET_FAIL
     retMsg += "SYCnEt..."
         
     # retrieve the panId
     ret, output = test_ssh(rootIpv6Addr, glob["CMD_GET_PANID"])
     if ret != RET_SUCC:
         retMsg +="FAILED<br>"
-        retMsg += "Cannot retrieve PANID for Root {}, Check if CAM Version is correct(current={})".format(rootIpv6Addr, glob["CAM_VERSION"])
+        retMsg += "Cannot retrieve PANID for Root {}".format(rootIpv6Addr)
         interactGuiObj.logCmdHistory(func_name(),retMsg,"error")
-        return RET_FAIL
+        return RET_FAIL, RET_FAIL
 
     # splitted = output.split('=')
     # panId = str(int(splitted[1].strip(),16))
@@ -264,7 +276,7 @@ def verifyRootAddr(rootIpv6Addr, interactGuiObj):
     retMsg += "OK".format(rootIpv6Addr)
     interactGuiObj.logCmdHistory(func_name(),retMsg,"info")
     # panId = str(int("597b",16)) if rootIpv6Addr=="eeee::1" else str(int("47de",16))
-    return panId
+    return rootVersion, panId
 
 def process_dodag_data(pan, panId, data, interactGuiObj):
     prefix   = ""

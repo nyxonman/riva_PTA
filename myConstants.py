@@ -46,6 +46,7 @@ DODAG_DUMP     = 2
 BPD_HW_TYPE_ID = 2
 
 # commands to run with ssh
+CMD_ROOT_VERSION = "cat /etc/Version.txt"
 CMD_NEIGHBOR_DUMP = "neighbor-dump -t0"
 CMD_DODAG_DUMP    = "cat /proc/net/ipv6_dodag"
 # CMD_MAC_TX_STAT   = 'pib -gln /mas/statistics/f2_txmgr |grep "DataConfirmSuccess\|DataConfirmFailure"'
