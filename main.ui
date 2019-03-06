@@ -1047,6 +1047,33 @@
             </property>
            </widget>
           </item>
+          <item row="10" column="1" colspan="3">
+           <widget class="QLineEdit" name="pibSetVal">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="10" rowspan="8">
+           <widget class="Line" name="line_5">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="0">
+           <widget class="QLabel" name="label_12">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Set pib value</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="3" colspan="5">
            <widget class="QLineEdit" name="rootAddrVal">
             <property name="sizePolicy">
@@ -1108,6 +1135,19 @@
             </property>
            </widget>
           </item>
+          <item row="10" column="5">
+           <widget class="QLabel" name="label_14">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Set LID value</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
           <item row="8" column="1" colspan="3">
            <widget class="QComboBox" name="pibLayerCombo">
             <item>
@@ -1139,6 +1179,16 @@
             </property>
            </widget>
           </item>
+          <item row="11" column="11">
+           <widget class="QCheckBox" name="rootAppendLogsCheckBox">
+            <property name="text">
+             <string>Append logs</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
           <item row="9" column="1" colspan="3">
            <widget class="QLineEdit" name="pibSearchVal">
             <property name="text">
@@ -1148,6 +1198,9 @@
           </item>
           <item row="7" column="6" colspan="4">
            <widget class="QComboBox" name="LidGetSetCombo">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <item>
              <property name="text">
               <string>GET</string>
@@ -1160,7 +1213,7 @@
             </item>
            </widget>
           </item>
-          <item row="8" column="5">
+          <item row="9" column="5">
            <widget class="QLabel" name="label_11">
             <property name="text">
              <string>Filter String</string>
@@ -1177,6 +1230,13 @@
             </property>
            </widget>
           </item>
+          <item row="9" column="11">
+           <widget class="QPushButton" name="rootExportPib">
+            <property name="text">
+             <string>Export PIBs</string>
+            </property>
+           </widget>
+          </item>
           <item row="9" column="0">
            <widget class="QLabel" name="label_8">
             <property name="text">
@@ -1189,6 +1249,9 @@
           </item>
           <item row="7" column="1" colspan="3">
            <widget class="QComboBox" name="pibGetSetCombo">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <item>
              <property name="text">
               <string>GET</string>
@@ -1245,10 +1308,10 @@
             </property>
            </widget>
           </item>
-          <item row="8" column="6" colspan="4">
-           <widget class="QLineEdit" name="lidSearchVal">
+          <item row="10" column="11">
+           <widget class="QPushButton" name="rootClearBtn">
             <property name="text">
-             <string>pwr</string>
+             <string>Clear log</string>
             </property>
            </widget>
           </item>
@@ -1272,74 +1335,17 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="10" rowspan="8">
-           <widget class="Line" name="line_5">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="10" column="1" colspan="3">
-           <widget class="QLineEdit" name="pibSetVal">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="10" column="0">
-           <widget class="QLabel" name="label_12">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Set pib value</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="9" column="5">
-           <widget class="QLabel" name="label_14">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Set LID value</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
           <item row="9" column="6" colspan="4">
+           <widget class="QLineEdit" name="lidSearchVal">
+            <property name="text">
+             <string>pwr</string>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="6" colspan="4">
            <widget class="QLineEdit" name="pibSetVal_2">
             <property name="enabled">
              <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="9" column="11">
-           <widget class="QPushButton" name="rootExportPib">
-            <property name="text">
-             <string>Export PIBs</string>
-            </property>
-           </widget>
-          </item>
-          <item row="10" column="11">
-           <widget class="QPushButton" name="rootClearBtn">
-            <property name="text">
-             <string>Clear log</string>
-            </property>
-           </widget>
-          </item>
-          <item row="11" column="11">
-           <widget class="QCheckBox" name="rootAppendLogsCheckBox">
-            <property name="text">
-             <string>Append logs</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
             </property>
            </widget>
           </item>
