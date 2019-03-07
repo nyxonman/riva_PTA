@@ -289,7 +289,7 @@ class App():
 
 		return RET_SUCC, ret
 	
-	def disp_line(self, char, word="", printOut=1,length=WIN_LEN,  allign="center"):
+	def disp_line(self, char, word="", printOut=1,length=120,  allign="center"):
 	
 		retStr = ""
 		cnt    = len(word)
@@ -373,12 +373,12 @@ class Node() :
 
 class Pan():
 	def __init__(self, prefix="", length="", nodes="", saddr="", rootAddr="", rootVersion=3):
-		self.rootAddr = rootAddr
-		self.prefix   = prefix
-		self.length   = length
-		self.nodes    = nodes
-		self.sAddr    = saddr
-		self.nodeList = {}
+		self.rootAddr    = rootAddr
+		self.prefix      = prefix
+		self.length      = length
+		self.nodes       = nodes
+		self.sAddr       = saddr
+		self.nodeList    = {}
 		self.rootVersion = rootVersion
 
 	def add_node(self, extAddr, sAddr, hwType, best_RF='-', RSSI_I='-',RSSI_M='-' ):

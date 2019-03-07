@@ -164,7 +164,6 @@ class interactGUI(object):
 		self.ui.runCmdBtn.clicked.connect(lambda:self.interact_root(self.ui.runCmdBtn))
 		self.ui.runCmdVal.returnPressed.connect(lambda:self.interact_root(self.ui.runCmdBtn))
 		self.ui.rootClearBtn.clicked.connect(lambda:self.interact_root(self.ui.rootClearBtn))
-		# self.ui.rootAppendLogsCheckBox.stateChanged.connect(lambda: self.interact_root(self.ui.rootAppendLogsCheckBox))
 		self.ui.pibSearchBtn.clicked.connect(lambda: self.interact_root(self.ui.pibSearchBtn))
 		self.ui.pibSearchVal.returnPressed.connect(lambda: self.interact_root(self.ui.pibSearchBtn))
 		self.ui.lidSearchBtn.clicked.connect(lambda: self.interact_root(self.ui.lidSearchBtn))
@@ -175,10 +174,6 @@ class interactGUI(object):
 		self.ui.actionAbout.triggered.connect(lambda:self.interact(self.ui.actionAbout))
 		self.ui.actionDebug_Mode.triggered.connect(lambda:self.interact(self.ui.actionDebug_Mode))
 
-# 		impAct = QAction('Import mail', self) 
-# impMenu.addAction(impAct)
-
-	# ALL integer arguments
 	def createCmdStr(self):
 		'''Create a command string for the output'''
 		mCmdStr = "*** COMMAND *** <br>"
@@ -310,7 +305,7 @@ class interactGUI(object):
 				param = myObjName[0:3] #can be pib or lid				
 				if param == "pib":
 					searchStr = myObjVal = self.ui.pibSearchVal.text().strip()
-					layerStr = self.ui.pibLayerCombo.currentText().strip()
+					layerStr  = self.ui.pibLayerCombo.currentText().strip()
 				else:
 					searchStr = myObjVal = self.ui.lidSearchVal.text().strip()
 
@@ -328,15 +323,17 @@ class interactGUI(object):
 				# print(retCode, output)
 				if retCode != RET_SUCC:
 					mError = 1
-					retMsg+= output
+					retMsg += output
 					self.statusBarMsg("Searching {} '".format(param) + searchStr + "' ...EMPTY/INCOMPLETE")
 					break
+
+				# colorize the filtered string
 				myObjVal = '<b><i style="color:#FF7800;">' + myObjVal + '</i></b>'
 				for line in output.split('\n'):
-						line = line.replace(searchStr.strip(),'<font style="color:#FF7800;">' + searchStr + '</font>')
-						line = line.replace(searchStr.upper(),'<font style="color:#FF7800;">' + searchStr.upper() + '</font>')
-						line = line.replace(searchStr.lower(),'<font style="color:#FF7800;">' + searchStr.lower() + '</font>')
-						line = line.replace(searchStr.capitalize(),'<font style="color:#FF7800;">' + searchStr.capitalize() + '</font>')
+						line     = line.replace(searchStr.strip(),'<font style="color:#FF7800;">' + searchStr + '</font>')
+						line     = line.replace(searchStr.upper(),'<font style="color:#FF7800;">' + searchStr.upper() + '</font>')
+						line     = line.replace(searchStr.lower(),'<font style="color:#FF7800;">' + searchStr.lower() + '</font>')
+						line     = line.replace(searchStr.capitalize(),'<font style="color:#FF7800;">' + searchStr.capitalize() + '</font>')
 						myObjVal += "<br>" + line 
 						
 				self.statusBarMsg("Searching {} '".format(param) + searchStr + "' ...DONE")
@@ -347,12 +344,12 @@ class interactGUI(object):
 
 				if retCode != RET_SUCC:
 					mError = 1
-					retMsg+= output
+					retMsg += output
 					break
 				self.exportPibs2csv(output)
 			else:
 				retMsg += myObjName + ": Not Found"
-				mError   = 1
+				mError = 1
 
 			break;
 		
@@ -415,8 +412,8 @@ class interactGUI(object):
 
 		elif myObjName == "addRowBtn":
 			# self.updateTable(self.mRootCnt,1)
-			currentRow=self.ui.tableWidget.currentRow()
-			totalRows = self.ui.tableWidget.rowCount()
+			currentRow = self.ui.tableWidget.currentRow()
+			totalRows  = self.ui.tableWidget.rowCount()
 			currentRow = currentRow if currentRow>-1 else totalRows-1
 			self.ui.tableWidget.insertRow(currentRow+1)
 			item = QtWidgets.QTableWidgetItem()
@@ -425,47 +422,47 @@ class interactGUI(object):
 			myObjVal = "1 row added"
 
 		elif myObjName == "removeRowBtn":
-			currentRow=self.ui.tableWidget.currentRow()
-			totalRows = self.ui.tableWidget.rowCount()
+			currentRow = self.ui.tableWidget.currentRow()
+			totalRows  = self.ui.tableWidget.rowCount()
 			currentRow = currentRow if currentRow>-1 else totalRows-1
 			if totalRows > 1 and currentRow > 0:
 				self.ui.tableWidget.removeRow(currentRow)
 				myObjVal = "Row {} removed".format(currentRow)
 			else:
-				mError   = 1
+				mError = 1
 				retMsg = "First Row cannot be removed"
 
 		elif myObjName == "startTestBtn":
-			myObjVal="pressed"
-			exclude = 1
+			myObjVal = "pressed"
+			exclude  = 1
 			self.ui.startTestBtn.setEnabled(0)
 			self.startTest()
 
 		elif myObjName == "stopTestBtn" or myObjName == "stopTestBtn2":
-			myObjVal="pressed"
+			myObjVal = "pressed"
 			self.stopTest()
 
 		elif myObjName == "clearLogBtn":
-			myObjVal="pressed"
+			myObjVal = "pressed"
 			self.ui.cmdHistory.setHtml('')
 		elif myObjName == "exportDataBtn":
 			self.exportData2csv()
-			myObjVal="pressed"
+			myObjVal = "pressed"
 
 		elif myObjName == "resetEntryBtn":
-			myObjVal="pressed"
+			myObjVal = "pressed"
 			self.initializeDefaults()
 
 		elif myObjName == "saveEntryBtn":
-			myObjVal="pressed"
+			myObjVal = "pressed"
 			self.saveEntries()
 
 		elif myObjName == "loadEntryBtn":
-			myObjVal="pressed"
+			myObjVal = "pressed"
 			self.loadEntries()
 
 		elif myObjName == "showMap":
-			myObjVal      = 0 if myObj.checkState() == 0 else 1
+			myObjVal = 0 if myObj.checkState() == 0 else 1
 			if myObjVal == 1:
 				self.ui.pktCntDial.setEnabled(0)
 				self.ui.pktIntDial.setEnabled(0)
@@ -481,7 +478,7 @@ class interactGUI(object):
 			self.mShowMap = myObjVal
 
 		elif myObjName == "showAllNeighbors":
-			myObjVal         = 0 if myObj.checkState() == 0 else 1
+			myObjVal               = 0 if myObj.checkState() == 0 else 1
 			self.mShowAllNeighbors = True if myObjVal == 1 else False
 
 		elif myObjName == "outputToFile":
@@ -501,7 +498,7 @@ class interactGUI(object):
 
 		elif myObjName == "actionAbout":
 			myObjVal = "pressed"
-			exclude = True
+			exclude  = True
 			self.logCmdHistory(func_name(),"<b><center>PING TEST APPLICATION<b><br/>v{}<br/>This application is created by Nikesh Man Shakya.<br>nikeshman.shakya@itron.com</center>".format(APP_VERSION), "info")
 			
 		elif myObjName == "actionDebug_Mode":
@@ -534,8 +531,8 @@ class interactGUI(object):
 	def updateTable(self, nRootCnt, addRow=0, rowNum=-1):
 		nRootCnt = int(nRootCnt)
 		# self.ui.tableWidget.clearContents()
-		rows = self.ui.tableWidget.rowCount()
-		cols = self.ui.tableWidget.columnCount()
+		rows     = self.ui.tableWidget.rowCount()
+		cols     = self.ui.tableWidget.columnCount()
 		self.ui.tableWidget.setColumnCount(nRootCnt)
 		self.ui.tableWidget.insertRow(rowNum)
 
@@ -575,11 +572,11 @@ class interactGUI(object):
 
 	def verifyEntries(self,myApp):
 		'''Verify table entries'''
-		cnt = 0
+		cnt      = 0
 		panArray = []
-		retMsg = ""
-		itemCnt = 0
-		first = 1
+		retMsg   = ""
+		itemCnt  = 0
+		first    = 1
 
 		# read all entries form the table widget and verify the contents
 		for row in range(self.ui.tableWidget.rowCount()):
@@ -728,7 +725,7 @@ class interactGUI(object):
 	def loadEntries(self, filename="configPTA.csv"):
 		itemCnt = 0
 		rootCnt = 0
-		first = 1
+		first   = 1
 
 		path, fileType = QFileDialog.getOpenFileName(QtWidgets.QWidget(), 'Choose config CSV File', CONFIG_FILENAME, 'CSV(*.csv)')
 		if path:
@@ -764,7 +761,7 @@ class interactGUI(object):
 
 	def output2console(self, myApp, file="", reps=0):
 		myHtml = ''
-		row = 1
+		row    = 1
 		if file:
 			self.ui.lowerText.setHtml('')
 			with open(file,'r') as stream:
@@ -828,7 +825,7 @@ class interactGUI(object):
 
 					params[-1] = str( round (sum( node.finalAvgRTT) / len(node.finalAvgRTT),3 ) ) if len(node.finalAvgRTT) >0 else '-'
 					for col in params:
-						style = ' align="center" style="color:#FF0000"' if col == "-" or col =="100%" else ''
+						style  = ' align="center" style="color:#FF0000"' if col == "-" or col =="100%" else ''
 						myHtml += "<td{}>{}</td>".format(style, col)
 					myHtml+= "</tr>"
 					myApp.exportData["finalStats"].append(params)
@@ -968,9 +965,9 @@ class interactGUI(object):
 			self.ui.lowerText.setHtml('')
 			self.statusBarMsg("Test Running...")
 			
-			tot    = len(myApp.testNodes)
+			tot              = len(myApp.testNodes)
 			total_iterations = int(myApp.iteration)
-			myDate = get_date()
+			myDate           = get_date()
 
 			self.logCmdHistory(func_name(),"<br/><b>TEST STARTED at {}<b>".format(myDate))
 			self.ui.upperText.setHtml("<br/><center><b>~~~ TEST STARTED at {} ~~~<b></center>".format(myDate))
@@ -1078,8 +1075,8 @@ class pingThread(QThread):
 
 		# iterate through each repetitions
 		for reps in range(1,total_iterations+1):
-			self.myApp.outputAppData=[]
-			cnt    = 0
+			self.myApp.outputAppData = []
+			cnt                      = 0
 
 			if reps > 1 :
 				# when higher reps, if the time between the iterations for a same node  is less than MIN_TIME_BEFORE_ITERATE, we need to sleep befre repeating the nodes
@@ -1107,7 +1104,7 @@ class pingThread(QThread):
 						self.sigStatusBar.emit("Test for {} (losts {}) in [{}/{}]  ".format(extAddr, myNode.finalTx - myNode.finalRx, reps, total_iterations))
 					
 					retCode = RET_FAIL
-					myDate = get_date()
+					myDate  = get_date()
 
 					if ipAddr != IP_NA:
 						last_mac_tx_succ, last_mac_tx_fail, last_rx_frame_kind_ack, last_rx_frame_kind_rts, last_fsm_ack_send, last_fsm_cts_send = self.myApp.get_mac_stats(extAddr)

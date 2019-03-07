@@ -25,12 +25,6 @@ BACT_TIME_SLOT      = 6
 CONFIG_FILENAME     = "configPTA.csv"
 DFT_OUTPUTFILENAME  = "testlog_"+str(datetime.now().strftime('%d_%m_%Y'))+".csv"
 
-
-# win_size = os.get_terminal_size().columns
-# WIN_LEN = win_size if win_size%2==0 else win_size -1
-# WIN_LEN-=6
-WIN_LEN = 114
-
 RET_SUCC = 0
 RET_FAIL = -1
 
@@ -52,14 +46,10 @@ CMD_NEIGHBOR_DUMP = "neighbor-dump -t0"
 CMD_DODAG_DUMP    = "cat /proc/net/ipv6_dodag"
 # CMD_MAC_TX_STAT   = 'pib -gln /mas/statistics/f2_txmgr |grep "DataConfirmSuccess\|DataConfirmFailure"'
 glob["CMD_MAC_TX_STAT"]   = 'pib -gln /mas/statistics/f2_txmgr |grep "DataConfirmSuccess\|DataConfirmFailure" && pib -gln /rf_mac/statistics/chan_mgr |grep "rx_frame_kind_rts\|fsm_cts_send\|rx_frame_kind_ack\|fsm_ack_send"'
-# CMD_MAC_TX_STAT   = "pib -gln /rf_mac/statistics/f4_LowMacDebug | grep Transmission"
-# .rf_mac.dynamic_config.f0_MAC_IDs.macSrcPANid = 47de
-# pib -gn /rf_mac/dynamic_config/mac_mgr/macPANID for CAM3
-# /rf_mac/status/f0_MAC_status/macNETRegistered = 0001
-# CMD_GET_PANID = "pib -gln /rf_mac/dynamic_config/f0_MAC_IDs/macSrcPANid"
+
 glob["CMD_GET_PANID"]   = "pib -gn /rf_mac/dynamic_config/f0_MAC_IDs/macSrcPANid" if glob["CAM_VERSION"] == 1 else "pib -gn /rf_mac/dynamic_config/mac_mgr/macPANID"
 CMD_RPL_STATUS    = "pib -gn /mas/status/f0_core/NetRegisteredFlag"
-# CMD_RPL_STATUS    = "ImProvHelper.sh --ReadLid ILID_ACT_NETWORK_STATUS"
+
 
 RPL_STATUS_SYNC = "SYCnEt"
 IP_NA           = "N/A"
