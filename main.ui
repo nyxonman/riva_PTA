@@ -641,7 +641,7 @@
              <number>5</number>
             </property>
             <property name="value">
-             <number>15</number>
+             <number>13</number>
             </property>
             <property name="notchesVisible">
              <bool>true</bool>
@@ -831,7 +831,7 @@
              <cursorShape>ForbiddenCursor</cursorShape>
             </property>
             <property name="text">
-             <string>180</string>
+             <string>156</string>
             </property>
             <property name="frame">
              <bool>false</bool>
