@@ -257,11 +257,15 @@ class interactGUI(object):
 
 			if verifyRoot:
 				# self.ui.rootOutputText.append("<br>")
+				self.statusBarMsg("Verifying Root "+ root + "...")
 				rootVersion, ret = verifyRootAddr(root, self)			
 				if ret == RET_FAIL:
 					mError = 1
 					retMsg = "Error connecting with '{}'".format(root)
+					self.statusBarMsg("Verifying Root "+ root + "... FAIL")
+
 					break
+			self.statusBarMsg("Verifying Root "+ root + "... OK")
 
 			# testConnectionBtn
 			if myObjName == "testConnectionBtn":
