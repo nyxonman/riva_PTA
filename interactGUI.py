@@ -263,8 +263,8 @@ class interactGUI(object):
 					mError = 1
 					# retMsg = "Error connecting with '{}'".format(root)
 					self.statusBarMsg("Verifying Root "+ root + "... FAIL")
-
 					break
+
 			self.statusBarMsg("Verifying Root "+ root + "... OK")
 			self.logRootCmdOutput(func_name(),retMsg, "succ")
 			retMsg = ""
@@ -277,6 +277,7 @@ class interactGUI(object):
 			# clear btn
 			elif myObjName == "rootClearBtn":
 				myObjVal = " Cleared"
+				exclude  = 1
 				self.ui.rootOutputText.setHtml('')
 			
 			# runCmdBtn
@@ -288,7 +289,7 @@ class interactGUI(object):
 					self.ui.runCmdVal.setFocus()
 					break
 
-				self.statusBarMsg("Running Command " + cmd + " ...")
+				self.statusBarMsg("Running Command '" + cmd + "' ...")
 				myObjVal = ' <b><i style="color:#FF7800;">' + cmd + '</i></b>' 
 				retCode, output = test_ssh(root, cmd)
 				if retCode != RET_SUCC:
@@ -299,7 +300,7 @@ class interactGUI(object):
 					# print(output)
 					for line in output.split('\n'):
 						myObjVal += "<br>" + line 
-				self.statusBarMsg("Running cmd " +cmd+" ...DONE")
+				self.statusBarMsg("Running cmd '" + cmd + "' ...DONE")
 			
 			# pibSearchBtn
 			elif myObjName == "pibSearchBtn" or myObjName == "lidSearchBtn":
@@ -336,8 +337,8 @@ class interactGUI(object):
 						line     = line.replace(searchStr.lower(),'<font style="background-color:#F5E07F;">' + searchStr.lower() + '</font>')
 						line     = line.replace(searchStr.capitalize(),'<font style="background-color:#F5E07F;">' + searchStr.capitalize() + '</font>')
 						myObjVal += "<br>" + line 
-						
-				self.statusBarMsg("Searching {} '".format(param) + searchStr + "' ...DONE")
+				
+				self.statusBarMsg("Searching {} '{}' ...DONE [{} Entries]".format(param, searchStr, len(output.splitlines())))
 
 			elif myObjName == "rootExportPib":
 				exclude = 1
@@ -360,10 +361,9 @@ class interactGUI(object):
 			self.ui.rootOutputText.append("")
 		if len(retMsg) > 1:
 			self.logRootCmdOutput(func_name(),retMsg, "error")
+			self.ui.rootOutputText.append("")
 
 		self.enableRootButtons(1)
-
-
 
 	def interact(self, myObj):
 		'''Handles the interaction with the GUI'''
