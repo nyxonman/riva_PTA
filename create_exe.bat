@@ -39,7 +39,6 @@ echo - Removing directory tmp...
 cd..
 rd /s/q tmp
 
-echo - The exe %filename%.exe is in %curPath%!!
+echo - *********** The exe %filename%.exe is ready in %curPath%!!
 endlocal
-echo - FINISHED
 pause
