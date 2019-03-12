@@ -1,4 +1,86 @@
+
 # riva_PTA
+This is a guideline documentation for a **BACT Ping Test Application**, later written as **PTA**. The main purpose of this Application is to run a test on a network and compare the performance of BACT modules using IPv6 ping application
+
+This application is written in Python and two instances are available for Windows environment and Linux environment. There are some requirements for this application to work which is detailed in Chapter 2.
+
+## Prerequisites
+
+ - A host having a IPv6 connectivity with the ROOT(s)
+ - A host may be a LINUX machine or WINDOWs machine
+ - Further Requirements are divided into two sections:
+
+### LINUX Environment
+
+ - Tested with Ubuntu 14.04 LTS Trusty Tahr  
+ - **Python3 +**  As the program is built in python therefore the python interpreter is necessary.  
+ - **SSHPASS**  This is used to pass the password through the SSH for accessing the ROOTs.
+
+You can install them by two methods:
+
+ 1. By running the two lines directly into the terminal
+	```` shell
+	sudo apt-get install sshpass
+	sudo apt-get install python3 
+ 2. By running install.sh
+	 ````
+	 ./path_to_the_file/install.sh
+
+**NOTE**: The necessary Libraries for python are automatically added by the PTA application for Linux.
+
+### Windows Environment
+
+ - Tested with Windows 10 only.
+ - **Python3 +**  As the program is built in python therefore the python interpreter is necessary.
+ - **Plink** if not installed previously  Like SSHPASS in Linux, this is required to send the passcode to get access to the ROOT
+
+### Installing
+
+A step by step series of examples that tell you how to get a development env running
+
+Say what the step will be
+
+```
+Give the example
+```
+
+
+End with an example of getting some data out of the system or using it for a little demo
+
+## Running the tests
+
+Explain how to run the automated tests for this system
+
+### Break down into end to end tests
+
+Explain what these tests test and why
+
+```
+Give an example
+```
+
+### And coding style tests
+
+Explain what these tests test and why
+
+```
+Give an example
+```
+
+## Deployment
+
+Add additional notes about how to deploy this on a live system
+
+
+
+## Versioning
+
+
+## Authors
+
+* **Nikesh Man Shakya** - shakya.nikeshman@itron.com
+
+
 
 # CHANGELOGS
 
@@ -91,4 +173,6 @@ a4d2301 - (5 weeks ago) (2019-01-24 13:20:35 +0100) <Shakya> changed min time be
 (6 weeks ago) (2019-01-15 11:07:13 +0100) <Shakya> reversed to previous version in the text
 (6 weeks ago) (2019-01-15 11:06:17 +0100) <Shakya> changed version
 (6 weeks ago) (2019-01-15 11:04:03 +0100) <Shakya> added .gitignore and Version.txt
-* 25dba95 - (origin/PTA_1_3_0) (5 months ago) (2018-10-03 13:53:29 +0200) <nyxonman> Initial commit
+* 25dba95 - (origin/PTA_1_3_0) (5 months ago) (2018-10-03 13:53:29 +0200) <nyxonman> Initial commit# riva_PTA
+
+
