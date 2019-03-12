@@ -1115,26 +1115,6 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="0" colspan="3">
-           <widget class="QLabel" name="rootAddrLab">
-            <property name="text">
-             <string>Root IPv6 Address </string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" colspan="3">
-           <widget class="QLabel" name="runCmdLab">
-            <property name="text">
-             <string>Run command</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
           <item row="10" column="5">
            <widget class="QLabel" name="label_14">
             <property name="enabled">
@@ -1346,6 +1326,60 @@
            <widget class="QLineEdit" name="pibSetVal_2">
             <property name="enabled">
              <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="QLabel" name="runCmdLab">
+            <property name="text">
+             <string>Run command</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QComboBox" name="comboBox">
+            <item>
+             <property name="text">
+              <string>self</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>ngcstatus</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>modversion</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>neighbor-dump t0</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>neighbor-dump t7</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>neighbor-dump t1</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="2">
+           <widget class="QLabel" name="rootAddrLab">
+            <property name="text">
+             <string>Root IPv6 Address </string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
