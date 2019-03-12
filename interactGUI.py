@@ -258,29 +258,26 @@ class interactGUI(object):
 			if verifyRoot:
 				# self.ui.rootOutputText.append("<br>")
 				self.statusBarMsg("Verifying Root "+ root + "...")
-				rootVersion, ret = verifyRootAddr(root, self)			
+				rootVersion, ret, retMsg = verifyRootAddr(root, self)			
 				if ret == RET_FAIL:
 					mError = 1
-					retMsg = "Error connecting with '{}'".format(root)
+					# retMsg = "Error connecting with '{}'".format(root)
 					self.statusBarMsg("Verifying Root "+ root + "... FAIL")
 
 					break
 			self.statusBarMsg("Verifying Root "+ root + "... OK")
-
+			self.logRootCmdOutput(func_name(),retMsg, "succ")
+			retMsg = ""
+			
 			# testConnectionBtn
 			if myObjName == "testConnectionBtn":
+				exclude  = 1
 				myObjVal = "Connection OK"
 
 			# clear btn
 			elif myObjName == "rootClearBtn":
 				myObjVal = " Cleared"
 				self.ui.rootOutputText.setHtml('')
-			
-			# rootScrollToLast
-			elif myObjName == "rootScrollToLast":
-				myObjVal = 0 if myObj.checkState() == 0 else 1
-				if myObjVal == 1:
-					self.ui.cmdHistory.moveCursor(QtGui.QTextCursor.End)
 			
 			# runCmdBtn
 			elif myObjName == "runCmdBtn":
@@ -306,8 +303,8 @@ class interactGUI(object):
 			
 			# pibSearchBtn
 			elif myObjName == "pibSearchBtn" or myObjName == "lidSearchBtn":
-				param = myObjName[0:3] #can be pib or lid				
-				if param == "pib":
+				param = myObjName[0:3].upper() #can be pib or lid				
+				if param == "PIB":
 					searchStr = myObjVal = self.ui.pibSearchVal.text().strip()
 					layerStr  = self.ui.pibLayerCombo.currentText().strip()
 				else:
@@ -320,7 +317,7 @@ class interactGUI(object):
 					break
 				self.statusBarMsg("Searching {} '".format(param) + myObjVal + "' ...")
 
-				if param == "pib":
+				if param == "PIB":
 					retCode, output = getPibValue(root, myObjVal, layerStr)
 				else:
 					retCode, output = getLidValue(root, myObjVal)
@@ -359,8 +356,8 @@ class interactGUI(object):
 		
 		flagAppend = 0 if self.ui.rootAppendLogsCheckBox.checkState() == 0 else 1
 		if not exclude and not mError:
-			self.ui.rootOutputText.append("")
 			self.logRootCmdOutput(func_name(),myObjName +":" + str(myObjVal), append=flagAppend)
+			self.ui.rootOutputText.append("")
 		if len(retMsg) > 1:
 			self.logRootCmdOutput(func_name(),retMsg, "error")
 
@@ -594,13 +591,15 @@ class interactGUI(object):
 					
 					# first row is the root ipv6 address. verify it and retrieve the pan ID
 					if first:
-						rootVersion, ret = verifyRootAddr(itemVal, self)
+						rootVersion, ret, retMsg = verifyRootAddr(itemVal, self)
 						if ret == RET_FAIL:
+							self.logCmdHistory(func_name(),retMsg,"error")							
 							return RET_FAIL
 						panId = ret
 						myApp.pans[panId] = Pan(rootAddr=itemVal)
 						myApp.pans[panId].rootVersion = rootVersion
 						panArray.append(panId)
+						self.logCmdHistory(func_name(),retMsg,"succ")
 
 					# process the rest of the items
 					else:

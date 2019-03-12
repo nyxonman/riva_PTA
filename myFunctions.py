@@ -106,68 +106,6 @@ def checkRootReachability(ipv6Addr):
  
     return RET_SUCC
 
-# fixme: later change to accept comments as well
-def verifyConfigFile(myApp, interactGuiObj):
-    filename = CONFIG_FILENAME
-    cnt = 0
-    panArray = []
-    retMsg = ""
-    
-    
-    with open(filename,'r',encoding="utf-8") as file:
-        for line in file:
-            # first lines contain the root ipv6 address. Verify the root addr
-            if cnt == 0:
-                splitted = line[:-1].replace(',',' ').split()
-                
-                for root in splitted:
-                    rootVersion, ret = verifyRootAddr(root, interactGuiObj)
-                    if ret == RET_FAIL:
-                        return RET_FAIL
-                    panId = ret
-                    myApp.pans[panId] = Pan(rootAddr=root)
-                    panArray.append(panId)
-                cnt+=1
-                continue
-
-            #from 2nd line onwards it contains hw addr of nodes
-            if cnt >0:
-                # for empty lines at the end
-                if len(line)<3:
-                    continue
-                splitted = line[:-1].replace(',',' ').split()
-                if len(splitted) > int(myApp.nbrOfRoots):
-                    retMsg+= "More entries[{} provided] in row {} than number of roots[{} provided]".format(len(splitted),cnt, myApp.nbrOfRoots)
-                    interactGuiObj.logCmdHistory(func_name(),retMsg,"error")
-                    return RET_FAIL
-
-                i=0
-                for col in splitted:
-                    length = len(col.strip())
-                    # uncomment the following if condition if you do not want to skip the empty entries
-                    if (length==0):
-                        i+=1
-                        continue
-
-                    if (length!=16 and length!=0):
-                        retMsg += "In row {}, EXT/MAC Address should be 16 characters[{} provided]".format(cnt, length)
-                        interactGuiObj.logCmdHistory(func_name(),retMsg,"error")
-
-                        return RET_FAIL
-
-                    if col.strip() in myApp.fileList:
-                        print("")
-                        retMsg += "In row {}, EXT/MAC Address '{}' is redundant. Please check entries".format(cnt+1, col.strip())
-                        interactGuiObj.logCmdHistory(func_name(),retMsg,"error")
-                        return RET_FAIL
-
-                    myApp.mapExt2PanId[col.strip()] = panArray[i]
-                    myApp.fileList.append(col.strip())
-                    i+=1
-                cnt+=1
-    
-    return RET_SUCC
-
 def display_console_str(myApp):
     print(myApp.outputStr)
 
@@ -213,8 +151,7 @@ def verifyRootAddr(rootIpv6Addr, interactGuiObj):
         socket.inet_pton(socket.AF_INET6, rootIpv6Addr.strip())
     except :  # not a valid address
         retMsg += "FAILED. '{}' is NOT a valid IPv6 Address".format(rootIpv6Addr)
-        interactGuiObj.logCmdHistory(func_name(),retMsg,"error")
-        return RET_FAIL, RET_FAIL
+        return RET_FAIL, RET_FAIL, retMsg
     retMsg += "VALID..."
 
     rootIpv6Addr = rootIpv6Addr if not interface else rootIpv6Addr + '%' + interface
@@ -225,9 +162,8 @@ def verifyRootAddr(rootIpv6Addr, interactGuiObj):
         retMsg +=  " ERR:'{}' is UNREACHABLE.".format(rootIpv6Addr)
         retMsg +=  " If you are using link-local address, please mention the interface as well."
         retMsg +=  " Example: fe80::207:81ff:feff:cc01%eth1"
-        interactGuiObj.logCmdHistory(func_name(),retMsg,"error")
 
-        return RET_FAIL, RET_FAIL
+        return RET_FAIL, RET_FAIL, retMsg
     retMsg += "REACHABLE..."
 
     # check between CAM3 and CAM1 or PIM or ACT ROOT
@@ -235,48 +171,37 @@ def verifyRootAddr(rootIpv6Addr, interactGuiObj):
     if ret != RET_SUCC:
         retMsg +="FAILED<br>"
         retMsg += "Cannot retrieve Version of Root{}".format(rootIpv6Addr)
-        interactGuiObj.logCmdHistory(func_name(),retMsg,"error")
-        return RET_FAIL, RET_FAIL
+        return RET_FAIL, RET_FAIL, retMsg
     
     rootVersion = 3 if "CAM3" in output else 1
     set_cam_version(rootVersion)
 
     retMsg += "CAM{}...".format(rootVersion)
-    # check if root is SYCnEt or not
-    ret, output = test_ssh(rootIpv6Addr,CMD_RPL_STATUS)
+
+    mergedCmd = CMD_RPL_STATUS+";"+glob["CMD_GET_PANID"]
+
+    # check if root is SYCnEt or not and retrieve panID
+    ret, output = test_ssh(rootIpv6Addr,mergedCmd)
     # print(ret, output)
     if ret != RET_SUCC:
         retMsg +="FAILED<br>"
-        retMsg += "Cannot retrieve RPL-Status of Root{}".format(rootIpv6Addr)
-        interactGuiObj.logCmdHistory(func_name(),retMsg,"error")
-        return RET_FAIL, RET_FAIL
+        retMsg += "Cannot retrieve RPL-Status and/or PAN ID of Root{}".format(rootIpv6Addr)
+        return RET_FAIL, RET_FAIL, retMsg
+    splitted = output.splitlines()
 
-    rplStat = int(output)
+    rplStat = int(splitted[0])
     if rplStat != 1:
         retMsg +="FAILED<br>"
         retMsg += "ROOT not SYCnEt Yet. Please wait until Root is RUNNING"
-        interactGuiObj.logCmdHistory(func_name(),retMsg,"error")
-        return RET_FAIL, RET_FAIL
+        return RET_FAIL, RET_FAIL, retMsg
     retMsg += "SYCnEt..."
         
-    # retrieve the panId
-    ret, output = test_ssh(rootIpv6Addr, glob["CMD_GET_PANID"])
-    if ret != RET_SUCC:
-        retMsg +="FAILED<br>"
-        retMsg += "Cannot retrieve PANID for Root {}".format(rootIpv6Addr)
-        interactGuiObj.logCmdHistory(func_name(),retMsg,"error")
-        return RET_FAIL, RET_FAIL
-
-    # splitted = output.split('=')
-    # panId = str(int(splitted[1].strip(),16))
-    panId = str(int(output,16))
-
-    retMsg += "0x{}...".format(output)
+    panId = str(int(splitted[1],16))
+    retMsg += "0x{}...".format(splitted[1])
     stdout.flush()    
-    retMsg += "OK".format(rootIpv6Addr)
-    interactGuiObj.logCmdHistory(func_name(),retMsg,"info")
+    retMsg += "OK"
     # panId = str(int("597b",16)) if rootIpv6Addr=="eeee::1" else str(int("47de",16))
-    return rootVersion, panId
+    return rootVersion, panId, retMsg
 
 def process_dodag_data(pan, panId, data, interactGuiObj):
     prefix   = ""
