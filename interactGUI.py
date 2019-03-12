@@ -330,10 +330,10 @@ class interactGUI(object):
 				# colorize the filtered string
 				myObjVal = '<b><i style="color:#FF7800;">' + myObjVal + '</i></b>'
 				for line in output.split('\n'):
-						line     = line.replace(searchStr.strip(),'<font style="color:#FF7800;">' + searchStr + '</font>')
-						line     = line.replace(searchStr.upper(),'<font style="color:#FF7800;">' + searchStr.upper() + '</font>')
-						line     = line.replace(searchStr.lower(),'<font style="color:#FF7800;">' + searchStr.lower() + '</font>')
-						line     = line.replace(searchStr.capitalize(),'<font style="color:#FF7800;">' + searchStr.capitalize() + '</font>')
+						line     = line.replace(searchStr.strip(),'<font style="background-color:#F5E07F;">' + searchStr + '</font>')
+						line     = line.replace(searchStr.upper(),'<font style="background-color:#F5E07F;">' + searchStr.upper() + '</font>')
+						line     = line.replace(searchStr.lower(),'<font style="background-color:#F5E07F;">' + searchStr.lower() + '</font>')
+						line     = line.replace(searchStr.capitalize(),'<font style="background-color:#F5E07F;">' + searchStr.capitalize() + '</font>')
 						myObjVal += "<br>" + line 
 						
 				self.statusBarMsg("Searching {} '".format(param) + searchStr + "' ...DONE")
