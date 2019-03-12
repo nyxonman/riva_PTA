@@ -61,7 +61,7 @@ def test_ssh(host, command):
         p1 = subprocess.Popen(['sshpass','-p', PWD, 'ssh', "-o StrictHostKeyChecking=no" ,"-o LogLevel=ERROR", "-o UserKnownHostsFile=/dev/null", HOST,COMMAND], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
         # plink -v youruser@yourhost.com -pw yourpw "some linux command"
-        p1 = subprocess.Popen(['plink',"-pw", PWD, HOST,COMMAND], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+        p1 = subprocess.Popen(['plink',"-pw", PWD, HOST,COMMAND], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, shell=True)
 
     raw_output,err = p1.communicate()
 
@@ -95,7 +95,7 @@ def getPibValue(root, filterStr="", pibLayer="All", pibType="All", identifier=""
 def checkRootReachability(ipv6Addr):
     # print("pinging "+ ipv6Addr)
     if os.name == OS_WIN:
-        p1 = subprocess.Popen([PING_CMD, PING_CMD_XTRA, PING_CNT,'1',PING_SIZE,'8', PING_RESP_TIME, '2',ipv6Addr],stdout=subprocess.PIPE)
+        p1 = subprocess.Popen([PING_CMD, PING_CMD_XTRA, PING_CNT,'1',PING_SIZE,'8', PING_RESP_TIME, '2',ipv6Addr], stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
     else:
         p1 = subprocess.Popen([PING_CMD, PING_CNT,'1',PING_SIZE,'8', PING_RESP_TIME, '2',ipv6Addr],stdout=subprocess.PIPE)
 
