@@ -873,7 +873,7 @@ class interactGUI(object):
 		myApp = App()
 		self.statusBarMsg("Test Started")
 		# myApp.fileList =[]
-
+		self.ui.cmdHistory.append("")
 		myApp.pktSize, myApp.pktIntv, myApp.pktResTime, myApp.pktCnt, myApp.nbrOfRoots, myApp.iteration, myApp.map, myApp.allNeighbors, myApp.outputFile, myApp.outputFilename	= self.getParams()
 
 		# if all neighbors is checked from config is False
@@ -881,12 +881,16 @@ class interactGUI(object):
 			myApp.fromConfig = False
 
 		while 1:
+			self.statusBarMsg("Verifying Entries...")
+
 			ret = self.verifyEntries(myApp)
 			if ret == RET_FAIL:
 				RUN_OK = False
 				break;
 
 			self.logCmdHistory(func_name(),"Test Started Successfully.","succ")
+			self.statusBarMsg("Verifying Entries...OK")
+
 			# myApp.display()
 			panCnt = 1
 			for keyPanId in myApp.pans:
@@ -895,6 +899,8 @@ class interactGUI(object):
 				
 				# retrieve a dodag dump on the cam and process it
 				logMsg = "Retrieving DODAG Dump for PAN {} [{}]...".format(panCnt, hex(int(keyPanId)))
+				self.statusBarMsg(logMsg)
+
 				ret, output = test_ssh(pan.rootAddr ,CMD_DODAG_DUMP)
 				if ret!=0:
 					logMsg+="FAILED"
@@ -909,9 +915,11 @@ class interactGUI(object):
 					break
 				logMsg+="OK"
 				self.logCmdHistory(func_name(),logMsg, "info")
+				self.statusBarMsg(logMsg)
 
 				# retrieve neighbordump and process it
 				logMsg = "Retrieving Neighbor Dump for PAN {} [{}]...".format(panCnt, hex(int(keyPanId)))
+				self.statusBarMsg(logMsg)
 				ret, output = test_ssh(pan.rootAddr,CMD_NEIGHBOR_DUMP)
 				if ret!=0:
 					logMsg += "FAILED"	
@@ -925,6 +933,7 @@ class interactGUI(object):
 					break
 				logMsg +="OK"
 				self.logCmdHistory(func_name(),logMsg, "info")
+				self.statusBarMsg(logMsg)							
 
 				# prepare mapping between the short addr and the ext addr from dodag tree and neighbor dump
 				ret = prepare_mapping(myApp, pan, keyPanId)
@@ -940,6 +949,8 @@ class interactGUI(object):
 				break
 			# prepare the test nodes	
 			logMsg = "Mapping Nodes for the Test ..."
+			self.statusBarMsg(logMsg)
+
 			ret = prepare_test(myApp)
 			if ret == RET_FAIL:
 				RUN_OK = False
@@ -947,6 +958,7 @@ class interactGUI(object):
 			logMsg += "OK [{}/{}]".format(ret,len(myApp.testNodes))
 			myApp.validNodesCnt = ret
 			self.logCmdHistory(func_name(),logMsg,"info")
+			self.statusBarMsg(logMsg)
 
 			# prepare the output mapping
 			prepare_output_mapping(myApp)
