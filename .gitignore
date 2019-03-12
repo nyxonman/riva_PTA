@@ -3,5 +3,6 @@
 *.sh
 *.json
 *.pyc
+*.exe
 __pycache__
 Version.txt
