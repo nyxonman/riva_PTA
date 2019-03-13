@@ -109,7 +109,7 @@ def getPibValue(root, filterStr="", pibLayer="All", pibType="All", identifier=""
     return retCode, output
 
 def checkRootReachability(ipv6Addr):
-    # print("pinging "+ ipv6Addr)
+
     if os.name == OS_WIN:
         p1 = subprocess.Popen([PING_CMD, PING_CMD_XTRA, PING_CNT,'1',PING_SIZE,'8', PING_RESP_TIME, '2000',ipv6Addr], stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE, shell=True, close_fds=True)
     else:
@@ -118,7 +118,6 @@ def checkRootReachability(ipv6Addr):
     raw_output,err = p1.communicate()
     # print(raw_output)
     if p1.returncode !=0:
-        print(raw_output.decode(), err.decode())
         logError(raw_output, err)
         return RET_FAIL
  
