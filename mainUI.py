@@ -309,6 +309,7 @@ class Ui_MainObj(object):
         self.pktSizeDial.setObjectName("pktSizeDial")
         self.gridLayout_4.addWidget(self.pktSizeDial, 3, 0, 1, 1)
         self.pktIntDial = QtWidgets.QDial(self.mainTab)
+        self.pktIntDial.setEnabled(False)
         self.pktIntDial.setCursor(QtGui.QCursor(QtCore.Qt.ClosedHandCursor))
         self.pktIntDial.setMinimum(1)
         self.pktIntDial.setMaximum(50)
