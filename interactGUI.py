@@ -169,6 +169,7 @@ class interactGUI(object):
 		self.ui.lidSearchBtn.clicked.connect(lambda: self.interact_root(self.ui.lidSearchBtn))
 		self.ui.lidSearchVal.returnPressed.connect(lambda: self.interact_root(self.ui.lidSearchBtn))
 		self.ui.rootExportPib.clicked.connect(lambda: self.interact_root(self.ui.rootExportPib))
+		self.ui.rootCmdcomboBox.currentIndexChanged.connect(lambda: self.interact_root(self.ui.rootCmdcomboBox))
 
 		#Menu Actions
 		self.ui.actionAbout.triggered.connect(lambda:self.interact(self.ui.actionAbout))
@@ -240,7 +241,7 @@ class interactGUI(object):
 		retMsg    = ""		
 		myObjName = myObj.property("objectName")
 		myObjVal  = ""
-		verifyRoot = False if myObjName == "rootClearBtn" or myObjName == "rootScrollToLast" else True
+		verifyRoot = False if myObjName == "rootClearBtn" or myObjName == "rootScrollToLast" or myObjName == "rootCmdcomboBox" else True
 		# print(myObjName)
 
 		# disable all buttons to prevent from multiple clicks because sometimes it takes a longer time to fetch the command results
@@ -265,8 +266,8 @@ class interactGUI(object):
 					self.statusBarMsg("Verifying Root "+ root + "... FAIL")
 					break
 
-			self.statusBarMsg("Verifying Root "+ root + "... OK")
-			self.logRootCmdOutput(func_name(),retMsg, "succ")
+				self.statusBarMsg("Verifying Root "+ root + "... OK")
+				self.logRootCmdOutput(func_name(),retMsg, "succ")
 			retMsg = ""
 			
 			# testConnectionBtn
@@ -279,7 +280,14 @@ class interactGUI(object):
 				myObjVal = " Cleared"
 				exclude  = 1
 				self.ui.rootOutputText.setHtml('')
-			
+			# rootCmdcomboBox
+			elif myObjName == "rootCmdcomboBox":
+				myObjVal = myObj.currentText().strip()
+				if myObjVal == "self":				
+					break
+				cmdTxt = name2cmd(myObjVal)
+				self.ui.runCmdVal.setText(cmdTxt)
+				
 			# runCmdBtn
 			elif myObjName == "runCmdBtn":
 				cmd = self.ui.runCmdVal.text().strip()

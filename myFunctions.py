@@ -72,6 +72,21 @@ def test_ssh(host, command):
 
     return p1.returncode,str(raw_output.decode()).strip()
 
+def name2cmd(cmdName=""):
+    cmdName = cmdName.lower()
+    if cmdName == "modversion":
+        return "modversion.sh"
+    elif cmdName == "ngcstatus":
+        return "ngcstatus.sh"
+    elif cmdName == "neighbor-dump t0":
+        return "neighbor-dump -t0 -l3"
+    elif cmdName == "neighbor-dump t1":
+        return "neighbor-dump -t1 -l3"
+    elif cmdName == "neighbor-dump t7":
+        return "neighbor-dump -t7"
+    elif cmdName == "dodag table":
+        return "cat /proc/net/ipv6_dodag"
+
 def getLidValue(root, filterStr=""):
     lidCmd = ""
     lidCmd = "LoadMonitorInit --verify | grep -i {}".format(filterStr)

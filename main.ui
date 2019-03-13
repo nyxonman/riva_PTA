@@ -1340,7 +1340,7 @@
            </widget>
           </item>
           <item row="1" column="2">
-           <widget class="QComboBox" name="comboBox">
+           <widget class="QComboBox" name="rootCmdcomboBox">
             <item>
              <property name="text">
               <string>self</string>
@@ -1354,6 +1354,11 @@
             <item>
              <property name="text">
               <string>modversion</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>DODAG table</string>
              </property>
             </item>
             <item>
