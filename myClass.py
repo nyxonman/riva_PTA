@@ -269,7 +269,8 @@ class App():
 	def send_ping(self,addr):
 		ret = []        
 		# addr = "172.18.200.27"
-		wait = self.pktResTime+"000" if os.name == OS_WIN else self.pktResTime
+		# waiting time is in ms in windows ping and seconds in linux ping
+		wait = self.pktResTime + "000" if os.name == OS_WIN else self.pktResTime
 		
 		if os.name == OS_WIN:
 			p1 = subprocess.Popen([PING_CMD, PING_CMD_XTRA, PING_CNT,self.pktCnt, PING_SIZE,self.pktSize, PING_RESP_TIME, wait, addr], stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE, shell=True, close_fds=True)
