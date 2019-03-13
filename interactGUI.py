@@ -758,6 +758,7 @@ class interactGUI(object):
 						itemCnt+=1
 						if first:
 							rootCnt+=1
+							self.ui.rootAddrVal.setText(data)
 					first = 0
 			
 			msg = "Loaded {} ROOT{} and {} items from {}".format(rootCnt, "(s)" if rootCnt>1 else "", itemCnt - rootCnt, path)
