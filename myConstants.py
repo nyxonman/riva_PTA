@@ -71,7 +71,7 @@ elif os.name == OS_WIN:
 	PING_CMD_XTRA  = '-6'
 	PING_CNT       = '-n'
 	PING_SIZE      = '-l'
-	PING_INTV      = '-i'
+	PING_INTV      = '-i' # OS_WIN does not support this
 	PING_RESP_TIME = '-w'
 
 	CLEAR_CMD = 'cls'

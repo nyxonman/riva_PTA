@@ -61,11 +61,12 @@ def test_ssh(host, command):
         p1 = subprocess.Popen(['sshpass','-p', PWD, 'ssh', "-o StrictHostKeyChecking=no" ,"-o LogLevel=ERROR", "-o UserKnownHostsFile=/dev/null", HOST,COMMAND], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
         # plink -v youruser@yourhost.com -pw yourpw "some linux command"
-        p1 = subprocess.Popen(['plink',"-pw", PWD, HOST,COMMAND], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, shell=True)
+        p1 = subprocess.Popen(['plink',"-pw", PWD, HOST,COMMAND], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, shell= True, close_fds=True)
 
     raw_output,err = p1.communicate()
 
-    if p1.returncode != RET_SUCC :        
+    if p1.returncode != RET_SUCC : 
+        logError(raw_output, err)       
         return p1.returncode,str(err.decode()).strip()
         # return p1.returncode,"ERR: Error while running the command '{}' to host {}".format(command, HOST)
     # print(raw_output.decode())
@@ -110,19 +111,30 @@ def getPibValue(root, filterStr="", pibLayer="All", pibType="All", identifier=""
 def checkRootReachability(ipv6Addr):
     # print("pinging "+ ipv6Addr)
     if os.name == OS_WIN:
-        p1 = subprocess.Popen([PING_CMD, PING_CMD_XTRA, PING_CNT,'1',PING_SIZE,'8', PING_RESP_TIME, '2',ipv6Addr], stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
+        p1 = subprocess.Popen([PING_CMD, PING_CMD_XTRA, PING_CNT,'1',PING_SIZE,'8', PING_RESP_TIME, '2000',ipv6Addr], stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE, shell=True, close_fds=True)
     else:
         p1 = subprocess.Popen([PING_CMD, PING_CNT,'1',PING_SIZE,'8', PING_RESP_TIME, '2',ipv6Addr],stdout=subprocess.PIPE)
 
     raw_output,err = p1.communicate()
     # print(raw_output)
     if p1.returncode !=0:
+        print(raw_output.decode(), err.decode())
+        logError(raw_output, err)
         return RET_FAIL
  
     return RET_SUCC
 
 def display_console_str(myApp):
     print(myApp.outputStr)
+
+def logError(rawOuput="", rawErr=""):
+    if rawErr or rawOuput:
+        fd = open("errorLog","a")
+        rawOuput = str(get_date()) +" [O/P]- " + rawOuput.decode()
+        rawErr = str(get_date()) +" [ERR]- " + rawErr.decode()
+        fd.writelines(rawOuput)
+        fd.writelines(rawErr)
+        fd.close()
 
 #creates a dummy configPTA.csv if it does not exists
 def create_dummy_config():
