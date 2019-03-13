@@ -127,8 +127,9 @@ def display_console_str(myApp):
     print(myApp.outputStr)
 
 def logError(rawOuput="", rawErr=""):
+    filename = "errorLog_" + str(get_date().split(' ')[0]) + ".log"
     if rawErr or rawOuput:
-        fd = open("errorLog","a")
+        fd = open(filename,"a")
         rawOuput = str(get_date()) +" [O/P]- " + rawOuput.decode()
         rawErr = str(get_date()) +" [ERR]- " + rawErr.decode()
         fd.writelines(rawOuput)
