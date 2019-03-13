@@ -87,7 +87,7 @@ def set_debug_mode(mode):
 def set_cam_version(version):
 	glob["CAM_VERSION"]     = int(version)
 	glob["CMD_GET_PANID"]   = "pib -gn /rf_mac/dynamic_config/f0_MAC_IDs/macSrcPANid" if glob["CAM_VERSION"] == 1 else "pib -gn /rf_mac/dynamic_config/mac_mgr/macPANID"
-	glob["CMD_MAC_TX_STAT"] = 'pib -gln /mas/statistics/f2_txmgr |grep "DataConfirmSuccess\|DataConfirmFailure" && pib -gln /rf_mac/statistics/f1_ChannelAccessDataExchange |grep "RTSRxForMeCnt3\|CTSsentCnt32\|.ACKrxForMeCnt32\|.ACKsentCnt32"' if glob["CAM_VERSION"] == 1 else 'pib -gln /mas/statistics/f2_txmgr |grep "DataConfirmSuccess\|DataConfirmFailure" && pib -gln /rf_mac/statistics/chan_mgr |grep "rx_frame_kind_rts\|fsm_cts_send\|rx_frame_kind_ack\|fsm_ack_send"'
+	glob["CMD_MAC_TX_STAT"] = "pib -gn /mas/statistics/f2_txmgr/DataConfirmSuccess;pib -gn /mas/statistics/f2_txmgr/DataConfirmFailure;pib -gn /rf_mac/statistics/f1_ChannelAccessDataExchange/RTSRxForMeCnt3;pib -gn /rf_mac/statistics/f1_ChannelAccessDataExchange/CTSsentCnt32;pib -gn /rf_mac/statistics/f1_ChannelAccessDataExchange/ACKrxForMeCnt32;pib -gn /rf_mac/statistics/f1_ChannelAccessDataExchange/ACKsentCnt32" if glob["CAM_VERSION"] == 1 else "pib -gn /mas/statistics/f2_txmgr/DataConfirmSuccess;pib -gn /mas/statistics/f2_txmgr/DataConfirmFailure;pib -gn /rf_mac/statistics/chan_mgr/rx_frame_kind_rts;pib -gn /rf_mac/statistics/chan_mgr/fsm_cts_send;pib -gn /rf_mac/statistics/chan_mgr/rx_frame_kind_ack;pib -gn /rf_mac/statistics/chan_mgr/fsm_ack_send"
 
 def func_name():
     return "["+inspect.stack()[1][3]+"] " if DEBUG_MODE == True else ""

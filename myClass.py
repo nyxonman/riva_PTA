@@ -180,33 +180,26 @@ class App():
 		pan             = self.pans[panId]
 		set_cam_version(self.pans[panId].rootVersion)
 		retCode, output = test_ssh(pan.rootAddr,glob["CMD_MAC_TX_STAT"])
-
-		if retCode!=0:
+		print(glob["CMD_MAC_TX_STAT"])
+		if retCode!=0:		
 			LOGE(func_name(),"Unable to retrieve MAC TX Stats from {}. Probably lost connection with the ROOT {}.".format(hex(int(panId)),pan.rootAddr))
-			print("")
-			print("")
+			LOGE(func_name(),output)
 			exit()
 		lines       = output.splitlines()
 		# print(output)
 		# DataConfirmSuccess
-		splitted    = lines[0].split('=')
-		mac_tx_succ = 0 if not splitted[1].strip() else int(splitted[1].strip(), 16)
+		mac_tx_succ = 0 if not lines[0].strip() else int(lines[0].strip(), 16)
 		# DataConfirmFailure
-		splitted    = lines[1].split('=')
-		mac_tx_fail = 0 if not splitted[1].strip() else int(splitted[1].strip(), 16)
-		# rx_frame_kind_ack
-		splitted    = lines[2].split('=') if glob["CAM_VERSION"]==3 else lines[5].split('=')
-		rx_frame_kind_ack = 0 if not splitted[1].strip() else int(splitted[1].strip(), 16)
+		mac_tx_fail = 0 if not lines[1].strip() else int(lines[1].strip(), 16)
 		# rx_frame_kind_rts
-		splitted    = lines[3].split('=') if glob["CAM_VERSION"]==3 else lines[2].split('=')
-		rx_frame_kind_rts = 0 if not splitted[1].strip() else int(splitted[1].strip(), 16)
-		# fsm_ack_send
-		splitted    = lines[5].split('=') if glob["CAM_VERSION"]==3 else lines[4].split('=')
-		fsm_ack_send = 0 if not splitted[1].strip() else int(splitted[1].strip(), 16)
+		rx_frame_kind_rts = 0 if not lines[2].strip() else int(lines[2].strip(), 16)
 		# fsm_cts_send
-		splitted    = lines[6].split('=') if glob["CAM_VERSION"]==3 else lines[3].split('=')
-		fsm_cts_send = 0 if not splitted[1].strip() else int(splitted[1].strip(), 16)
-
+		fsm_cts_send = 0 if not lines[3].strip() else int(lines[3].strip(), 16)
+		# rx_frame_kind_ack
+		rx_frame_kind_ack = 0 if not lines[4].strip() else int(lines[4].strip(), 16)
+		# fsm_ack_send
+		fsm_ack_send = 0 if not lines[5].strip() else int(lines[5].strip(), 16)
+		
 		# return mac_tx_succ,mac_tx_fail
 		return mac_tx_succ, mac_tx_fail, rx_frame_kind_ack, rx_frame_kind_rts, fsm_ack_send, fsm_cts_send
 
