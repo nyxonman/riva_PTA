@@ -180,7 +180,7 @@ class App():
 		pan             = self.pans[panId]
 		set_cam_version(self.pans[panId].rootVersion)
 		retCode, output = test_ssh(pan.rootAddr,glob["CMD_MAC_TX_STAT"])
-		print(glob["CMD_MAC_TX_STAT"])
+
 		if retCode!=0:		
 			LOGE(func_name(),"Unable to retrieve MAC TX Stats from {}. Probably lost connection with the ROOT {}.".format(hex(int(panId)),pan.rootAddr))
 			LOGE(func_name(),output)
