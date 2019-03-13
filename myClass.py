@@ -276,7 +276,8 @@ class App():
 	def send_ping(self,addr):
 		ret = []        
 		# addr = "172.18.200.27"
-		p1 = subprocess.Popen([PING_CMD,PING_SIZE, self.pktSize, PING_CNT, self.pktCnt, PING_INTV, self.pktIntv, PING_RESP_TIME, self.pktResTime, addr],stdout=subprocess.PIPE)
+		wait = self.pktResTime*1000 if os.name == OS_WIN else self.pktResTime
+		p1 = subprocess.Popen([PING_CMD,PING_SIZE, self.pktSize, PING_CNT, self.pktCnt, PING_INTV, self.pktIntv, PING_RESP_TIME, wait, addr],stdout=subprocess.PIPE)
 		raw_output,err = p1.communicate()
 		
 		# 0 is success 1 is success with 0 received
