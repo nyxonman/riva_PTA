@@ -854,7 +854,7 @@ class interactGUI(object):
 		self.ui.pktSizeDial.setEnabled(enable)
 		self.ui.pktSizeVal.setEnabled(enable)
 		self.ui.pktCntDial.setEnabled(enable)
-		self.ui.pktIntDial.setEnabled(enable)
+		# self.ui.pktIntDial.setEnabled(enable)
 		self.ui.pktResDial.setEnabled(enable)
 		self.ui.IterVal.setEnabled(enable)
 		self.ui.rootCntVal.setEnabled(enable)
@@ -881,6 +881,7 @@ class interactGUI(object):
 		RUN_OK = True
 		myApp = App()
 		self.statusBarMsg("Test Started")
+		self.enableInputs(0)
 		# myApp.fileList =[]
 		self.ui.cmdHistory.append("")
 		myApp.pktSize, myApp.pktIntv, myApp.pktResTime, myApp.pktCnt, myApp.nbrOfRoots, myApp.iteration, myApp.map, myApp.allNeighbors, myApp.outputFile, myApp.outputFilename	= self.getParams()
@@ -985,7 +986,7 @@ class interactGUI(object):
 
 		# start a thread to send pings and process
 		if RUN_OK == True and myApp.map == False:
-			self.enableInputs(0)
+			# self.enableInputs(0)
 			self.ui.lowerText.setHtml('')
 			self.statusBarMsg("Test Running...")
 			
