@@ -219,7 +219,7 @@ class interactGUI(object):
 		self.ui.outputToFile.setChecked(CHECKBOX_STATE_UNCHECKED)
 		self.ui.outputFilenameVal.setText(DFT_OUTPUTFILENAME)
 
-		self.ui.actionDebug_Mode.setChecked(DEBUG_MODE)
+		self.ui.actionDebug_Mode.setChecked(glob["DEBUG_MODE"])
 		
 		self.updateTable(DFT_ROOTS_CNT)
 

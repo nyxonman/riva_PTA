@@ -282,9 +282,12 @@ class App():
 		
 		# 0 is success, 1 is success with 0 received
 		if p1.returncode != 0 and p1.returncode !=1:
-			logError(raw_output, err)
+			logDump(func_name(), str_decode(raw_output), str_decode(err))
 			return RET_FAIL, ret
 
+		if(glob["DEBUG_MODE"]):
+			logDump(func_name(),str_decode(raw_output))
+			
 		# proces the ping result to provide an array at the end
 		output = str(raw_output.decode('utf-8','ignore'))  
 		ret = process_ping_output(output,p1.returncode)   

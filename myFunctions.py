@@ -14,29 +14,29 @@ from time import sleep
 from myConstants import *
 # from myClass import *
 
-def logInfo(myLog, funcName=""):
+def logInfo(myLog, funcName="", plainText=False):
 
     if funcName:
         myLog = "{}".format(funcName) + myLog
-    myLog = '<span style="color:#0000FF;">INFO: ' + myLog + '</span>' 
+    myLog = '<span style="color:#0000FF;">INFO: ' + myLog + '</span>' if not plainText else 'INFO: ' + myLog
     return myLog
 
-def logWarn(myLog, funcName=""):
+def logWarn(myLog, funcName="", plainText=False):
     if funcName:
         myLog = "{}".format(funcName) + myLog
-    myLog = '<span style="color:#FF8C00;">WARN: ' + myLog + '</span>' 
+    myLog = '<span style="color:#FF8C00;">WARN: ' + myLog + '</span>' if not plainText else 'WARN: ' + myLog
     return myLog
 
-def logErr(myLog, funcName=""):
+def logErr(myLog, funcName="", plainText=False):
     if funcName:
         myLog = "{}".format(funcName) + myLog
-    myLog = '<span style="color:#FF0000;">ERROR: ' + myLog + '</span>' 
+    myLog = '<span style="color:#FF0000;">ERROR: ' + myLog + '</span>' if not plainText else 'ERROR: ' + myLog
     return myLog
 
-def logSucc(myLog, funcName=""):
+def logSucc(myLog, funcName="", plainText=False):
     if funcName:
         myLog = "{}".format(funcName) + myLog
-    myLog = '<span style="color:#006400;">SUCC: ' + myLog + '</span>' 
+    myLog = '<span style="color:#006400;">SUCC: ' + myLog + '</span>' if not plainText else 'SUCC: ' + myLog
     return myLog
 
 def logDef(myLog, funcName="", myColor='#000000'):
@@ -64,12 +64,14 @@ def test_ssh(host, command):
         p1 = subprocess.Popen(['plink',"-pw", PWD, HOST,COMMAND], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, shell= True, close_fds=True)
 
     raw_output,err = p1.communicate()
-
+    
     if p1.returncode != RET_SUCC : 
-        logError(raw_output, err)       
+        logDump(func_name(), str_decode(raw_output), str_decode(err))       
         return p1.returncode,str(err.decode('utf-8', 'ignore')).strip()
         # return p1.returncode,"ERR: Error while running the command '{}' to host {}".format(command, HOST)
     # print(raw_output.decode())
+    if glob["DEBUG_MODE"]:
+        logDump(func_name(), str_decode(raw_output), str_decode(err))
 
     return p1.returncode,str(raw_output.decode('utf-8', 'ignore')).strip()
 
@@ -117,25 +119,32 @@ def checkRootReachability(ipv6Addr):
 
     raw_output,err = p1.communicate()
     # print(raw_output)
+    
     if p1.returncode !=0:
-        logError(raw_output, err)
+        logDump(func_name(), str_decode(raw_output), str_decode(err))
         return RET_FAIL
+
+    if glob["DEBUG_MODE"]:
+        logDump(func_name(), str_decode(raw_output), str_decode(err))
  
     return RET_SUCC
 
 def display_console_str(myApp):
     print(myApp.outputStr)
 
-def logError(rawOuput="", rawErr=""):
+def str_decode(data, encoding='utf-8', error='ignore'):
+    return str(data.decode(encoding, error)) if data else ""
+
+def logDump(funcName="", rawOuputStr="", rawErrStr=""):
     filename = "errorLog_" + str(get_date().split(' ')[0]) + ".log"
-    if rawErr or rawOuput:
+    if rawErrStr or rawOuputStr:
         fd = open(filename,"a")
-        if rawOuput:
-            rawOuput = str(get_date()) +" [O/P]- " + str(rawOuput.decode('utf-8', "ignore"))
-            fd.writelines(rawOuput)
-        if rawErr:
-            rawErr = str(get_date()) +" [ERR]- " + str(rawErr.decode('utf-8', "ignore"))
-            fd.writelines(rawErr)
+        if rawOuputStr:
+            rawOuputStr = str(get_date()) + funcName +" [O/P]- " + rawOuputStr
+            fd.writelines(rawOuputStr)
+        if rawErrStr:
+            rawErrStr = str(get_date())+ funcName +" [ERR]- " + rawErrStr
+            fd.writelines(rawErrStr)
         fd.close()
 
 #creates a dummy configPTA.csv if it does not exists
@@ -231,7 +240,7 @@ def verifyRootAddr(rootIpv6Addr, interactGuiObj):
     stdout.flush()    
     retMsg += "OK"
     interactGuiObj.statusBarMsg(retMsg)
-    
+
     # panId = str(int("597b",16)) if rootIpv6Addr=="eeee::1" else str(int("47de",16))
     return rootVersion, panId, retMsg
 

@@ -8,11 +8,11 @@ glob={}
 
 OS_POSIX   = "posix"
 OS_WIN     = "nt"
-DEBUG_MODE = False
+glob["DEBUG_MODE"] = False
 logMsg     = ""
 
 __VERSION__        = "1.3.4"
-APP_VERSION        = __VERSION__ +" {OS: " + os.name + "} (debug)" if DEBUG_MODE == True else __VERSION__ +" {OS: " + os.name + "}"
+APP_VERSION        = __VERSION__ +" {OS: " + os.name + "} (debug)" if glob["DEBUG_MODE"] == True else __VERSION__ +" {OS: " + os.name + "}"
 
 glob["CAM_VERSION"] = 3
 DFT_PKT_CNT         = "1"
@@ -81,8 +81,7 @@ CHECKBOX_STATE_CHECKED   = 2
 CHECKBOX_STATE_UNCHECKED = 0
 
 def set_debug_mode(mode):
-	global DEBUG_MODE
-	DEBUG_MODE = mode
+	glob["DEBUG_MODE"] = mode
 
 def set_cam_version(version):
 	glob["CAM_VERSION"]     = int(version)
@@ -90,7 +89,7 @@ def set_cam_version(version):
 	glob["CMD_MAC_TX_STAT"] = "pib -gn /mas/statistics/f2_txmgr/DataConfirmSuccess;pib -gn /mas/statistics/f2_txmgr/DataConfirmFailure;pib -gn /rf_mac/statistics/f1_ChannelAccessDataExchange/RTSRxForMeCnt3;pib -gn /rf_mac/statistics/f1_ChannelAccessDataExchange/CTSsentCnt32;pib -gn /rf_mac/statistics/f1_ChannelAccessDataExchange/ACKrxForMeCnt32;pib -gn /rf_mac/statistics/f1_ChannelAccessDataExchange/ACKsentCnt32" if glob["CAM_VERSION"] == 1 else "pib -gn /mas/statistics/f2_txmgr/DataConfirmSuccess;pib -gn /mas/statistics/f2_txmgr/DataConfirmFailure;pib -gn /rf_mac/statistics/chan_mgr/rx_frame_kind_rts;pib -gn /rf_mac/statistics/chan_mgr/fsm_cts_send;pib -gn /rf_mac/statistics/chan_mgr/rx_frame_kind_ack;pib -gn /rf_mac/statistics/chan_mgr/fsm_ack_send"
 
 def func_name():
-    return "["+inspect.stack()[1][3]+"] " if DEBUG_MODE == True else ""
+    return "["+inspect.stack()[1][3]+"] " if glob["DEBUG_MODE"] == True else ""
 
 last_fin  = '\n'
 last_func = ''
