@@ -182,6 +182,7 @@ def verifyRootAddr(rootIpv6Addr, interactGuiObj):
         retMsg += "FAILED. '{}' is NOT a valid IPv6 Address".format(rootIpv6Addr)
         return RET_FAIL, RET_FAIL, retMsg
     retMsg += "VALID..."
+    interactGuiObj.statusBarMsg(retMsg)
 
     rootIpv6Addr = rootIpv6Addr if not interface else rootIpv6Addr + '%' + interface
     # check the reachability of the root
@@ -194,6 +195,7 @@ def verifyRootAddr(rootIpv6Addr, interactGuiObj):
 
         return RET_FAIL, RET_FAIL, retMsg
     retMsg += "REACHABLE..."
+    interactGuiObj.statusBarMsg(retMsg)
 
     # check between CAM3 and CAM1 or PIM or ACT ROOT
     ret, output = test_ssh(rootIpv6Addr,CMD_ROOT_VERSION)    
@@ -205,6 +207,7 @@ def verifyRootAddr(rootIpv6Addr, interactGuiObj):
     set_cam_version(rootVersion)
 
     retMsg += "CAM{}...".format(rootVersion)
+    interactGuiObj.statusBarMsg(retMsg)
 
     mergedCmd = CMD_RPL_STATUS+";"+glob["CMD_GET_PANID"]
 
@@ -221,11 +224,14 @@ def verifyRootAddr(rootIpv6Addr, interactGuiObj):
         retMsg +="FAILED. ROOT not SYCnEt Yet. Please wait until Root is RUNNING"
         return RET_FAIL, RET_FAIL, retMsg
     retMsg += "SYCnEt..."
-        
+    interactGuiObj.statusBarMsg(retMsg)
+    
     panId = str(int(splitted[1],16))
     retMsg += "0x{}...".format(splitted[1])
     stdout.flush()    
     retMsg += "OK"
+    interactGuiObj.statusBarMsg(retMsg)
+    
     # panId = str(int("597b",16)) if rootIpv6Addr=="eeee::1" else str(int("47de",16))
     return rootVersion, panId, retMsg
 
