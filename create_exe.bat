@@ -26,7 +26,7 @@ echo.
 echo  - MAKING EXE %filename% ...
 
 rem run py installer
-pyinstaller --clean --icon icon.ico --onefile --name %filename% -w main.py
+pyinstaller --clean --icon icon.ico --onefile --name %filename%  main.py
 
 rem copy the exe file back to original folder
 echo.
@@ -42,3 +42,5 @@ rd /s/q tmp
 echo - *********** The exe %filename%.exe is ready in %curPath%!!
 endlocal
 pause
+
+rem set PATH=C:\Program Files\PuTTY;%PATH%

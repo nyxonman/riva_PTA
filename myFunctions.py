@@ -67,11 +67,11 @@ def test_ssh(host, command):
 
     if p1.returncode != RET_SUCC : 
         logError(raw_output, err)       
-        return p1.returncode,str(err.decode()).strip()
+        return p1.returncode,str(err.decode('utf-8', 'ignore')).strip()
         # return p1.returncode,"ERR: Error while running the command '{}' to host {}".format(command, HOST)
     # print(raw_output.decode())
 
-    return p1.returncode,str(raw_output.decode()).strip()
+    return p1.returncode,str(raw_output.decode('utf-8', 'ignore')).strip()
 
 def name2cmd(cmdName=""):
     cmdName = cmdName.lower()
@@ -113,7 +113,7 @@ def checkRootReachability(ipv6Addr):
     if os.name == OS_WIN:
         p1 = subprocess.Popen([PING_CMD, PING_CMD_XTRA, PING_CNT,'1',PING_SIZE,'8', PING_RESP_TIME, '2000',ipv6Addr], stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE, shell=True, close_fds=True)
     else:
-        p1 = subprocess.Popen([PING_CMD, PING_CNT,'1',PING_SIZE,'8', PING_RESP_TIME, '2',ipv6Addr],stdout=subprocess.PIPE)
+        p1 = subprocess.Popen([PING_CMD, PING_CNT,'1',PING_SIZE,'8', PING_RESP_TIME, '2',ipv6Addr],stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 
     raw_output,err = p1.communicate()
     # print(raw_output)
@@ -130,10 +130,12 @@ def logError(rawOuput="", rawErr=""):
     filename = "errorLog_" + str(get_date().split(' ')[0]) + ".log"
     if rawErr or rawOuput:
         fd = open(filename,"a")
-        rawOuput = str(get_date()) +" [O/P]- " + rawOuput.decode()
-        rawErr = str(get_date()) +" [ERR]- " + rawErr.decode()
-        fd.writelines(rawOuput)
-        fd.writelines(rawErr)
+        if rawOuput:
+            rawOuput = str(get_date()) +" [O/P]- " + str(rawOuput.decode('utf-8', "ignore"))
+            fd.writelines(rawOuput)
+        if rawErr:
+            rawErr = str(get_date()) +" [ERR]- " + str(rawErr.decode('utf-8', "ignore"))
+            fd.writelines(rawErr)
         fd.close()
 
 #creates a dummy configPTA.csv if it does not exists
@@ -196,8 +198,7 @@ def verifyRootAddr(rootIpv6Addr, interactGuiObj):
     # check between CAM3 and CAM1 or PIM or ACT ROOT
     ret, output = test_ssh(rootIpv6Addr,CMD_ROOT_VERSION)    
     if ret != RET_SUCC:
-        retMsg +="FAILED<br>"
-        retMsg += "Cannot retrieve Version of Root{}".format(rootIpv6Addr)
+        retMsg +="FAILED. Cannot retrieve Version of Root {}".format(rootIpv6Addr)
         return RET_FAIL, RET_FAIL, retMsg
     
     rootVersion = 3 if "CAM3" in output else 1
@@ -211,15 +212,13 @@ def verifyRootAddr(rootIpv6Addr, interactGuiObj):
     ret, output = test_ssh(rootIpv6Addr,mergedCmd)
     # print(ret, output)
     if ret != RET_SUCC:
-        retMsg +="FAILED<br>"
-        retMsg += "Cannot retrieve RPL-Status and/or PAN ID of Root{}".format(rootIpv6Addr)
+        retMsg +="FAILED. Cannot retrieve RPL-Status and/or PAN ID of Root {}".format(rootIpv6Addr)
         return RET_FAIL, RET_FAIL, retMsg
     splitted = output.splitlines()
 
     rplStat = int(splitted[0])
     if rplStat != 1:
-        retMsg +="FAILED<br>"
-        retMsg += "ROOT not SYCnEt Yet. Please wait until Root is RUNNING"
+        retMsg +="FAILED. ROOT not SYCnEt Yet. Please wait until Root is RUNNING"
         return RET_FAIL, RET_FAIL, retMsg
     retMsg += "SYCnEt..."
         

@@ -286,7 +286,7 @@ class App():
 			return RET_FAIL, ret
 
 		# proces the ping result to provide an array at the end
-		output = str(raw_output.decode())  
+		output = str(raw_output.decode('utf-8','ignore'))  
 		ret = process_ping_output(output,p1.returncode)   
 
 		return RET_SUCC, ret
