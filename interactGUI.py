@@ -11,20 +11,20 @@ class interactGUI(object):
 	"""class to interact with the various GUI elements and take necessary actions"""
 	def __init__(self, arg):
 		super(interactGUI, self).__init__()
-		self.ui              = arg
-		self.mPktSize        = 0
-		self.mPktInt         = 0
-		self.mPktRes         = 0
-		self.mPktCnt         = 0
-		self.mRootCnt        = 0
-		self.mIteration      = 0
-		self.mShowMap        = 0
-		self.mShowAllNeighbors    = 0
-		self.mOutputToFile   = 0
-		self.mOutputFilename = "last_testlog.csv"
-		self.exportData      = {}
-		self.centerPoint     = QDesktopWidget().availableGeometry().center()
-		self.pingThreadObj   = pingThread(App(), self.ui)
+		self.ui                = arg
+		self.mPktSize          = 0
+		self.mPktInt           = 0
+		self.mPktRes           = 0
+		self.mPktCnt           = 0
+		self.mRootCnt          = 0
+		self.mIteration        = 0
+		self.mShowMap          = 0
+		self.mShowAllNeighbors = 0
+		self.mOutputToFile     = 0
+		self.mOutputFilename   = "last_testlog.csv"
+		self.exportData        = {}
+		self.centerPoint       = QDesktopWidget().availableGeometry().center()
+		self.pingThreadObj     = pingThread(App(), self.ui)
 		self.ui.menubar.setNativeMenuBar(False) # for unix
 		self.interactObjects()
 
@@ -220,8 +220,12 @@ class interactGUI(object):
 		self.ui.outputFilenameVal.setText(DFT_OUTPUTFILENAME)
 
 		self.ui.actionDebug_Mode.setChecked(glob["DEBUG_MODE"])
-		
-		self.updateTable(DFT_ROOTS_CNT)
+
+		# if the default config file exists, load it immediately else show the default entries
+		if os.path.isfile(CONFIG_FILENAME):
+			self.loadEntries(CONFIG_FILENAME)
+		else:
+			self.updateTable(DFT_ROOTS_CNT)
 
 		cmdStr = self.createCmdStr() 
 		self.ui.outputCmd.setHtml(cmdStr)
@@ -733,12 +737,18 @@ class interactGUI(object):
 		else:
 			self.logCmdHistory(func_name(),"Filename not provided","error")	
 
-	def loadEntries(self, filename="configPTA.csv"):
+	def loadEntries(self, filename=""):
+		''' if filename is provided, load it directly else open a dialogBox to choose a config file to load.
+		'''
 		itemCnt = 0
 		rootCnt = 0
 		first   = 1
-
-		path, fileType = QFileDialog.getOpenFileName(QtWidgets.QWidget(), 'Choose config CSV File', CONFIG_FILENAME, 'CSV(*.csv)')
+		# if file name if not provided, open a dialogBox to choose a config file else, load the filename directly
+		if not filename:
+			filename = CONFIG_FILENAME
+			path, fileType = QFileDialog.getOpenFileName(QtWidgets.QWidget(), 'Choose config CSV File', filename, 'CSV(*.csv)')
+		else:
+			path = filename
 		if path:
 			with open(path,'r') as stream:
 				self.ui.tableWidget.clearContents()

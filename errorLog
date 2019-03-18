@@ -1,7 +1,0 @@
-2019-03-13 17:26:04 [O/P]- 
-Pinging eeee::1 with 8 bytes of data:
-PING: transmit failed. General failure. 
-
-Ping statistics for eeee::1:
-    Packets: Sent = 1, Received = 0, Lost = 1 (100% loss),
-2019-03-13 17:26:04 [ERR]- 
