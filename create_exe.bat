@@ -26,7 +26,7 @@ echo.
 echo  - MAKING EXE %filename% ...
 
 rem run py installer
-pyinstaller --clean --icon icon.ico --onefile --name %filename%  main.py
+pyinstaller --clean --icon icon.ico --onefile --name %filename%  -w main.py
 
 rem copy the exe file back to original folder
 echo.

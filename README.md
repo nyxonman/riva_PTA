@@ -37,6 +37,13 @@ You can install them by two methods:
 ### Installing
 
 A step by step series of examples that tell you how to get a development env running
+Windows:
+- install plink. You can install by installing putty
+-  In order to use Plink, the file plink.exe will need either to be on your PATH or in your current directory. To add the directory containing Plink to your PATH environment variable, type into the console window:
+
+```set PATH=C:\path\to\putty\directory;%PATH%```
+
+- for a new pan perform one ssh from the terminal to pass the fingerprint key word
 
 Say what the step will be
 
