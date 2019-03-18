@@ -140,10 +140,10 @@ def logDump(funcName="", rawOuputStr="", rawErrStr=""):
     if rawErrStr or rawOuputStr:
         fd = open(filename,"a")
         if rawOuputStr:
-            rawOuputStr = str(get_date()) + funcName +" [O/P]- " + rawOuputStr
+            rawOuputStr = str(get_date()) + " " + funcName +" [O/P]- " + rawOuputStr
             fd.writelines(rawOuputStr)
         if rawErrStr:
-            rawErrStr = str(get_date())+ funcName +" [ERR]- " + rawErrStr
+            rawErrStr = str(get_date())+ " " + funcName +" [ERR]- " + rawErrStr
             fd.writelines(rawErrStr)
         fd.close()
 
