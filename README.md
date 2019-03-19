@@ -1,86 +1,115 @@
+# Riva PTA
+This is a guideline documentation for a **RIVA BACT Ping Test Application**, later written as **PTA**. The main purpose of this application is to run a test on a network and compare the performance of BACT modules using IPv6 ping application.
 
-# riva_PTA
-This is a guideline documentation for a **BACT Ping Test Application**, later written as **PTA**. The main purpose of this Application is to run a test on a network and compare the performance of BACT modules using IPv6 ping application
+This application is written in Python and two instances are available for Windows environment and Linux environment. The application has been so far tested for **Ubuntu 14.04 LTS Trusty Tahr** and **Windows 10** machine There are some requirements for this application to work which is detailed below.
 
-This application is written in Python and two instances are available for Windows environment and Linux environment. There are some requirements for this application to work which is detailed in Chapter 2.
+## Network Requirements
 
-## Prerequisites
+ - A host having a IPv6 connectivity with the ROOT(s). 
+	 - May be directly or via VPN.
+	 - May be via global or link-local IPv6 address.
+ - A host may be a LINUX machine or WINDOWs machine. 
 
- - A host having a IPv6 connectivity with the ROOT(s)
- - A host may be a LINUX machine or WINDOWs machine
- - Further Requirements are divided into two sections:
-
-### LINUX Environment
-
- - Tested with Ubuntu 14.04 LTS Trusty Tahr  
- - **Python3 +**  As the program is built in python therefore the python interpreter is necessary.  
+## Application Requirements
+### Linux Environment
+ - **Python3+**  As the program is built in python therefore the python interpreter is necessary.  
  - **SSHPASS**  This is used to pass the password through the SSH for accessing the ROOTs.
 
-You can install them by two methods:
-
- 1. By running the two lines directly into the terminal
-	```` shell
-	sudo apt-get install sshpass
-	sudo apt-get install python3 
- 2. By running install.sh
-	 ````
-	 ./path_to_the_file/install.sh
-
-**NOTE**: The necessary Libraries for python are automatically added by the PTA application for Linux.
-
 ### Windows Environment
+ - **Python 3+** As the program is built in python therefore the python interpreter is necessary. It is not necessary for standalone executable
+ - **Plink** if not installed previously.  Like SSHPASS in Linux, this is required to send the passcode to get access to the ROOT. Plink comes with the installation of Putty
+  
+ ## Installation
+  ### Linux Environment
+ It is quite easy to install all the requirements and the application for linux. The following steps shows how to install the dependencies of the application and the application itself.
+ - Download the Installation zip file (*Installer_x_y_z.zip*). Open a Terminal and change the directory to this file.
+	 ````shell
+	 cd /path/to/the/directory/of/zipfile/
+	 ````
+ - Unzip the Installer file *Installer_x_y_z.zip*
+	 ````shell
+	 unzip -o Installer_x_y_z.zip
+	 ````
+  - You will see a list of files and then execute the install.sh file. This shell file will install all the dependencies and the application automatically.
+	 ````shell
+	./install.sh
+	 ````
+	 If you face any problem, try to change the mode of the file by running the following command.
+	  ````shell
+	chmod +x install.sh
+	 ````
+	 
+ - Your Executable named ***PTA_x_y_z*** should be ready in the current folder.
+##### Example: (A case when sshpass, python and PyQt5 has already been installed)
+  ````shell
+nikeshman@nikeshman:~$ cd Test/py_PTA/Test1/exe/1_3_4/
+nikeshman@nikeshman:~/Test/py_PTA/Test1/exe/1_3_4$ ls
+Installer_1_3_4.zip
 
- - Tested with Windows 10 only.
- - **Python3 +**  As the program is built in python therefore the python interpreter is necessary.
- - **Plink** if not installed previously  Like SSHPASS in Linux, this is required to send the passcode to get access to the ROOT
+nikeshman@nikeshman:~/Test/py_PTA/Test1/exe/1_3_4$ unzip -o Installer_1_3_4.zip 
+Archive:  Installer_1_3_4.zip
+ extracting: PTA_1_3_4.zip           
+  inflating: install.sh              
+  inflating: changelogs.txt          
+ extracting: Version.txt             
 
-### Installing
+nikeshman@nikeshman:~/Test/py_PTA/Test1/exe/1_3_4$ ./install.sh 
 
-A step by step series of examples that tell you how to get a development env running
-Windows:
-- install plink. You can install by installing putty
--  In order to use Plink, the file plink.exe will need either to be on your PATH or in your current directory. To add the directory containing Plink to your PATH environment variable, type into the console window:
+~~~~~ Installer v1.0 (APP v1_3_4)~~~~~
 
-```set PATH=C:\path\to\putty\directory;%PATH%```
+ -> SSHPASS already installed... /usr/bin/sshpass
+ -> python already installed... /usr/bin/python
+ -> python installer already installed... /usr/local/bin/pyinstaller
+ -> python pyqt5 already installed...
+.
+.
+.
+18322 INFO: Appending archive to ELF section in EXE /home/nikeshman/Test/py_PTA/Test1/exe/1_3_4/dist/PTA_1_3_4
+18375 INFO: Building EXE from out00-EXE.toc completed successfully.
 
-- for a new pan perform one ssh from the terminal to pass the fingerprint key word
+ ***** The Executable PTA_1_3_4 is ready in /home/nikeshman/Test/py_PTA/Test1/exe/1_3_4
+````
 
-Say what the step will be
+ ### Windows Environment
+ - First, you need to install plink if it is is not already present.
+	 - To check if it is present or not. Open the command interface (Win+R and type cmd and press Enter).
+	 - Type cmd and Press Enter. A console will open
+	 - Type plink -V 
+		````
+		C:\Users\nishakya>plink -V
+		plink: Release 0.70
+		Build platform: 64-bit Windows
+		Compiler: clang 5.0.0 (http://llvm.org/git/clang.git dba970f4d143480b964f77b363ec23f22cea0390) (http://llvm.org/git/llvm.git 52ebe03cb0a728134e66d04f85281bc5a60d7091), emulating Visual Studio 2013 / MSVC++ 12.0 (_MSC_VER=1800)
+		Source commit: 3cd10509a51edf5a21cdc80aabf7e6a934522d47
+		````
+	 - If it shows something similar like above, plink is already installed. In this case, skip the next two steps else proceed.
+	 - Install putty from this [link](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html). The putty will install the plink as well.
+	 - In order to use Plink, the file plink.exe will need either to be on your PATH or in your current directory. To add the directory containing Plink to your PATH environment variable, type 
+*set PATH=C:\path\to\putty\directory;%PATH%* into the console window:
+		````
+		C:\Users\nishakya>set PATH=C:\path\to\putty\directory;%PATH%
+		````
 
-```
-Give the example
-```
+- Now you have all the pre-requisites; download the Installation zip file (*Installer_x_y_z.zip*) and goto the directory.
+ - Extract the files to a folder.
+ - You application is **PTA_x_y_z.exe**
 
 
-End with an example of getting some data out of the system or using it for a little demo
 
 ## Running the tests
+Once the installation is finished, goto the installation directory and open the PTA_x_y_z file. It should show a GUI. 
+**Important:** Before running the application, there is one important step to take into action if you are running this with a new ROOT. For a new ROOT IPv6 address, **perform one ssh to the address from the terminal** to pass the fingerprint key word. The current version for windows does not support auto accepting the ssh keys.
 
-Explain how to run the automated tests for this system
 
 ### Break down into end to end tests
 
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-
-
 ## Versioning
+
+ - 1.3.4
+ - 1.3.3
+ - 1.3.2
+ - 1.3.1
+ - 1.3.0
 
 
 ## Authors
@@ -89,7 +118,7 @@ Add additional notes about how to deploy this on a live system
 
 
 
-# CHANGELOGS
+## CHANGELOGS
 
 * da716d6 - (HEAD (2019-03-12 17:13:34 +0100) <Shakya> updated readme
 * 5feefe5 - (origin/master, (2019-03-12 16:53:14 +0100) <Shakya> icon file added for windows
