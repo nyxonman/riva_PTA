@@ -120,8 +120,30 @@ Once the installation is finished, goto the installation directory and open the 
 
 ## CHANGELOGS
 
-* da716d6 - (HEAD (2019-03-12 17:13:34 +0100) <Shakya> updated readme
-* 5feefe5 - (origin/master, (2019-03-12 16:53:14 +0100) <Shakya> icon file added for windows
+* cf077d8 - (HEAD -> master, origin/master, (2019-03-19 14:59:11 +0100) <Shakya> updated README
+* (2019-03-18 11:24:22 +0100) <Shakya> installation steps
+* (2019-03-18 10:02:07 +0100) <Shakya> auto loading of the config file if, the file is present with the default name
+* (2019-03-18 09:41:20 +0100) <Shakya> space added in the log dump
+* (2019-03-15 22:29:23 +0100) <Shakya> added debug mode logs
+* (2019-03-15 15:02:52 +0100) <Shakya> added extra status bar update during root verification function
+* (2019-03-15 14:58:32 +0100) <Shakya> fixed issue with utf decoding when working with french characters
+* (2019-03-15 10:47:46 +0100) <Shakya> bugfix for interval which was enabled after performing a test
+* (2019-03-13 17:49:34 +0100) <Shakya> added comment for ms waiting time and s waiting time for windows and linux resp.
+* (2019-03-13 17:47:58 +0100) <Shakya> daily error logs
+* (2019-03-13 17:45:06 +0100) <Shakya> packet interval disabled coz it is not supported in windows ping and not implemented for linux yet
+* (2019-03-13 17:43:23 +0100) <Shakya> bugfix on windows- checkRoot reachability wait time is in ms so it is set to 2000
+* (2019-03-13 17:42:26 +0100) <Shakya> Added error logging to a file
+* (2019-03-13 15:45:18 +0100) <Shakya> min time before iterate changed to 30s because for supporting a case when PING is acked but ack is lost all time, we may flood it with additional pings if it is less than 30
+* (2019-03-13 14:06:33 +0100) <Shakya> remove extra print
+* (2019-03-13 14:03:41 +0100) <Shakya> fixed the mac tx status grep
+* (2019-03-13 13:10:01 +0100) <Shakya> waiting time -w option in the ping for windows is in ms in contrast to the -W option in linux which is in sec
+* (2019-03-13 11:22:33 +0100) <Shakya> Added icon to the application for both windows and linux
+* (2019-03-13 10:32:16 +0100) <Shakya> loaded the last root address to the root ipv6 addr in the root tab
+* (2019-03-13 10:26:19 +0100) <Shakya> combo box added for some pre listed commands in the root tab
+* (2019-03-12 17:25:58 +0100) <Shakya> Added pre-listed commands for running commands
+* (2019-03-12 17:15:50 +0100) <Shakya> updated changelogs
+* (2019-03-12 17:13:34 +0100) <Shakya> updated readme
+* (2019-03-12 16:53:14 +0100) <Shakya> icon file added for windows
 * (2019-03-12 15:51:57 +0100) <Shakya> minor fixes
 * (2019-03-12 15:46:13 +0100) <Shakya> added .exe file to the git ignore list
 * (2019-03-12 15:45:20 +0100) <Shakya> batch file added for making exe in windows
@@ -226,7 +248,7 @@ Once the installation is finished, goto the installation directory and open the 
 * (2019-01-16 13:02:38 +0100) <Shakya> make up work
 *   (2019-01-16 13:00:44 +0100) <Shakya> Merge branch 'master' of https://github.com/nyxonman/riva_PTA
 |\  
-| * (2019-01-16 12:49:02 +0100) <nyxonman> Delete Version.txt
+| * f622ddc - (9 weeks ago) (2019-01-16 12:49:02 +0100) <nyxonman> Delete Version.txt
 * | (2019-01-16 12:50:57 +0100) <Shakya> remove Version.txt
 * | (2019-01-16 12:46:36 +0100) <Shakya> Added Version.txt to the ignore list
 |/  
@@ -250,4 +272,4 @@ Once the installation is finished, goto the installation directory and open the 
 * (2019-01-15 11:07:13 +0100) <Shakya> reversed to previous version in the text
 * (2019-01-15 11:06:17 +0100) <Shakya> changed version
 * (2019-01-15 11:04:03 +0100) <Shakya> added .gitignore and Version.txt
-* 25dba95 - ((2018-10-03 13:53:29 +0200) <nyxonman> Initial commit
+* 25dba95 - (origin/PTA_1_3_0) (6 months ago) (2018-10-03 13:53:29 +0200) <nyxonman> Initial commit
