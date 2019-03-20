@@ -482,12 +482,14 @@ class interactGUI(object):
 				self.ui.pktResDial.setEnabled(0)
 				self.ui.pktSizeDial.setEnabled(0)
 				self.ui.IterVal.setEnabled(0)
+				self.ui.pktSizeVal.setEnabled(0)
 			else:
 				self.ui.pktCntDial.setEnabled(1)
 				self.ui.pktIntDial.setEnabled(1)
 				self.ui.pktResDial.setEnabled(1)
 				self.ui.pktSizeDial.setEnabled(1)
 				self.ui.IterVal.setEnabled(1)
+				self.ui.pktSizeVal.setEnabled(1)
 			self.mShowMap = myObjVal
 
 		elif myObjName == "showAllNeighbors":
