@@ -51,11 +51,11 @@ def get_date():
     return (datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
 def get_current_path():
+    '''get the current path'''
     return os.getcwd()
 
 def test_ssh(host, command):
-    'Runs a command on a remote node by passing the password depending upon the OS'
-
+    '''Runs a command on a remote node by passing the password depending upon the OS'''
     HOST    = "root@"+host
     COMMAND = command
     PWD     = "itron"
@@ -84,6 +84,8 @@ def test_ssh(host, command):
     return p1.returncode,str(raw_output.decode('utf-8', 'ignore')).strip()
 
 def name2cmd(cmdName=""):
+    '''converts a name to the respective command for the Root tab'''
+
     cmdName = cmdName.lower()
     if cmdName == "modversion":
         return "modversion.sh"
@@ -99,12 +101,14 @@ def name2cmd(cmdName=""):
         return "cat /proc/net/ipv6_dodag"
 
 def getLidValue(root, filterStr=""):
+    '''Fetch the LID value from root using ssh'''
     lidCmd = ""
     lidCmd = "LoadMonitorInit --verify | grep -i {}".format(filterStr)
     retCode, output = test_ssh(root, lidCmd)
     return retCode, output
 
 def getPibValue(root, filterStr="", pibLayer="All", pibType="All", identifier=""):
+    '''Fetch the PIB value from the root'''
     pibCmd = ""
     # print(root, filterStr, pibLayer, pibType, identifier)
     if pibLayer == "All":
@@ -119,6 +123,7 @@ def getPibValue(root, filterStr="", pibLayer="All", pibType="All", identifier=""
     return retCode, output
 
 def checkRootReachability(ipv6Addr):
+    '''check the reachability of the Root by sending a small packet of size 8B'''
 
     if os.name == OS_WIN:
         p1 = subprocess.Popen([PING_CMD, PING_CMD_XTRA, PING_CNT,'1',PING_SIZE,'8', PING_RESP_TIME, '2000',ipv6Addr], stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE, shell=True, close_fds=True)
@@ -141,9 +146,11 @@ def display_console_str(myApp):
     print(myApp.outputStr)
 
 def str_decode(data, encoding='utf-8', error='ignore'):
+    '''Decodes and return the string using the encoding and error type'''
     return str(data.decode(encoding, error)) if data else ""
 
 def logDump(funcName="", rawOuputStr="", rawErrStr=""):
+    '''To dump the log into the file. Helpful for debugging'''
     filename = "dumpLog_" + str(get_date().split(' ')[0]) + ".log"
     if rawErrStr or rawOuputStr:
         fd = open(filename,"a")
@@ -170,6 +177,7 @@ def create_dummy_config():
     
 
 def conv_ipv6(ipAddr):
+    '''Takes the string full ip address notation, verifies it and then return it in printable format'''
     err = RET_SUCC
     try:
         myIp   = socket.inet_pton(socket.AF_INET6, ipAddr.strip())        
@@ -181,6 +189,7 @@ def conv_ipv6(ipAddr):
     return err, ipAddr
 
 def verifyRootAddr(rootIpv6Addr, interactGuiObj):
+    '''Verify if the rootIPv6Addr is valid and reachable and collects the version, sync status, pan id.'''
     retMsg       = ""    
     retMsg       = "Verifying ROOT {}".format(rootIpv6Addr)
     interface    = ""
@@ -253,6 +262,7 @@ def verifyRootAddr(rootIpv6Addr, interactGuiObj):
     return rootVersion, panId, retMsg
 
 def process_dodag_data(pan, panId, data, interactGuiObj):
+    '''Process the DODAG data'''
     prefix   = ""
     nodesCnt = 0
     retMsg   = "" 
@@ -290,7 +300,7 @@ def process_dodag_data(pan, panId, data, interactGuiObj):
     return RET_SUCC
 
 def process_neighbor_data(pan, panId, data, interactGuiObj):
-    
+    '''Process the neighbor-table data'''
     skipHeaderCnt=9
     retMsg = ""
     lines = data.splitlines()
@@ -367,6 +377,7 @@ def prepare_mapping(myApp, pan, panId):
     return RET_SUCC
 
 def prepare_output_mapping(myApp):
+    '''Prepare output mapping table'''
 
     myApp.mapStr = "<br/>"
     myApp.mapStr += ''' <table border="1" width="100%">
@@ -402,7 +413,7 @@ def unavailable_node(extAddr, final):
         return ["", extAddr, "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"]
 
 def process_ping_output(output, retCode):
-    'Process the ping output results to get the necessary counters and RTT values'
+    '''Process the ping output results to get the necessary counters and RTT values'''
 
     lines=output.splitlines()  
     
@@ -443,6 +454,7 @@ def process_ping_output(output, retCode):
 
 
 def write2csv(csvfile = "testlog.csv", res=""):
+    '''write res to the csv file'''
 
     with open(csvfile, "w", newline='') as output:
         writer = csv.writer(output)
@@ -450,6 +462,7 @@ def write2csv(csvfile = "testlog.csv", res=""):
             writer.writerow(r)
 
 def append2csv(csvfile = "app_testlog.csv", res="", mode="a"):
+    '''append to the csv file'''
 
     with open(csvfile, mode, newline='') as output:
         writer = csv.writer(output)

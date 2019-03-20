@@ -99,6 +99,7 @@ class App():
 			myNode.finalAvgRTT.append(myNode.avgRTT)
 	
 	def get_mod_rssi(self, extAddr):
+		'''Get the modulation and the rssi by performing a neighbor-dump'''
 		found = False
 		panId = self.mapExt2PanId[extAddr]
 		pan   = self.pans[panId]
