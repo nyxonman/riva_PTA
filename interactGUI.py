@@ -749,7 +749,8 @@ class interactGUI(object):
 			filename = CONFIG_FILENAME
 			path, fileType = QFileDialog.getOpenFileName(QtWidgets.QWidget(), 'Choose config CSV File', filename, 'CSV(*.csv)')
 		else:
-			path = filename
+			path = get_current_path() + "/" + filename
+
 		if path:
 			with open(path,'r') as stream:
 				self.ui.tableWidget.clearContents()
