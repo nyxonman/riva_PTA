@@ -987,7 +987,8 @@ class interactGUI(object):
 			if myApp.map == True:
 				self.ui.tabWidget.setCurrentIndex(1)
 				myApp.runMap_test(self)
-				self.ui.showMap.setChecked(0)
+				self.enableInputs(1)
+				self.ui.showMap.setChecked(CHECKBOX_STATE_UNCHECKED)
 				RUN_OK = True
 				break
 			
