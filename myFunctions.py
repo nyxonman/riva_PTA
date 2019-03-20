@@ -177,7 +177,9 @@ def create_dummy_config():
     
 
 def conv_ipv6(ipAddr):
-    '''Takes the string full ip address notation, verifies it and then return it in printable format'''
+    '''Takes the string full ip address notation, verifies it and then return it in printable format
+        Return: err, ipAddr
+    '''
     err = RET_SUCC
     try:
         myIp   = socket.inet_pton(socket.AF_INET6, ipAddr.strip())        
@@ -396,10 +398,12 @@ def prepare_output_mapping(myApp):
             ipAddr       = item.get(extAddr)
             panId        = myApp.mapExt2PanId[extAddr]
             sAddr        = ipAddr.split(":")[-1]
+            dump, prefix = conv_ipv6(myApp.pans[panId].prefix + ":0000")
+            prefixLen = myApp.pans[panId].prefixLen
             # myApp.mapStr += myApp.disp_line(" ","{:<18s} | {:>04s} | {:<6s}".format(extAddr,sAddr,hex(int(panId))) , 0 , length) + "\n"
             style = ' style="color:#FF0000"' if ipAddr == IP_NA else ""
-            myApp.mapStr += '<tr{}><td>{}</td><td>{}</td><td>{}</td><td>{} /{}</td></tr>'.format(style, extAddr,sAddr,hex(int(panId)), myApp.pans[panId].prefix, myApp.pans[panId].prefixLen)
-            params = [extAddr, sAddr, hex(int(panId)), myApp.pans[panId].prefix +" /" + str(myApp.pans[panId].prefixLen)]
+            myApp.mapStr += '<tr{}><td>{}</td><td>{}</td><td>{}</td><td>{} /{}</td></tr>'.format(style, extAddr,sAddr,hex(int(panId)), prefix, prefixLen)
+            params = [extAddr, sAddr, hex(int(panId)), prefix +" /" + str(prefixLen)]
             myApp.exportData["mapList"].append(params)
     myApp.mapStr += "<table>"
 
