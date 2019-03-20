@@ -847,6 +847,11 @@ class interactGUI(object):
 					myHtml+= "<tr>"
 
 					params[-1] = str( round (sum( node.finalAvgRTT) / len(node.finalAvgRTT),3 ) ) if len(node.finalAvgRTT) >0 else '-'
+					
+					# if the loss params[-10] is 100% min and max RTT should be -
+					if params[-10]=="100%" or params[-10]=="-":
+						params[-2] = params[-3] = "-"
+
 					for col in params:
 						style  = ' align="center" style="color:#FF0000"' if col == "-" or col =="100%" else ''
 						myHtml += "<td{}>{}</td>".format(style, col)

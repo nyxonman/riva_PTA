@@ -53,10 +53,15 @@ def get_date():
 def test_ssh(host, command):
     'Runs a command on a remote node by passing the password depending upon the OS'
 
-    HOST="root@"+host
-    COMMAND=command
-    PWD = "itron"
-    # runn ssh or plink depending upon the os
+    HOST    = "root@"+host
+    COMMAND = command
+    PWD     = "itron"
+    
+    # show the command running in debug mode
+    if glob["DEBUG_MODE"]:
+        logDump(func_name(),"COMMAND-> {} in {}\n\r".format(COMMAND, HOST))
+
+    # run ssh or plink depending upon the os
     if os.name == OS_POSIX:
         p1 = subprocess.Popen(['sshpass','-p', PWD, 'ssh', "-o StrictHostKeyChecking=no" ,"-o LogLevel=ERROR", "-o UserKnownHostsFile=/dev/null", HOST,COMMAND], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
@@ -136,14 +141,14 @@ def str_decode(data, encoding='utf-8', error='ignore'):
     return str(data.decode(encoding, error)) if data else ""
 
 def logDump(funcName="", rawOuputStr="", rawErrStr=""):
-    filename = "errorLog_" + str(get_date().split(' ')[0]) + ".log"
+    filename = "dumpLog_" + str(get_date().split(' ')[0]) + ".log"
     if rawErrStr or rawOuputStr:
         fd = open(filename,"a")
         if rawOuputStr:
-            rawOuputStr = str(get_date()) + " " + funcName +" [O/P]- " + rawOuputStr
+            rawOuputStr = str(get_date()) + " " + funcName +" [O/P]-\n\r" + rawOuputStr 
             fd.writelines(rawOuputStr)
         if rawErrStr:
-            rawErrStr = str(get_date())+ " " + funcName +" [ERR]- " + rawErrStr
+            rawErrStr = str(get_date())+ " " + funcName +" [ERR]-\n\r" + rawErrStr 
             fd.writelines(rawErrStr)
         fd.close()
 
