@@ -262,15 +262,14 @@ class interactGUI(object):
 
 			if verifyRoot:
 				# self.ui.rootOutputText.append("<br>")
-				self.statusBarMsg("Verifying Root "+ root + "...")
 				rootVersion, ret, retMsg = verifyRootAddr(root, self)			
 				if ret == RET_FAIL:
 					mError = 1
 					# retMsg = "Error connecting with '{}'".format(root)
-					self.statusBarMsg("Verifying Root "+ root + "... FAIL")
+					self.statusBarMsg("Verifying ROOT "+ root + "... FAIL")
 					break
 
-				self.statusBarMsg("Verifying Root "+ root + "... OK")
+				self.statusBarMsg("Verifying ROOT "+ root + "... OK")
 				self.logRootCmdOutput(func_name(),retMsg, "succ")
 			retMsg = ""
 			
