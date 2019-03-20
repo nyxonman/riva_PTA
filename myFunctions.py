@@ -258,6 +258,7 @@ def process_dodag_data(pan, panId, data, interactGuiObj):
     # extract prefix, len, nodes from the first line
     words    = lines[0].split()
     prefix   = words[2][0:34]
+    prefixLen = int(words[4])
     nodesCnt = int(words[7]) - 1
 
     if nodesCnt <1:
@@ -267,6 +268,7 @@ def process_dodag_data(pan, panId, data, interactGuiObj):
     
     pan.prefix = prefix
     pan.nodes  = nodesCnt
+    pan.prefixLen = prefixLen
 
     for line in lines:
         words = line.split()
@@ -361,12 +363,13 @@ def prepare_output_mapping(myApp):
     myApp.mapStr = "<br/>"
     myApp.mapStr += ''' <table border="1" width="100%">
                         <tr>
-                            <th colspan="3">MAP LIST</th>
+                            <th colspan="4">MAP LIST</th>
                         </tr>
                         <tr>
                             <th>EXT_ADDR</th>
                             <th>SADDR</th>
                             <th>PAN ID</th>
+                            <th>Prefix</th>
                         </tr>
                     '''
     for item in myApp.testNodes:
@@ -376,8 +379,8 @@ def prepare_output_mapping(myApp):
             sAddr        = ipAddr.split(":")[-1]
             # myApp.mapStr += myApp.disp_line(" ","{:<18s} | {:>04s} | {:<6s}".format(extAddr,sAddr,hex(int(panId))) , 0 , length) + "\n"
             style = ' style="color:#FF0000"' if ipAddr == IP_NA else ""
-            myApp.mapStr += '<tr{}><td>{}</td><td>{}</td><td>{}</td></tr>'.format(style, extAddr,sAddr,hex(int(panId)))
-            params = [extAddr, sAddr, hex(int(panId))]
+            myApp.mapStr += '<tr{}><td>{}</td><td>{}</td><td>{}</td><td>{} /{}</td></tr>'.format(style, extAddr,sAddr,hex(int(panId)), myApp.pans[panId].prefix, myApp.pans[panId].prefixLen)
+            params = [extAddr, sAddr, hex(int(panId)), myApp.pans[panId].prefix +" /" + str(myApp.pans[panId].prefixLen)]
             myApp.exportData["mapList"].append(params)
     myApp.mapStr += "<table>"
 

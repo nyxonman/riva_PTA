@@ -377,9 +377,10 @@ class Node() :
 		self.finalAvgRTT.append(avgRTT)
 
 class Pan():
-	def __init__(self, prefix="", length="", nodes="", saddr="", rootAddr="", rootVersion=3):
+	def __init__(self, prefix="", prefixLen="", length="", nodes="", saddr="", rootAddr="", rootVersion=3):
 		self.rootAddr    = rootAddr
 		self.prefix      = prefix
+		self.prefixLen   = prefixLen
 		self.length      = length
 		self.nodes       = nodes
 		self.sAddr       = saddr
