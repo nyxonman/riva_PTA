@@ -50,6 +50,9 @@ def get_date():
     # return (datetime.now().strftime('%d %b %Y %H:%M:%S'))
     return (datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
+def get_current_path():
+    return os.getcwd()
+
 def test_ssh(host, command):
     'Runs a command on a remote node by passing the password depending upon the OS'
 
