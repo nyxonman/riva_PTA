@@ -492,8 +492,16 @@ class interactGUI(object):
 			self.mShowMap = myObjVal
 
 		elif myObjName == "showAllNeighbors":
-			myObjVal               = 0 if myObj.checkState() == 0 else 1
-			self.mShowAllNeighbors = True if myObjVal == 1 else False
+			if myObj.checkState()==0:
+				myObjVal = 0
+				self.mShowAllNeighbors = False
+			else:
+				myObjVal = 1
+				self.mShowAllNeighbors = True
+				self.ui.addRowBtn.setEnabled(0)
+				self.ui.removeRowBtn.setEnabled(0)
+				self.ui.loadEntryBtn.setEnabled(0)
+				self.ui.saveEntryBtn.setEnabled(0)
 
 		elif myObjName == "outputToFile":
 			myObjVal           = 0 if myObj.checkState() == 0 else 1
